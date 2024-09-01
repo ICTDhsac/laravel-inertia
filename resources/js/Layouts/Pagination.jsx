@@ -2,7 +2,7 @@ import { Link } from '@inertiajs/react';
 
 export default function Pagination({links}) {
   return (
-    <div className='py-12'>
+    <div className='py-12 text-primary'>
         {links.map((link, key) => (
             link.url ?
             <Link className={`px-2 ${link.active ? 'rounded ring-2 ring-blue-500' : ''}`}

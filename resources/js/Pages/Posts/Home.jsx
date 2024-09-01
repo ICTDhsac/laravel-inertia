@@ -1,16 +1,22 @@
 import { IoIosCreate } from "react-icons/io";
 import Pagination from "../../Layouts/Pagination";
-import { Link } from '@inertiajs/react';
+// import { Link } from '@inertiajs/react';
+import { useState } from "react";
+import Create from "./Create";
 
 export default function Home({ posts }) {
 
-    console.log(posts);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
     return <>
-    <div className="flex justify-between">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Posts</h1>
-        <Link href='/posts/create' className="btn btn-primary"><IoIosCreate /> Create New</Link>
-    </div>
+
+        <div className="flex justify-between">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Posts</h1>
+            <button className="btn btn-primary" onClick={openModal}><IoIosCreate /> Create New</button>
+        </div>
 
         <div>
 
@@ -28,6 +34,9 @@ export default function Home({ posts }) {
         </div>
         
         <Pagination links={posts.links} />
+
+        <Create isOpen={isModalOpen} onClose={closeModal} />
+
 
     </>
 }

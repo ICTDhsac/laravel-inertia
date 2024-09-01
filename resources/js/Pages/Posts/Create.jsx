@@ -1,24 +1,85 @@
 import { useForm } from "@inertiajs/react";
+import Alert from "../../Layouts/Alert";
+import { useEffect } from "react";
+import FileUpload from "../../Helper/FileUpload";
 
+export default function Create({isOpen, onClose}) {
 
-export default function Create() {
-
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
         body: '',
+        files: []
     })
 
-  return (
-    <>
-        <div className="title">Create a new Post</div>
+    // console.log(useForm());
 
-        <div className="w-1/2 m-auto">
-            <form>
-                <textarea className="w-full h-28 p-2 border border-gray-300 rounded"></textarea>
-                <div className="flex justify-end mt-2">
-                    <button className="btn btn-success">Create</button>
-                </div>
-            </form>
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setData(name, value);
+    };
+
+    const handleDrop = (acceptedFiles) => {
+        setData('files', [...data.files, ...acceptedFiles]);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("Form Submitted");
+
+        const formData = new FormData();
+        data.files.forEach((file) => {
+            formData.append('files[]', file);
+        });
+
+        post("/posts", {
+            preserveScroll: true,
+            data: formData,
+            onSuccess: (response) => {
+                console.log("Post created successfully:", response.props);
+                reset();
+                onClose();
+            },
+            onError: (err) => {
+                console.log("Form submission errors:", err);
+                
+            }
+        });
+    }
+
+    useEffect(() => {
+        if (!isOpen) {
+            clearErrors();
+            reset();
+        }
+    }, [isOpen]);
+
+    return (
+        <div className={`modal ${isOpen ? 'modal-open' : ''}`}>
+            <div className="modal-box w-1/2 max-w-5xl">
+                <h3 className="font-bold text-lg mb-10">Create a New Post</h3>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-control">
+                        {errors.body &&
+                            <Alert message={errors.body}/>
+                        }
+                        <textarea
+                            className={`w-full p-2 border border-gray-300 rounded ${errors.body && '!ring-red-500'}`}
+                            rows="10"
+                            name="body"
+                            value={data.body}
+                            onChange={handleChange}
+                        ></textarea>
+                        {/* <FileUpload onDrop={handleDrop} />
+                        {errors.files &&
+                            <Alert message={errors.files}/>
+                        } */}
+                    </div>
+                    <div className="modal-action">
+                        <button type="submit" disabled={processing} className="btn btn-success"><span className={`loading loading-spinner loading-xs ${processing ? 'inline-block' : 'hidden'}`}></span>Create</button>
+                        <button type="button" onClick={onClose} className="btn">Cancel</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </>
-  )
-}
+    );
+};
+

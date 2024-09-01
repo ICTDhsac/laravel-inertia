@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -30,7 +31,13 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        //
+        sleep(2);
+        /* with StorePostRequest automatically returns errors without calling it */
+        $post = Post::create($request->validated()); /* $request->validated() - this is called only to return all the fields that validated then save it */
+
+        return redirect()->route('posts.index')
+            ->with('status', 'Post created successfully!')
+            ->with('post', $post);
     }
 
     /**
@@ -52,7 +59,7 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePostRequest $request, Post $post)
+    public function update(Request $request, Post $post)
     {
         //
     }
