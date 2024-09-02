@@ -1,7 +1,7 @@
 import { useForm } from "@inertiajs/react";
 import Alert from "../../Layouts/Alert";
 import { useEffect } from "react";
-import FileUpload from "../../Helper/FileUpload";
+// import FileUpload from "../../Helper/FileUpload";
 
 export default function Create({isOpen, onClose}) {
 
@@ -17,9 +17,9 @@ export default function Create({isOpen, onClose}) {
         setData(name, value);
     };
 
-    const handleDrop = (acceptedFiles) => {
-        setData('files', [...data.files, ...acceptedFiles]);
-    };
+    // const handleDrop = (acceptedFiles) => {
+    //     setData('files', [...data.files, ...acceptedFiles]);
+    // };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -54,8 +54,10 @@ export default function Create({isOpen, onClose}) {
 
     return (
         <div className={`modal ${isOpen ? 'modal-open' : ''}`}>
-            <div className="modal-box w-1/2 max-w-5xl">
-                <h3 className="font-bold text-lg mb-10">Create a New Post</h3>
+            <div className="modal-box bg-gray-900 w-1/2 max-w-5xl">
+                <h3 className="font-bold text-lg">Create a New Post</h3>
+                {/* Divider */}
+                <div className="divider divider-neutral"></div>
                 <form onSubmit={handleSubmit}>
                     <div className="form-control">
                         {errors.body &&
@@ -68,12 +70,14 @@ export default function Create({isOpen, onClose}) {
                             value={data.body}
                             onChange={handleChange}
                         ></textarea>
+
                         {/* <FileUpload onDrop={handleDrop} />
                         {errors.files &&
                             <Alert message={errors.files}/>
                         } */}
                     </div>
-                    <div className="modal-action">
+                    {/* Divider */}
+                    <div className="modal-action pt-2 border-t-2 border-neutral">
                         <button type="submit" disabled={processing} className="btn btn-success"><span className={`loading loading-spinner loading-xs ${processing ? 'inline-block' : 'hidden'}`}></span>Create</button>
                         <button type="button" onClick={onClose} className="btn">Cancel</button>
                     </div>

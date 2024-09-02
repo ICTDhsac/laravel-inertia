@@ -4,6 +4,8 @@ import Pagination from "../../Layouts/Pagination";
 import { useState } from "react";
 import Create from "./Create";
 
+import FileUploadComponent from "../../Helper/FileUploadComponent";
+
 export default function Home({ posts }) {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,6 +15,7 @@ export default function Home({ posts }) {
 
     return <>
 
+        <FileUploadComponent />
         <div className="flex justify-between">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Posts</h1>
             <button className="btn btn-primary" onClick={openModal}><IoIosCreate /> Create New</button>
@@ -31,6 +34,7 @@ export default function Home({ posts }) {
                 </div>
 
             ))}
+
         </div>
         
         <Pagination links={posts.links} />

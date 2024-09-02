@@ -25,7 +25,7 @@
         @apply block text-sm font-medium leading-6 text-slate-900 first-letter:capitalize;
     }
     header {
-        @apply bg-gray-100 text-gray-200 dark:bg-gray-800 p-4 shadow-lg;
+        @apply w-full bg-gray-100 text-gray-200 dark:bg-gray-800 p-4 shadow-lg;
     }
     nav {
         @apply p-5 max-w-screen-lg mx-auto flex items-center justify-between;
@@ -65,11 +65,11 @@
     }
 
     .active-link {
-        @apply text-blue-500 bg-gray-400  rounded-lg px-4 py-2 dark:bg-gray-700;
+        @apply text-blue-500 bg-gray-400 rounded-lg px-0 py-2 dark:bg-gray-700;
     }
     
     .side-nav-link {
-        @apply hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center space-x-3;
+        @apply hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center space-x-3 px-2;
     }
     
     .round-btn {

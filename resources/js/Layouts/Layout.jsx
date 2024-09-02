@@ -23,10 +23,10 @@ export default function Layout({ children }) {
         <div className="flex h-screen">
 
             {/* Side Navigation Bar */}
-            <div className={`bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-100 p-6 space-y-6 ${isCollapsed ? 'w-20' : 'w-64'} transition-all duration-300`}>
+            <div className={`bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-gray-100 p-6 space-y-6 transition-all duration-300 flex-none ${isCollapsed ? 'min-w-20' : 'min-w-64'} `}>
 
                 {/* Logo */}
-                <div className={`flex items-center space-x-2 mb-6 ${isCollapsed ? 'justify-center' : ''}`}>
+                <div className={`flex items-center space-x-2 mb-6 justify-center`}>
                     {/* <img src="https://your-logo-url.com/logo.png" alt="Logo" className="h-10" /> */}
                     <IoLogoCodepen size={40} />
                     {!isCollapsed && <span className="text-3xl font-bold text-primary">MyApp</span>}
@@ -51,19 +51,19 @@ export default function Layout({ children }) {
                 {/* Navigation Links */}
                 <ul className="space-y-4 mt-6">
                     <li>
-                        <Link className={`side-nav-link active-link ${isCollapsed ? 'justify-center' : ''} ${isActive('/')}`} href="/">
+                        <Link className={`side-nav-link ${isActive('/')}`} href="/">
                             <FaHome />
                             {!isCollapsed && <span>Dashboard</span>}
                         </Link>
                     </li>
                     <li>
-                        <Link className={`side-nav-link ${isCollapsed ? 'justify-center' : ''} ${isActive('/reports')}`} href="#">
+                        <Link className={`side-nav-link ${isActive('/reports')}`} href="#">
                             <FaFile />
                             {!isCollapsed && <span>Reports</span>}
                         </Link>
                     </li>
                     <li>
-                        <Link className={`side-nav-link ${isCollapsed ? 'justify-center' : ''} ${isActive('/settings')}`} href="#">
+                        <Link className={`side-nav-link ${isActive('/settings')}`} href="#">
                             <FaGear />
                             {!isCollapsed && <span>Settings</span>}
                         </Link>
@@ -80,7 +80,7 @@ export default function Layout({ children }) {
             <div className="flex-1 flex flex-col bg-gray-100">
 
                 {/* Header */}
-                <header className="header">
+                <header>
 
                     <div className="navbar text-black">
                         <div className="flex-none">
