@@ -62,7 +62,7 @@ export default function PdfThumbnailComponent({fileUrl, fileName}) {
                     </Document>
                     </div>
                 </div>
-                <figcaption className='overflow-hidden text-ellipsis whitespace-nowrap'>{fileName}</figcaption>
+                <figcaption className='overflow-elipsis'>{fileName}</figcaption>
                 
                 <div className="flex justify-between items-center mt-2 text-sm">
                     <p className="text-center">

@@ -53,37 +53,30 @@ export default function Create({isOpen, onClose}) {
     }, [isOpen]);
 
     return (
-        <div className={`modal ${isOpen ? 'modal-open' : ''}`}>
-            <div className="modal-box bg-gray-900 w-1/2 max-w-5xl">
-                <h3 className="font-bold text-lg">Create a New Post</h3>
-                {/* Divider */}
-                <div className="divider divider-neutral"></div>
-                <form onSubmit={handleSubmit}>
-                    <div className="form-control">
-                        {errors.body &&
-                            <Alert message={errors.body}/>
-                        }
-                        <textarea
-                            className={`w-full p-2 border border-gray-300 rounded ${errors.body && '!ring-red-500'}`}
-                            rows="10"
-                            name="body"
-                            value={data.body}
-                            onChange={handleChange}
-                        ></textarea>
+        <>
+            <form onSubmit={handleSubmit}>
+                <div className="form-control">
+                    { errors.body && <Alert message={errors.body}/> }
+                    <textarea
+                        className={`w-full p-2 border border-gray-300 rounded ${errors.body && '!ring-red-500'}`}
+                        rows="10"
+                        name="body"
+                        value={data.body}
+                        onChange={handleChange}
+                    ></textarea>
 
-                        {/* <FileUpload onDrop={handleDrop} />
-                        {errors.files &&
-                            <Alert message={errors.files}/>
-                        } */}
-                    </div>
-                    {/* Divider */}
-                    <div className="modal-action pt-2 border-t-2 border-neutral">
-                        <button type="submit" disabled={processing} className="btn btn-success"><span className={`loading loading-spinner loading-xs ${processing ? 'inline-block' : 'hidden'}`}></span>Create</button>
-                        <button type="button" onClick={onClose} className="btn">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                    {/* <FileUpload onDrop={handleDrop} />
+                    {errors.files &&
+                        <Alert message={errors.files}/>
+                    } */}
+                </div>
+                {/* Divider */}
+                <div className="modal-action pt-2 border-t-2 border-neutral">
+                    <button type="submit" disabled={processing} className="btn btn-success"><span className={`loading loading-spinner loading-xs ${processing ? 'inline-block' : 'hidden'}`}></span>Create</button>
+                    <button type="button" onClick={onClose} className="btn">Cancel</button>
+                </div>
+            </form>
+        </>
     );
 };
 
