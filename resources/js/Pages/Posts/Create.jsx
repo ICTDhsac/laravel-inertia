@@ -32,6 +32,7 @@ export default function Create({isOpen, onClose}) {
 
         post("/posts", {
             preserveScroll: true,
+            preserveState: true,
             data: formData,
             onSuccess: (response) => {
                 console.log("Post created successfully:", response.props);

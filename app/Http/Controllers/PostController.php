@@ -6,7 +6,6 @@ use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class PostController extends Controller
 {
@@ -51,8 +50,8 @@ class PostController extends Controller
             return response()->json(['post' => $post]);
         }
         
-        return Inertia::render(null, [
-            'post' => $post
+        return inertia('Posts/Home', [
+            'post' => $post,
         ]);
     }
 
@@ -67,7 +66,7 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(UpdatePostRequest $request, Post $post)
     {
         //
     }
@@ -77,6 +76,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return redirect('/')->with(
+            'message', 'The post was deleted!'
+        );
     }
 }
