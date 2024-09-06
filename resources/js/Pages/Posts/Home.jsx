@@ -1,46 +1,71 @@
-import { IoIosCreate } from "react-icons/io";
 import Pagination from "../../Layouts/Pagination";
 import { Head, useForm, router,  usePage, Link } from '@inertiajs/react';
-import axios from 'axios';
+// import axios from 'axios';
 import { useState, useEffect } from "react";
 import Create from "./Create";
 import Show from "./Show";
 
+import { IoIosCreate } from "react-icons/io";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 // import FileUploadComponent from "../../Helper/FileUploadComponent";
 import Modal from "../../Helper/Modal";
 
-export default function Home({ posts }) {
+const Msg = ({ closeToast, toastProps }) => (
+    <div>
+        Lorem ipsum dolor {toastProps.position}
+        <div className="mt-2 flex justify-end gap-1">
+            <button className="btn btn-xs btn-warning">Retry</button>
+            <button className="btn btn-xs btn-error" onClick={closeToast}>Close</button>
+        </div>
+    </div>
+);
+
+export default function Home({ posts, flash }) {
 
     const [isCreate, setIsCreate] = useState(false);
     const [isShow, setIsShow] = useState(false);
     const [post, setPost] = useState(null);
     const [loadingStates, setLoadingStates] = useState({});
-    const { flash } = usePage().props;
-    const [flashMsg, setFlashMsg ] = useState(flash.message);
     const { delete: destroy } = useForm();
+
+    const notify = (res) => {
+        const { error, message } = res;
+        if(error){
+            toast.error(message);
+        }else{
+            toast.success(message);
+        }
+    }
     
     useEffect(() => {
-        if (flash.message) {
-            setFlashMsg(flash.message);
-            setTimeout(() => {
-                setFlashMsg(null);
-            },2000);
+        if (flash.response) {
+            notify(flash.response);
         }
     }, [flash]);
 
-    const handleShowPost = (e) => {
-        const data_obj = JSON.parse(atob(e.currentTarget.dataset.object));
+    console.log(flash)
 
+    const handleShowPost = (e) => {
+        // const postId = e.currentTarget.dataset.id;
+        const data_obj = JSON.parse(atob(e.currentTarget.dataset.object));
+        const toastId = toast.loading("Please wait...", { position: "bottom-right", className: 'foo-bar' } );
         setIsShow(true);
-        setPost(data_obj);
+        setTimeout(() => {
+            toast.update(toastId, { render: "All is good", type: "success", isLoading: false, autoClose: 3000 });
+            setPost(data_obj);
+        },5000);
         
-        // router.get(`/posts/${postId}`, {}, {
+        // router.post(`/posts/${postId}/fetch`, {}, {
         //     onSuccess: (page) => {
-        //         console.log(page);
-        //         setPost(page.props.post);
         //         setIsShow(true);
+        //         setPost(page.props.post);
         //     },
-        //     onFinish: () => setLoadingStates(prevState => ({ ...prevState, [postId]: false })),
+        //     onFinish: () => {
+        //         setLoadingStates(prevState => ({ ...prevState, [postId]: false }));
+        //         toast.update(toastId, { render: "All is good", type: "success", isLoading: false, autoClose: 3000 });
+        //     },
         //     preserveState: true, // prevents full page reload
         //     preserveScroll: true, // prevents full page reload
         //     only: ['post']  // fetch only the 'post' data, avoiding unnecessary rerenders
@@ -65,13 +90,8 @@ export default function Home({ posts }) {
         </div>
 
         <div>
-            { flashMsg && 
-                <div className="toast toast-end">
-                    <div className="alert alert-success">
-                        <span>{flashMsg}</span>
-                    </div>
-                </div>
-            }
+            <ToastContainer />
+            
             {posts.data.map(post => (
 
                 <div className="p-4 border-b" key={post.id}>
@@ -108,7 +128,7 @@ export default function Home({ posts }) {
         <Modal isOpen={isCreate} onClose={() => setIsCreate(false)} title="Create Post" >
             <Create isOpen={isCreate} onClose={() => setIsCreate(false)} />
         </Modal>
-        <Modal isOpen={isShow} onClose={() => setIsShow(false)} title={new Date(post?.created_at).toLocaleTimeString()} >
+        <Modal isOpen={isShow} onClose={() => {setIsShow(false); setPost(null)}} title={post ? new Date(post?.created_at).toLocaleTimeString() : 'Loading' } >
             {post ? <Show post={post} /> : <span className="loading loading-spinner loading-md">Loading...</span> }
         </Modal>
 

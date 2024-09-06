@@ -50,7 +50,7 @@ export default function Layout({ children }) {
 
                 {/* Navigation Links */}
                 <ul className="space-y-4 mt-6">
-                    <li>
+                    <li className='shadow-md'>
                         <Link className={`side-nav-link ${isActive('/')}`} href="/">
                             <FaHome />
                             {!isCollapsed && <span>Dashboard</span>}
