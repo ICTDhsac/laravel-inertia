@@ -1,6 +1,8 @@
 import { useForm} from "@inertiajs/react";
+import { useState } from "react";
 // import { FaGear } from "react-icons/fa6";
 import { FaTasks } from "react-icons/fa";
+import { TbTableColumn } from "react-icons/tb";
 
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
@@ -20,19 +22,22 @@ export default function TaskForm() {
     const { data, setData, post, processing, errors, reset, clearErrors, control, handleSubmit, setValue, getValues } = useForm({
         title: '',
         body: '',
-        status: []
+        status: null
     });
 
+    const [selectedOption, setSelectedOption] = useState(null);
+
     const handleChange = (e) => {
-        console.log(e);
+        
         const {name, value } = e.target;
+        console.log(name)
         setData(name, value);
     }
-    console.log('status',data.status)
+    console.log('data', data)
 
-    const handleSelectStatus = (option) => {
-        console.log(option)
-        setData(status, option);
+    const handleSelectOption = (selected) => {
+        setSelectedOption(selected);
+        setData('status', selected.value);
     }
 
     return (
@@ -51,20 +56,27 @@ export default function TaskForm() {
                             value={data?.title}
                         />
                     </label>
-                    <Select
-                        className="w-full"
-                        name="status"
-                        closeMenuOnSelect={false}
-                        components={animatedComponents}
-                        options={options}
-                        isMulti
-                        onChange={handleSelectStatus}
-                        // value={data.status}
-                    />
-                    
-                </form>
+                    <label className="input input-bordered bg-transparent flex items-center gap-2">
+                        <TbTableColumn />
+                        <Select
+                            name="status"
+                            className="w-full"
+                            placeholder="Status"
+                            closeMenuOnSelect={false}
+                            components={animatedComponents}
+                            options={options}
+                            // isMulti
+                            onChange={handleSelectOption}
+                            value={selectedOption}
+                        />
+                    </label>
 
+                    <div className="flex justify-end mt-3 px-5">
+                        <button className="btn btn-sm btn-primary">Submit</button>
+                    </div>
+                </form>
             </div>
+            <div className="divider">TO DO LIST</div>
         </>
     )
 }
