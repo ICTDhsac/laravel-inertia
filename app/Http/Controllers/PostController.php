@@ -31,7 +31,6 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        sleep(2);
         /* with StorePostRequest automatically returns errors without calling it */
         $post = Post::create($request->validated()); /* $request->validated() - this is called only to return all the fields that validated then save it */
 

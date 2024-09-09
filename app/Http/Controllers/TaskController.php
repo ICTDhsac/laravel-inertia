@@ -13,7 +13,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
+        $tasks = Task::latest()->get();
         return inertia('Tasks/Index', ['tasks' => $tasks]);
     }
 
@@ -30,7 +30,11 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        //
+        Task::create($request->validated());
+        return redirect()->back()->with('response', [
+            'error' => false,
+            'message' => 'Task created successfully!'
+        ]);
     }
 
     /**
