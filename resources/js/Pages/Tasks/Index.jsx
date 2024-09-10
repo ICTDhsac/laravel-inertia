@@ -1,8 +1,11 @@
+import '../../../css/tasks.css';
 import TaskForm from "./TaskForm"
 import { GrInProgress } from "react-icons/gr";
 import { MdOutlinePending } from "react-icons/md";
 import { FaCheckToSlot } from "react-icons/fa6";
 import TaskColumn from "./TaskColumn";
+import { ToastContainer, toast } from "react-toastify";
+import { useEffect, useState } from "react";
 
 const columnStatus = [
         {
@@ -49,10 +52,42 @@ const columnStatus = [
         
     ];
 
-export default function Index({tasks}) {
+export default function Index({tasks, flash}) {
+
+    const [activeCard, setActiveCard] = useState(null);
+
+    const handleOnDrop = (status, position) => {
+        console.log(`${activeCard} is going to place into ${status} and at the position ${position}`)
+
+        if(activeCard == null || activeCard == undefined) return;
+
+        const taskToMove = tasks[activeCard];
+        const updateTasks = tasks.filter((task, index) => index !== activeCard);
+        updateTasks.splice(position, 0, {
+            ...taskToMove,
+            status: status
+        });
+        tasks = updateTasks;
+    }
+
+    const notify = (res) => {
+        const { error, message } = res;
+        if(error){
+            toast.error(message);
+        }else{
+            toast.success(message);
+        }
+    }
+
+    useEffect(() => {
+        if (flash.response) {
+            notify(flash.response);
+        }
+    }, [flash]);
     
   return (
     <>
+        <ToastContainer />
         <h1 className="text-xl text-primary font-bold mb-5">DAILY TASK</h1>
         <TaskForm statuses={columnStatus.map(item => ({label: item.title, value: item.status}))}/>
 
@@ -60,13 +95,13 @@ export default function Index({tasks}) {
         <div className="flex gap-5 max-w-full overflow-x-auto pb-4">
 
             {/* TO DO COLUMN */}
-            {columnStatus.map((cStatus, i) => (
+            {columnStatus.map((column, i) => (
                 <TaskColumn
                     key={i}
-                    title={cStatus.title}
-                    icon={cStatus.icon}
-                    color={cStatus.color}
-                    tasks={tasks.filter((task) => task.status === cStatus.status)}
+                    column = {column}
+                    tasks={tasks.filter((task) => task.status === column.status)}
+                    setActiveCard={setActiveCard}
+                    onDrop={handleOnDrop}
                 />
             ))}
 

@@ -18,7 +18,7 @@ class TaskFactory extends Factory
     {
         return [
             'title' => fake()->sentence(),
-            'status' => fake()->randomElement(['IN PROGRESS', 'BACKLOGS', 'CANCELLED']),
+            'status' => fake()->randomElement(['TO DO', 'IN PROGRESS', 'BACKLOGS', 'CANCELLED']),
             'body' => fake()->text(),
         ];
     }

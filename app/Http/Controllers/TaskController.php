@@ -66,6 +66,11 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        sleep(2);
+        $task->delete();
+        return redirect('/')->with('response', [
+            'error' => false,
+            'message' => "Task \"". $task->title . "\" deleted successfully!"
+        ]);
     }
 }

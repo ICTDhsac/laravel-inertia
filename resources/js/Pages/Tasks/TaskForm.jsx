@@ -23,7 +23,7 @@ const options = [
 
 
 export default function TaskForm({statuses}) {
-    const { data, setData, post, processing, errors, reset, clearErrors, control, handleSubmit, setValue, getValues } = useForm({
+    const { data, setData, post, processing, errors, reset } = useForm({
         title: '',
         body: '',
         status: null
@@ -32,12 +32,10 @@ export default function TaskForm({statuses}) {
     const [selectedOption, setSelectedOption] = useState(null);
 
     const handleChange = (e) => {
-        
         const {name, value } = e.target;
-        console.log(name)
         setData(name, value);
     }
-    console.log('data', data)
+
 
     const handleSelectOption = (selected) => {
         setSelectedOption(selected);
@@ -53,6 +51,7 @@ export default function TaskForm({statuses}) {
             onSuccess: () => {
                 console.log("Task created successfully");
                 reset();
+                setSelectedOption(null);
             },
             onError: () => {
                 console.log("Task creation error");
@@ -82,7 +81,7 @@ export default function TaskForm({statuses}) {
                             name="status"
                             className="w-full"
                             placeholder="Status"
-                            closeMenuOnSelect={false}
+                            closeMenuOnSelect={true}
                             components={animatedComponents}
                             options={statuses}
                             // isMulti

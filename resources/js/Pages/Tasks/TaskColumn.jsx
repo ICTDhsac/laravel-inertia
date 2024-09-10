@@ -1,25 +1,25 @@
+import React from "react";
+import DropArea from "./DropArea";
+import TaskCard from "./TaskCard";
 
-export default function TaskColumn({title, icon, color, tasks}) {
+export default function TaskColumn({column, tasks, setActiveCard, onDrop}) {
+
   return (
     <>
         <div>
-            <h1 className={`text-xl font-bold text-center flex items-center justify-center mb-5 shadow-md ${color}`}>{icon} &nbsp;{title}</h1>
-            <div className="px-5 w-96 max-h-screen overflow-y-auto">
-                {tasks.map((task, key) => (
-                        <div key={key} className="card bg-gray-200 dark:bg-gray-800 text-black shadow-xl mb-5" draggable>
-                            <div className="card-body">
-                                <div className="text-sm text-slate-800 dark:text-slate-300">
-                                    <span>Posted on: </span>
-                                    <span> {new Date(task.created_at).toLocaleDateString()}</span>
-                                    <span> {new Date(task.created_at).toLocaleTimeString()}</span>
-                                </div>
-                                <h5 className="card-title dark:text-slate-300">{task.title}</h5>
-                                <p className="dark:text-slate-300">{task.body}</p>
-                                <div className="card-actions justify-end">
-                                    <button className="btn btn-sm btn-primary">View</button>
-                                </div>
-                            </div>
-                        </div>
+            <h1 className={`text-xl font-bold text-center flex items-center justify-center mb-5 shadow-md ${column.color}`}>{column.icon} &nbsp;{column.title}</h1>
+            <div className="border py-4 px-5 w-96 max-h-screen overflow-y-auto">
+                <DropArea onDrop={() => onDrop(column.status, 0)}/>
+                {tasks.map((task, index) => (
+                    <React.Fragment key={index}>
+                        <TaskCard
+                            index={index}
+                            task={task}
+                            setActiveCard={setActiveCard}
+                        />
+                        <DropArea onDrop={() => onDrop(column.status, index + 1)} />
+                    </React.Fragment>
+                        
                     ))
                 }
             </div>
