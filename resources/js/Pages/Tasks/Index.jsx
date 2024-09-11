@@ -9,42 +9,42 @@ import { useEffect, useState } from "react";
 import { router } from '@inertiajs/react';
 
 const columnStatus = [
-        {
-            status: "TO DO",
-            title: "TO DO",
-            icon: <MdOutlinePending className="text-md"/>,
-            color: "text-warning"
+    {
+        status: "TO DO",
+        title: "TO DO",
+        icon: <MdOutlinePending className="text-md"/>,
+        color: "text-warning"
 
-        },
-        {
-            status: "IN PROGRESS",
-            title: "IN PROGRESS",
-            icon: <FaCheckToSlot className="text-md"/>,
-            color: "text-info"
+    },
+    {
+        status: "IN PROGRESS",
+        title: "IN PROGRESS",
+        icon: <FaCheckToSlot className="text-md"/>,
+        color: "text-info"
 
-        },
-        {
-            status: "COMPLETED",
-            title: "COMPLETED",
-            icon: <FaCheckToSlot className="text-md"/>,
-            color: "text-success"
+    },
+    {
+        status: "COMPLETED",
+        title: "COMPLETED",
+        icon: <FaCheckToSlot className="text-md"/>,
+        color: "text-success"
 
-        },
-        {
-            status: "CANCELLED",
-            title: "CANCELLED",
-            icon: <FaCheckToSlot className="text-md"/>,
-            color: "text-error"
+    },
+    {
+        status: "CANCELLED",
+        title: "CANCELLED",
+        icon: <FaCheckToSlot className="text-md"/>,
+        color: "text-error"
 
-        },
-        {
-            status: "BACKLOGS",
-            title: "BACKLOGS",
-            icon: <FaCheckToSlot className="text-md"/>,
-            color: "text-amber-500"
-        },
-        
-    ];
+    },
+    {
+        status: "BACKLOGS",
+        title: "BACKLOGS",
+        icon: <FaCheckToSlot className="text-md"/>,
+        color: "text-amber-500"
+    },
+    
+];
 
 export default function Index({tasks, flash}) {
 
@@ -66,7 +66,10 @@ export default function Index({tasks, flash}) {
             const taskToMove = activeColumnTasks.splice(activeCard.index, 1); // Remove the task from the old position
     
             // Add the task to the new position in the new status column
-            const newStatusTasks = newDuties[status] ? [...newDuties[status]] : [];
+            let newStatusTasks = newDuties[status] ? [...newDuties[status]] : [];
+            if(status == activeCard.status){
+                newStatusTasks = activeColumnTasks ? [...activeColumnTasks] : [];
+            }
             newStatusTasks.splice(position, 0, { ...taskToMove[0], status });
     
             // Update the duties object
@@ -80,14 +83,9 @@ export default function Index({tasks, flash}) {
             router.put('/tasks-batch', {tasks: updatedTasks}, {
                 preserveScroll: true,
                 preserveState: true,
-                onSuccess: () => {
+                onSuccess: (page) => {
                     console.log("Tasks updated successfully");
-                    // let p = router.page;
-                    // p.url = '/';
-                    // router.setPage(p,{
-                    //     preserveScroll: true,
-                    //     preserveState: true
-                    // })
+                    console.log(page);
                 },
                 onError: () => {
                     console.log("Tasks update error");
