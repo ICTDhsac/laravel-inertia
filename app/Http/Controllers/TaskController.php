@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class TaskController extends Controller
 {
@@ -13,7 +15,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::latest()->get();
+        $tasks = Task::orderBy('sortIndex')->latest()->get();
         return inertia('Tasks/Index', ['tasks' => $tasks]);
     }
 
@@ -59,6 +61,28 @@ class TaskController extends Controller
     public function update(UpdateTaskRequest $request, Task $task)
     {
         //
+    }
+
+    public function updateBatch(Request $request)
+    {
+        $tasks = $request->tasks;
+
+        foreach ($tasks as $task) {
+            Task::where('id', $task['id'])
+                ->update(['sortIndex' => $task['sortIndex'], 'status' => $task['status']]);
+        }
+
+        return redirect('/')->with('response', [
+            'error' => false,
+            'message' => "Task sort index updated successfully!"
+        ]);
+
+        // return Inertia::render('Tasks/Index', [
+        //     'tasks' => Task::orderBy('sortIndex')->get()
+        // ])->with('response', [
+        //     'error' => false,
+        //     'message' => 'Sort Index updated successfully!'
+        // ]);
     }
 
     /**

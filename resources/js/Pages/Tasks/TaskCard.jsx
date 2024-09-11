@@ -8,7 +8,7 @@ export default function TaskCard({index, task, setActiveCard}) {
     const deleteTask = (e) => {
         e.preventDefault();
         const url = e.currentTarget.action;
-        destroy(url);
+        destroy(url,{ preserveScroll: true, preserveState: true });
     }
 
   return (
@@ -16,10 +16,11 @@ export default function TaskCard({index, task, setActiveCard}) {
         <article
             key={index}
             className="task-card card cursor-grab bg-gray-200 dark:bg-gray-800 text-black shadow-xl mb-5"
-            draggable onDragStart={() => setActiveCard(index)}
+            draggable onDragStart={() => setActiveCard({index: index, id: task.id, status: task.status})}
             onDragEnd={() => setActiveCard(null)}
         >
             <div className="card-body">
+                <h1 className="text-xl font-bold text-primary">sort#: {task.sortIndex}</h1>
                 <DateComponent dateTime={task.created_at} />
                 <h5 className="card-title dark:text-slate-300">{task.title}</h5>
                 <p className="dark:text-slate-300">{task.body}</p>

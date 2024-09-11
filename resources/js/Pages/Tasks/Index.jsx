@@ -6,6 +6,7 @@ import { FaCheckToSlot } from "react-icons/fa6";
 import TaskColumn from "./TaskColumn";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
+import { router } from '@inertiajs/react';
 
 const columnStatus = [
         {
@@ -16,24 +17,17 @@ const columnStatus = [
 
         },
         {
-            status: "ONGOING",
-            title: "ONGOING",
-            icon: <GrInProgress className="text-md"/>,
-            color: "text-primary"
-
-        },
-        {
-            status: "COMPLETE",
-            title: "COMPLETED",
-            icon: <FaCheckToSlot className="text-md"/>,
-            color: "text-success"
-
-        },
-        {
             status: "IN PROGRESS",
             title: "IN PROGRESS",
             icon: <FaCheckToSlot className="text-md"/>,
             color: "text-info"
+
+        },
+        {
+            status: "COMPLETED",
+            title: "COMPLETED",
+            icon: <FaCheckToSlot className="text-md"/>,
+            color: "text-success"
 
         },
         {
@@ -55,23 +49,62 @@ const columnStatus = [
 export default function Index({tasks, flash}) {
 
     const [activeCard, setActiveCard] = useState(null);
+    const [duties, setDuties] = useState([]);
 
     const handleOnDrop = (status, position) => {
-        console.log(`${activeCard} is going to place into ${status} and at the position ${position}`)
-
+        
         if(activeCard == null || activeCard == undefined) return;
 
-        const taskToMove = tasks[activeCard];
-        const updateTasks = tasks.filter((task, index) => index !== activeCard);
-        updateTasks.splice(position, 0, {
-            ...taskToMove,
-            status: status
+        console.log(`status: ${activeCard.status} - index: ${activeCard.index} - ID# - ${activeCard.id}  is going to place into ${status} and at the position ${position}`)
+
+        setDuties(prevDuties => {
+            // Clone the previous state
+            const newDuties = { ...prevDuties };
+
+            // Get the tasks from the current status column and clone it
+            const activeColumnTasks = [...newDuties[activeCard.status]];
+            const taskToMove = activeColumnTasks.splice(activeCard.index, 1); // Remove the task from the old position
+    
+            // Add the task to the new position in the new status column
+            const newStatusTasks = newDuties[status] ? [...newDuties[status]] : [];
+            newStatusTasks.splice(position, 0, { ...taskToMove[0], status });
+    
+            // Update the duties object
+            newDuties[activeCard.status] = activeColumnTasks;
+            newDuties[status] = newStatusTasks;
+
+            const updatedTasks = Object.entries(newDuties).flatMap(([status, tasks]) => 
+                tasks.map((task, i) => ({ ...task, sortIndex: i }))
+            );
+
+            router.put('/tasks-batch', {tasks: updatedTasks}, {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    console.log("Tasks updated successfully");
+                    // let p = router.page;
+                    // p.url = '/';
+                    // router.setPage(p,{
+                    //     preserveScroll: true,
+                    //     preserveState: true
+                    // })
+                },
+                onError: () => {
+                    console.log("Tasks update error");
+                },
+                only: ['flash'],
+                replace: true
+            });
+            
+    
+            return newDuties;
         });
-        tasks = updateTasks;
+
     }
 
     const notify = (res) => {
         const { error, message } = res;
+
         if(error){
             toast.error(message);
         }else{
@@ -83,7 +116,29 @@ export default function Index({tasks, flash}) {
         if (flash.response) {
             notify(flash.response);
         }
+        console.log("flash", flash)
     }, [flash]);
+
+    useEffect( () => {
+        columnStatus.forEach((column) => {
+            setDuties((prev) => {
+                return { ...prev, [column.status]: tasks.filter((task) => task.status === column.status)}
+            }) 
+        });
+        console.log("tasks!!!!!!", tasks)
+    }, [tasks])
+
+
+    useEffect( () => {
+        if(duties){
+            Object.entries(duties).map(([status, tasks]) => {
+                console.log(`Status: ${status}, Number of Tasks: ${tasks.length}`);
+            });
+        }
+        console.log(duties)
+    }, [duties])
+    
+
     
   return (
     <>
@@ -99,7 +154,7 @@ export default function Index({tasks, flash}) {
                 <TaskColumn
                     key={i}
                     column = {column}
-                    tasks={tasks.filter((task) => task.status === column.status)}
+                    tasks={duties?.[column.status] ?? []}
                     setActiveCard={setActiveCard}
                     onDrop={handleOnDrop}
                 />

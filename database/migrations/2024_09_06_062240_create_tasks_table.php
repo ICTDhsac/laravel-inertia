@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('body')->nullable();
             $table->string('status');
-            $table->integer('position');
+            $table->integer('sortIndex')->default(0);
             $table->timestamps();
         });
     }
