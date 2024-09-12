@@ -84,8 +84,7 @@ export default function Index({tasks, flash}) {
                 preserveScroll: true,
                 preserveState: true,
                 onSuccess: (page) => {
-                    console.log("Tasks updated successfully");
-                    console.log(page);
+                    console.log("Tasks updated successfully", page);
                 },
                 onError: () => {
                     console.log("Tasks update error");

@@ -49,7 +49,7 @@ export default function Layout({ children }) {
 
             <div>
                 {/* Side Navigation Bar */}
-                <aside className={`fixed flex flex-col pt-20 h-screen border-r border-neutral-300 dark:border-neutral-600 bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-gray-100 p-6 space-y-6 transition-all duration-300 ${isCollapsed ? 'min-w-20' : 'min-w-64'} `}>
+                <aside className={`fixed flex flex-col pt-20 h-screen border-r border-neutral-300 dark:border-neutral-600 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 p-6 space-y-6 transition-all duration-300 ${isCollapsed ? 'min-w-20' : 'min-w-64'} `}>
                     
                     {/* Logo */}
                     <div className={`hidden items-center space-x-2 justify-center`}>
@@ -104,7 +104,7 @@ export default function Layout({ children }) {
                 </aside>
 
                 {/* Main Content Area */}
-                <div className={`bg-white dark:bg-gray-900 pt-20 ${isCollapsed ? '!pl-28' : '!pl-72'}`}>
+                <div className={`bg-gray-200 dark:bg-gray-900 pt-20 ${isCollapsed ? '!pl-28' : '!pl-72'}`}>
 
                     {/* Main Content */}
                     <main className="overflow-x-auto min-h-lvh">

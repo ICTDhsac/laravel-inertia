@@ -61,9 +61,9 @@ export default function TaskForm({statuses}) {
 
     return (
         <>
-            <div className="bg-gray-200 dark:bg-gray-800 text-gray-200 dark:text-white md:w-full lg:w-1/2 mx-auto rounded p-2">
+            <div className="bg-white dark:bg-gray-800 text-gray-200 dark:text-white md:w-full lg:w-1/2 mx-auto border border-gray-400 rounded p-2">
                 <form onSubmit={handleSubmitForm}>
-                    <label className="input bg-gray-200 dark:bg-gray-800 flex items-center gap-2">
+                    <label className="input bg-white dark:bg-gray-800 flex items-center gap-2">
                         <FaTasks className="dark:text-white" />
                         <input
                             type="text"
@@ -75,7 +75,7 @@ export default function TaskForm({statuses}) {
                         />
                     </label>
                     { errors.title && <p className="text-error flex items-center pl-10"><MdError/> {errors.title}</p> }
-                    <label className="input bg-gray-200 dark:bg-gray-800 flex items-center gap-2">
+                    <label className="input bg-white dark:bg-gray-800 flex items-center gap-2">
                         <TbTableColumn className="dark:text-white"/>
                         <Select
                             name="status"

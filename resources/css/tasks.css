@@ -7,7 +7,7 @@
 @layer components {
     
     .task-card {
-        @apply cursor-grab bg-gray-200 dark:bg-gray-800 text-black shadow-xl mb-5 hover:ring-1 hover:ring-amber-400 dark:hover:ring-slate-100;
+        @apply cursor-grab bg-white dark:bg-gray-800 text-black shadow-xl mb-5 hover:ring-1 hover:ring-amber-400 dark:hover:ring-slate-100;
     }
     
     /* .task-card:active {
