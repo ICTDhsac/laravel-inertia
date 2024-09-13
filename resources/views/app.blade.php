@@ -9,5 +9,14 @@
     </head>
     <body>
         @inertia
+
+        <script>
+            window.addEventListener('DOMContentLoaded', function() {
+                window.Echo.channel('system-maintenance')
+                    .listen('SystemMaintenanceEvent', (event) => {
+                        console.log(event);
+                    });
+            })
+        </script>
     </body>
 </html>

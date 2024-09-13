@@ -1,10 +1,9 @@
 import { useForm } from "@inertiajs/react";
 import DateComponent from "../../Helper/DateComponent";
 import { MdDelete } from "react-icons/md";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
-export default function TaskCard({index, task, setActiveCard}) {
-    // const dragGhostRef = useRef(null);
+export default function TaskCard({index, task, setActiveCard, onDrop}) {
     const [isDragging, setIsDragging] = useState(false);
     const { delete: destroy, processing } = useForm();
 
@@ -26,17 +25,18 @@ export default function TaskCard({index, task, setActiveCard}) {
                 key={index}
                 className={`task-card card ${isDragging ? "dragging" : ""}`}
                 draggable
-                onDragStart={(e) => {
-                    // if (dragGhostRef.current) {
-                    //     e.dataTransfer.setDragImage(dragGhostRef.current, 0, 0);
-                    // }
+                onDragStart={() => {
                     setIsDragging(true);
-                    setActiveCard({index: index, id: task.id, status: task.status})
+                    setActiveCard({index: index, id: task.id, status: task.status});
+
                 }}
                 onDragEnd={() => {
                     setActiveCard(null);
                     setIsDragging(false);
                 }}
+                onDrop={() => onDrop()}
+                onDragOver={ (e) => e.preventDefault()}
+                
             >
                 <div className="card-body">
                     {/* <h1 className="text-xl font-bold text-primary">sort#: {task.sortIndex}</h1> */}
@@ -54,27 +54,6 @@ export default function TaskCard({index, task, setActiveCard}) {
                     </div>
                 </div>
             </article>
-
-            {/* <article
-                className="task-card card"
-                ref={dragGhostRef}
-                style={{
-                    position: 'absolute',
-                    top: '-9999px',
-                    left: '-9999px',
-                    backgroundColor: 'white',
-                    padding: '10px',
-                    borderRadius: '5px',
-                    boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
-                }}
-            >
-                <div className="card-body">
-
-                    <DateComponent dateTime={task.created_at} />
-                    <h5 className="card-title dark:text-slate-300">{task.title}</h5>
-                    <p className="dark:text-slate-300">{task.body}</p>
-                </div>
-            </article> */}
 
         </>
     )

@@ -5,7 +5,8 @@ import { FaGear } from "react-icons/fa6";
 import { IoLogoCodepen } from "react-icons/io";
 import { BsThreeDots } from "react-icons/bs";
 import { GiToggles } from "react-icons/gi";
-import ThemeToggle from './ThemeToggle';
+import { DarkThemeToggle, Flowbite } from "flowbite-react";
+// import ThemeToggle from './ThemeToggle';
 
 export default function Layout({ children }) {
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -20,7 +21,7 @@ export default function Layout({ children }) {
     };
 
     return (
-        <div className="container-fluid">
+        <Flowbite>
             <header>
                 <div className="navbar text-black">
                     <div className="flex-none">
@@ -32,7 +33,7 @@ export default function Layout({ children }) {
                         <a className="btn btn-ghost dark:text-gray-200 text-xl">MyApp</a>
                     </div>
                     <div className="flex-none">
-                        <ThemeToggle />
+                        <DarkThemeToggle />
                         <div className="dropdown dropdown-end dropdown-hover dark:text-gray-200">
                             <div tabIndex={0} role="button" className='btn m-1 btn-square btn-ghost'><BsThreeDots /></div>
                             <ul tabIndex={0} className="dropdown-content menu bg-base-100 text-gray-200 rounded-box z-[1] w-52 p-2 shadow">
@@ -53,7 +54,6 @@ export default function Layout({ children }) {
                     
                     {/* Logo */}
                     <div className={`hidden items-center space-x-2 justify-center`}>
-                        {/* <img src="https://your-logo-url.com/logo.png" alt="Logo" className="h-10" /> */}
                         <IoLogoCodepen size={40} />
                         {!isCollapsed && <span className="text-3xl font-bold text-primary">MyApp</span>}
                     </div>
@@ -76,10 +76,16 @@ export default function Layout({ children }) {
 
                     {/* Navigation Links */}
                     <ul className="space-y-4 mt-6">
-                        <li className=''>
-                            <Link className={`side-nav-link active-link ${isActive('/')}`} href="/">
+                        <li>
+                            <Link className={`side-nav-link ${isActive('/')}`} href="/">
                                 <FaHome />
                                 {!isCollapsed && <span>Dashboard</span>}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link className={`side-nav-link ${isActive('/about')}`} href="/about">
+                                <FaFile />
+                                {!isCollapsed && <span>About</span>}
                             </Link>
                         </li>
                         <li>
@@ -107,13 +113,13 @@ export default function Layout({ children }) {
                 <div className={`bg-gray-200 dark:bg-gray-900 pt-20 ${isCollapsed ? '!pl-28' : '!pl-72'}`}>
 
                     {/* Main Content */}
-                    <main className="overflow-x-auto min-h-lvh">
+                    <main>
                         {children}
                     </main>
                 </div>
 
             </div>
 
-        </div>
+        </Flowbite>
     );
 }

@@ -5,8 +5,9 @@ import { MdOutlinePending } from "react-icons/md";
 import { FaCheckToSlot } from "react-icons/fa6";
 import TaskColumn from "./TaskColumn";
 import { ToastContainer, toast } from "react-toastify";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { router } from '@inertiajs/react';
+import ScrollArrow from '../../Helper/ScrollArrow';
 
 const columnStatus = [
     {
@@ -50,6 +51,7 @@ export default function Index({tasks, flash}) {
 
     const [activeCard, setActiveCard] = useState(null);
     const [duties, setDuties] = useState([]);
+    const containerRef = useRef(null);
 
     const handleOnDrop = (status, position) => {
         
@@ -133,8 +135,7 @@ export default function Index({tasks, flash}) {
             });
         }
         console.log(duties)
-    }, [duties])
-    
+    }, [duties]);
 
     
   return (
@@ -144,19 +145,25 @@ export default function Index({tasks, flash}) {
         <TaskForm statuses={columnStatus.map(item => ({label: item.title, value: item.status}))}/>
 
         {/*main container for the kanban */}
-        <div className="flex gap-5 max-w-full overflow-x-auto pb-4">
+        <div className="relative group">
+            <div
+                className="flex gap-5 max-w-full overflow-x-auto scroll-smooth pb-4"
+                ref={containerRef}
+            >
 
-            {/* TO DO COLUMN */}
-            {columnStatus.map((column, i) => (
-                <TaskColumn
-                    key={i}
-                    column = {column}
-                    tasks={duties?.[column.status] ?? []}
-                    setActiveCard={setActiveCard}
-                    onDrop={handleOnDrop}
-                />
-            ))}
-
+                {/* TO DO COLUMN */}
+                {columnStatus.map((column, i) => (
+                    <TaskColumn
+                        key={i}
+                        column = {column}
+                        tasks={duties?.[column.status] ?? []}
+                        setActiveCard={setActiveCard}
+                        onDrop={handleOnDrop}
+                    />
+                ))}
+            </div>
+            
+            <ScrollArrow containerRef={containerRef} />
         </div>
         
     </>

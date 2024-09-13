@@ -16,6 +16,7 @@ export default function TaskColumn({column, tasks, setActiveCard, onDrop}) {
                                 index={index}
                                 task={task}
                                 setActiveCard={setActiveCard}
+                                onDrop={() => onDrop(column.status, index )}
                             />
                             <DropArea onDrop={() => onDrop(column.status, index + 1)} />
                         </React.Fragment>
