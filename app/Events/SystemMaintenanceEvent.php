@@ -18,9 +18,10 @@ class SystemMaintenanceEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(public string $time)
+    private $message;
+    public function __construct($message)
     {
-        //
+        $this->message = $message;
     }
 
     /**
@@ -28,11 +29,15 @@ class SystemMaintenanceEvent implements ShouldBroadcast
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn(): array
+    public function broadcastOn(): Channel
+    {
+        return new Channel('testChannel');
+    }
+
+    public function broadcastwith():array
     {
         return [
-            // new PrivateChannel('channel-name'),
-            new Channel('system-maintenance'),
+            'message' => $this->message
         ];
     }
 }

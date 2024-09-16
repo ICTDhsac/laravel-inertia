@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\SystemMaintenanceEvent;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
@@ -12,3 +13,7 @@ Route::inertia('/about', 'OffCanvas');
 
 Route::resource('tasks', TaskController::class)->except('index');
 Route::resource('posts', PostController::class);
+
+Route::get('test', function(){
+    event(new SystemMaintenanceEvent('Hello World'));
+});

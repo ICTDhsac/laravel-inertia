@@ -10,13 +10,14 @@
     <body>
         @inertia
 
-        <script>
-            window.addEventListener('DOMContentLoaded', function() {
-                window.Echo.channel('system-maintenance')
-                    .listen('SystemMaintenanceEvent', (event) => {
-                        console.log(event);
-                    });
-            })
-        </script>
     </body>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM fully loaded and parsed");
+            window.Echo.channel('testChannel')
+                .listen('SystemMaintenanceEvent', (event) => {
+                    console.log(event);
+                });
+        })
+    </script>
 </html>
