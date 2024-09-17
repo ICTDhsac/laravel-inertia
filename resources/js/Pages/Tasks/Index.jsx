@@ -1,13 +1,15 @@
 import '../../../css/tasks.css';
+
 import TaskForm from "./TaskForm"
-import { GrInProgress } from "react-icons/gr";
+import ScrollArrow from '../../Helper/ScrollArrow';
+import TaskColumn from "./TaskColumn";
+import Show from './Show';
 import { MdOutlinePending } from "react-icons/md";
 import { FaCheckToSlot } from "react-icons/fa6";
-import TaskColumn from "./TaskColumn";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useRef, useState } from "react";
 import { router } from '@inertiajs/react';
-import ScrollArrow from '../../Helper/ScrollArrow';
+import Loader from '../../Layouts/Loader';
 
 const columnStatus = [
     {
@@ -50,35 +52,43 @@ const columnStatus = [
 export default function Index({tasks, flash}) {
 
     const [activeCard, setActiveCard] = useState(null);
-    const [duties, setDuties] = useState([]);
+    const [todos, setTodos] = useState([]);
     const containerRef = useRef(null);
+    const [task, setTask] = useState(null);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+    const handleShow = (data) => {
+        setIsDrawerOpen(true);
+        setTask(data);
+    }
+    
 
     const handleOnDrop = (status, position) => {
-        
+
         if(activeCard == null || activeCard == undefined) return;
 
         console.log(`status: ${activeCard.status} - index: ${activeCard.index} - ID# - ${activeCard.id}  is going to place into ${status} and at the position ${position}`)
 
-        setDuties(prevDuties => {
+        setTodos(prevTodos => {
             // Clone the previous state
-            const newDuties = { ...prevDuties };
+            const newTodos = { ...prevTodos };
 
             // Get the tasks from the current status column and clone it
-            const activeColumnTasks = [...newDuties[activeCard.status]];
+            const activeColumnTasks = [...newTodos[activeCard.status]];
             const taskToMove = activeColumnTasks.splice(activeCard.index, 1); // Remove the task from the old position
     
             // Add the task to the new position in the new status column
-            let newStatusTasks = newDuties[status] ? [...newDuties[status]] : [];
+            let newStatusTasks = newTodos[status] ? [...newTodos[status]] : [];
             if(status == activeCard.status){
                 newStatusTasks = activeColumnTasks ? [...activeColumnTasks] : [];
             }
             newStatusTasks.splice(position, 0, { ...taskToMove[0], status });
     
             // Update the duties object
-            newDuties[activeCard.status] = activeColumnTasks;
-            newDuties[status] = newStatusTasks;
+            newTodos[activeCard.status] = activeColumnTasks;
+            newTodos[status] = newStatusTasks;
 
-            const updatedTasks = Object.entries(newDuties).flatMap(([status, tasks]) => 
+            const updatedTasks = Object.entries(newTodos).flatMap(([status, tasks]) => 
                 tasks.map((task, i) => ({ ...task, sortIndex: i }))
             );
 
@@ -96,14 +106,13 @@ export default function Index({tasks, flash}) {
             });
             
     
-            return newDuties;
+            return newTodos;
         });
 
     }
 
     const notify = (res) => {
         const { error, message } = res;
-
         if(error){
             toast.error(message);
         }else{
@@ -120,22 +129,20 @@ export default function Index({tasks, flash}) {
 
     useEffect( () => {
         columnStatus.forEach((column) => {
-            setDuties((prev) => {
+            setTodos((prev) => {
                 return { ...prev, [column.status]: tasks.filter((task) => task.status === column.status)}
             }) 
         });
-        console.log("tasks!!!!!!", tasks)
     }, [tasks])
 
 
     useEffect( () => {
-        if(duties){
-            Object.entries(duties).map(([status, tasks]) => {
+        if(todos){
+            Object.entries(todos).map(([status, tasks]) => {
                 console.log(`Status: ${status}, Number of Tasks: ${tasks.length}`);
             });
         }
-        console.log(duties)
-    }, [duties]);
+    }, [todos]);
 
     
   return (
@@ -156,16 +163,18 @@ export default function Index({tasks, flash}) {
                     <TaskColumn
                         key={i}
                         column = {column}
-                        tasks={duties?.[column.status] ?? []}
+                        tasks={todos?.[column.status] ?? []}
                         setActiveCard={setActiveCard}
                         onDrop={handleOnDrop}
+                        onShow={handleShow}
                     />
                 ))}
             </div>
             
             <ScrollArrow containerRef={containerRef} />
         </div>
-        
+
+        <Show isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} task={task}/>
     </>
   )
 }

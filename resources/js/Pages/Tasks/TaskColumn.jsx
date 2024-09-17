@@ -1,8 +1,10 @@
+
 import React from "react";
 import DropArea from "./DropArea";
 import TaskCard from "./TaskCard";
 
-export default function TaskColumn({column, tasks, setActiveCard, onDrop}) {
+export default function TaskColumn({column, tasks, setActiveCard, onDrop, onShow}) {
+
 
     return (
         <>
@@ -17,6 +19,7 @@ export default function TaskColumn({column, tasks, setActiveCard, onDrop}) {
                                 task={task}
                                 setActiveCard={setActiveCard}
                                 onDrop={() => onDrop(column.status, index )}
+                                onShow={onShow}
                             />
                             <DropArea onDrop={() => onDrop(column.status, index + 1)} />
                         </React.Fragment>
@@ -25,6 +28,7 @@ export default function TaskColumn({column, tasks, setActiveCard, onDrop}) {
                     }
                 </div>
             </div>
+
         </>
     )
 }

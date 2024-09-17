@@ -3,7 +3,7 @@ import DateComponent from "../../Helper/DateComponent";
 import { MdDelete } from "react-icons/md";
 import { useState } from "react";
 
-export default function TaskCard({index, task, setActiveCard, onDrop}) {
+export default function TaskCard({index, task, setActiveCard, onDrop, onShow}) {
     const [isDragging, setIsDragging] = useState(false);
     const { delete: destroy, processing } = useForm();
 
@@ -44,7 +44,12 @@ export default function TaskCard({index, task, setActiveCard, onDrop}) {
                     <h5 className="card-title dark:text-slate-300">{task.title}</h5>
                     <p className="dark:text-slate-300">{task.body}</p>
                     <div className="card-actions justify-end">
-                        <button className="btn btn-sm btn-primary">View</button>
+                        <button
+                            className="btn btn-sm btn-primary"
+                            onClick={() => onShow(task)}
+                        >
+                            View
+                        </button>
                         <form onSubmit={deleteTask} action={`/tasks/${task.id}`}>
                             <button className="btn btn-error btn-sm">
                                 {processing ? <span className="loading loading-spinner loading-xs"></span> : <MdDelete />}

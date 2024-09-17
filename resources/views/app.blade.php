@@ -11,7 +11,7 @@
         @inertia
 
     </body>
-    <script>
+    {{-- <script>
         window.addEventListener('DOMContentLoaded', function() {
             console.log("DOM fully loaded and parsed");
             window.Echo.channel('testChannel')
@@ -19,5 +19,5 @@
                     console.log(event);
                 });
         })
-    </script>
+    </script> --}}
 </html>
