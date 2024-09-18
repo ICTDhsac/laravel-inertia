@@ -1,12 +1,14 @@
 import { Link, usePage } from '@inertiajs/react';
 import React, { useState } from 'react';
+
+import { DarkThemeToggle, Flowbite, Breadcrumb } from "flowbite-react";
+import { HiHome } from "react-icons/hi";
 import { Lines } from 'react-preloaders';
 import { FaHome, FaFile } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { IoLogoCodepen } from "react-icons/io";
 import { BsThreeDots } from "react-icons/bs";
 import { GiToggles } from "react-icons/gi";
-import { DarkThemeToggle, Flowbite } from "flowbite-react";
 // import ThemeToggle from './ThemeToggle';
 
 export default function Layout({ children }) {
@@ -120,8 +122,19 @@ export default function Layout({ children }) {
                     {/* Main Content Area */}
                     <div className={`bg-gray-200 dark:bg-gray-900 pt-20 ${isCollapsed ? '!pl-28' : '!pl-72'}`}>
 
+                        {/* Content Header */}
+                        <section className='flex justify-between items-center'>
+                            <h1 className='text-slate-900 dark:text-slate-300 font-bold text-3xl flex-1'>Page Title<small className='text-gray-400'> Control panel</small></h1>
+                            <Breadcrumb aria-label="Content Header" className='flex-none py-0 px-5'>
+                                <Breadcrumb.Item href="#" icon={HiHome}>
+                                    Home
+                                </Breadcrumb.Item>
+                                <Breadcrumb.Item href="#">Projects</Breadcrumb.Item>
+                                <Breadcrumb.Item>Tasks</Breadcrumb.Item>
+                            </Breadcrumb>
+                        </section>
                         {/* Main Content */}
-                        <main>
+                        <main className='mt-6'>
                             {children}
                         </main>
                     </div>

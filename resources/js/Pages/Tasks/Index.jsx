@@ -66,9 +66,10 @@ export default function Index({tasks, flash}) {
     const handleOnDrop = (status, position) => {
 
         if(activeCard == null || activeCard == undefined) return;
+        if(activeCard.status == status && position == activeCard.index) return;
 
         console.log(`status: ${activeCard.status} - index: ${activeCard.index} - ID# - ${activeCard.id}  is going to place into ${status} and at the position ${position}`)
-
+        
         setTodos(prevTodos => {
             // Clone the previous state
             const newTodos = { ...prevTodos };
@@ -148,8 +149,7 @@ export default function Index({tasks, flash}) {
   return (
     <>
         <ToastContainer />
-        <h1 className="text-xl text-primary font-bold mb-5">DAILY TASK</h1>
-        <TaskForm statuses={columnStatus.map(item => ({label: item.title, value: item.status}))}/>
+        {/* <TaskForm statuses={columnStatus.map(item => ({label: item.title, value: item.status}))}/> */}
 
         {/*main container for the kanban */}
         <div className="relative group">
