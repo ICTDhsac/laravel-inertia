@@ -151,63 +151,63 @@ export default function Index({tasks, flash}) {
     }, [todos]);
 
     
-  return (
-    <>
-        <ToastContainer />
-        {/* <TaskForm statuses={columnStatus.map(item => ({label: item.title, value: item.status}))}/> */}
+    return (
+        <>
+            <ToastContainer />
+            {/* <TaskForm statuses={columnStatus.map(item => ({label: item.title, value: item.status}))}/> */}
 
-        {/*main container for the kanban */}
-        <div className="relative group">
-            <div
-                className="flex gap-5 max-w-full overflow-x-auto scroll-smooth pb-4"
-                ref={containerRef}
-            >
+            {/*main container for the kanban */}
+            <div className="relative group">
+                <div
+                    className="flex gap-5 max-w-full overflow-x-auto scroll-smooth pb-4"
+                    ref={containerRef}
+                >
 
-                {/* TO DO COLUMN */}
-                {taskColumns &&
-                taskColumns.map((column, i) => (
-                    <TaskColumn
-                        key={i}
-                        column = {column}
-                        tasks={todos?.[column.status] ?? []}
-                        setActiveCard={setActiveCard}
-                        onDrop={handleOnDrop}
-                        onShow={handleShow}
-                    />
-                ))}
+                    {/* TO DO COLUMN */}
+                    {taskColumns &&
+                    taskColumns.map((column, i) => (
+                        <TaskColumn
+                            key={i}
+                            column = {column}
+                            tasks={todos?.[column.status] ?? []}
+                            setActiveCard={setActiveCard}
+                            onDrop={handleOnDrop}
+                            onShow={handleShow}
+                        />
+                    ))}
+                </div>
+                
+                <ScrollArrow containerRef={containerRef} />
             </div>
             
-            <ScrollArrow containerRef={containerRef} />
-        </div>
-        
 
-        {/* sample drag and drop */}
-        {/* <div className='flex justify-center border border-yellow-200 '>
+            {/* sample drag and drop */}
+            {/* <div className='flex justify-center border border-yellow-200 '>
 
-            <div className='border-2 bg-gray-400 w-96 h-80 m-auto my-2'>
-                <div
-                    className='border-1 bg-gray-500 w-44 h-44 flex items-center justify-center'
-                    draggable
-                    onDragEnter={(e) => {
-                        if (e.currentTarget.contains(e.relatedTarget)) return;
-                        console.log("onDragEnter") 
-                    }}
-                    onDragLeave={(e) =>{
-                        if (e.currentTarget.contains(e.relatedTarget)) return;
-                        console.log("onDragLeave")
-                    }}
-                >
-                    <div className='border-2  p-10'>
-                        <span className='border-2 p-2'>
-                            <button className='btn btn-xs' onClick={() => alert("CLick!")}>Click</button>
-                        </span>
+                <div className='border-2 bg-gray-400 w-96 h-80 m-auto my-2'>
+                    <div
+                        className='border-1 bg-gray-500 w-44 h-44 flex items-center justify-center'
+                        draggable
+                        onDragEnter={(e) => {
+                            if (e.currentTarget.contains(e.relatedTarget)) return;
+                            console.log("onDragEnter") 
+                        }}
+                        onDragLeave={(e) =>{
+                            if (e.currentTarget.contains(e.relatedTarget)) return;
+                            console.log("onDragLeave")
+                        }}
+                    >
+                        <div className='border-2  p-10'>
+                            <span className='border-2 p-2'>
+                                <button className='btn btn-xs' onClick={() => alert("CLick!")}>Click</button>
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        </div> */}
+            </div> */}
 
-        <Show isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} task={task}/>
-    </>
-  )
+            <Show isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} task={task}/>
+        </>
+    )
 }

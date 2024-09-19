@@ -3,7 +3,6 @@ import DateComponent from "../../Helper/DateComponent";
 import { Dropdown } from "flowbite-react";
 import { HiCog, HiCurrencyDollar, HiLogout, HiViewGrid } from "react-icons/hi";
 import { MdDelete } from "react-icons/md";
-import { BsThreeDots } from "react-icons/bs";
 
 import { useState } from "react";
 import { useForm } from "@inertiajs/react";
@@ -13,9 +12,9 @@ export default function TaskCard({index, task, setActiveCard, onDrop, onShow}) {
     const [showDrop, setShowDrop] = useState(null);
     const { delete: destroy, processing } = useForm();
 
-    const deleteTask = (e) => {
-        e.preventDefault();
-        const url = e.currentTarget.action;
+    const deleteTask = () => {
+        const url = `/tasks/${task.id}`;
+        
         destroy(url,{
             preserveScroll: true,
             preserveState: true,
@@ -26,23 +25,23 @@ export default function TaskCard({index, task, setActiveCard, onDrop, onShow}) {
     }
 
     const handleDragEnter = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         if (e.currentTarget.contains(e.relatedTarget)) return;
-        let taskData = e.dataTransfer.getData('text/plain');
-    
-        try {
-            taskData = JSON.parse(taskData);
-            console.log("Dropped task:", taskData);
-        } catch (error) {
-            console.error("Error parsing JSON:", error);
-            return;
-        }
+        let taskData = e.dataTransfer.getData('text');
+        console.log("taskData", taskData)
+        // try {
+        //     taskData = JSON.parse(taskData);
+        //     console.log("Dropped task:", taskData);
+        // } catch (error) {
+        //     console.error("Error parsing JSON:", error);
+        //     return;
+        // }
 
-        const data_id = e.currentTarget.getAttribute('data-id');
-        console.log("data_id", data_id)
-        if(taskData?.id == data_id) return;
+        // const data_id = e.currentTarget.getAttribute('data-id');
+        // console.log("data_id", data_id)
+        // if(taskData?.id == data_id) return;
 
-        setShowDrop(taskData);
+        // setShowDrop(taskData);
     };
 
     const handleDragLeave = (e) => {
@@ -59,20 +58,43 @@ export default function TaskCard({index, task, setActiveCard, onDrop, onShow}) {
             onDragStart={(e) => {
                 setIsDragging(true);
                 setActiveCard({index: index, id: task.id, status: task.status});
-                e.dataTransfer.setData("text/plain", JSON.stringify(task));
-
+                
+                // e.dataTransfer.setData("text", JSON.stringify(task));
+                // e.dataTransfer.setData("text", JSON.stringify("task"));
+                e.originalEvent.dataTransfer.effectAllowed = "move";
+                e.originalEvent.dataTransfer.setData("text", "damnnn!!!");
+                // console.log(e.dataTransfer.getData('text'));
+                // const data = JSON.parse(e.dataTransfer.getData('text'));
+                // console.log(data)
             }}
+            onDragEnter={(e) => {
+                const taskData = e.dataTransfer.getData('text'); // Get the data
+                console.log("ondragEnter",taskData);
+                // if (!taskData) {
+                //     console.log("No data available in dataTransfer");
+                //     return;  // If no data, exit early
+                // }
+            
+                // try {
+                //     const parsedData = JSON.parse(taskData);  // Try to parse the data
+                //     console.log("Parsed Data on Drag Enter:", parsedData);
+                // } catch (error) {
+                //     console.error("Error parsing JSON in Drag Enter:", error);
+                // }
+            }}
+            // onDragEnter={handleDragEnter}
             onDragEnd={() => {
                 setActiveCard(null);
                 setIsDragging(false);
             }}
-            onDrop={() => {
+            onDrop={(e) => {
+                const taskData = e.dataTransfer.getData('text'); // Get the data
+                console.log(taskData)
                 onDrop();
                 setShowDrop(null);
             }}
             onDragOver={ (e) => e.preventDefault()}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}     
+            // onDragLeave={handleDragLeave}     
         >
             {showDrop && (
                 <article className="task-card card dragging pointer-events-none">
@@ -90,38 +112,24 @@ export default function TaskCard({index, task, setActiveCard, onDrop, onShow}) {
                 className={`task-card cursor-pointer card ${isDragging ? "dragging" : ""}`}
             >
                 <div className="card-body relative px-3 py-3">
-                    {/* <div className="dropdown dropdown-left dropdown-hover dark:text-gray-200 absolute right-2">
-                        <div tabIndex={0} role="button"
-                            className='btn btn-xs btn-square btn-ghost'
+                    <div className="task-dropdown-toggle absolute right-0">
+                        <Dropdown 
+                            label="..."
+                            arrowIcon={false}
+                            placement="left-end"
                         >
-                            <BsThreeDots />
-                        </div>
-                        <ul tabIndex={0} className="dropdown-content menu bg-white text-black z-50 rounded-box w-52 shadow-lg">
-                            <li><a>Option 1</a></li>
-                            <li><a>Option 2</a></li>
-                            <li><a>Option 3</a></li>
-                            <li>
-                                <form onSubmit={deleteTask} action={`/tasks/${task.id}`}>
-                                    <button className="flex items-center">
-                                        {processing ? <span className="loading loading-spinner loading-xs"></span> : <MdDelete />}
-                                        &nbsp;Delete
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div> */}
-                    <div className="absolute right-2">
-                        <Dropdown label="" renderTrigger={() => <BsThreeDots />} placement="left-start">
                             <Dropdown.Header>
-                                <span className="block text-sm">Bonnie Green</span>
-                                <span className="block truncate text-sm font-medium">bonnie@flowbite.com</span>
+                                <small className="block text-sm">{task.status}</small>
                             </Dropdown.Header>
-                            <Dropdown.Item icon={HiViewGrid}>Dashboard</Dropdown.Item>
-                            <Dropdown.Item icon={HiCog}>Settings</Dropdown.Item>
-                            <Dropdown.Item icon={HiCurrencyDollar}>Earnings</Dropdown.Item>
+                            <Dropdown.Item icon={HiViewGrid}>Option1</Dropdown.Item>
+                            <Dropdown.Item icon={HiCog}>Option2</Dropdown.Item>
+                            <Dropdown.Item icon={HiCurrencyDollar}>Option3</Dropdown.Item>
                             <Dropdown.Divider />
-                            <Dropdown.Item icon={HiLogout}>Sign out</Dropdown.Item>
+                            <Dropdown.Item onClick={deleteTask}>
+                                <MdDelete /> Delete
+                            </Dropdown.Item>
                         </Dropdown>
+                        {processing ? <span className="mt-5 loading loading-spinner loading-xs"></span> : ""}
                     </div>
                     <DateComponent dateTime={task.created_at} />
                     <section

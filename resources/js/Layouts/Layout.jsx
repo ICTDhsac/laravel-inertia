@@ -2,7 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 import React, { useState } from 'react';
 
 import { DarkThemeToggle, Flowbite, Breadcrumb } from "flowbite-react";
-import { HiHome } from "react-icons/hi";
+import { HiHome, HiCog, HiCurrencyDollar, HiLogout, HiViewGrid } from "react-icons/hi";
 import { Lines } from 'react-preloaders';
 import { FaHome, FaFile } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
@@ -41,9 +41,9 @@ export default function Layout({ children }) {
                             <div className="dropdown dropdown-end dropdown-hover dark:text-gray-200">
                                 <div tabIndex={0} role="button" className='btn m-1 btn-square btn-ghost'><BsThreeDots /></div>
                                 <ul tabIndex={0} className="dropdown-content menu bg-base-100 text-gray-200 rounded-box z-[1] w-52 p-2 shadow">
-                                    <li><a>View Profile</a></li>
-                                    <li><a>Change Password</a></li>
-                                    <li><a>Log Out</a></li>
+                                    <li><a><HiViewGrid /> View Profile</a></li>
+                                    <li><a><HiCog /> Change Password</a></li>
+                                    <li><a><HiLogout/> Log Out</a></li>
                                 </ul>
                             </div>
                         </div>
