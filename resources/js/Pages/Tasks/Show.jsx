@@ -4,7 +4,7 @@ import { HiBars2, HiSquaresPlus } from "react-icons/hi2";
 export default function Show({isOpen, onClose, task}) {
   return (
     
-    <Drawer className="z-50" open={isOpen} onClose={onClose} position="right">
+    <Drawer className="z-50 text-black dark:text-white" open={isOpen} onClose={onClose} position="right">
         <Drawer.Header 
             title={task?.title}
             // titleIcon={() => <Avatar rounded size="xs" />}

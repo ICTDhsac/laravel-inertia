@@ -10,7 +10,7 @@ export default function TaskColumn({column, tasks, setActiveCard, onDrop, onShow
         <>
             <div className="shadow" draggable>
                 <h1 className={`text-gray-700 dark:text-slate-300 text-xl font-bold text-center flex items-center justify-center mb-5 shadow-md`}>{column.icon} &nbsp;{column.title}</h1>
-                <div className="py-4 px-5 w-96 max-h-screen overflow-y-auto">
+                <div className="py-4 px-3 w-96 max-h-screen overflow-y-auto">
                 <DropArea onDrop={() => onDrop(column.status, 0)} />
                     {tasks.map((task, index) => (
                         <React.Fragment key={index}>

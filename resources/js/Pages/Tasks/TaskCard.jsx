@@ -1,11 +1,16 @@
-import { useForm } from "@inertiajs/react";
 import DateComponent from "../../Helper/DateComponent";
+
+import { Dropdown } from "flowbite-react";
+import { HiCog, HiCurrencyDollar, HiLogout, HiViewGrid } from "react-icons/hi";
 import { MdDelete } from "react-icons/md";
+import { BsThreeDots } from "react-icons/bs";
+
 import { useState } from "react";
+import { useForm } from "@inertiajs/react";
 
 export default function TaskCard({index, task, setActiveCard, onDrop, onShow}) {
     const [isDragging, setIsDragging] = useState(false);
-    const [showDrop, setShowDrop] = useState(false);
+    const [showDrop, setShowDrop] = useState(null);
     const { delete: destroy, processing } = useForm();
 
     const deleteTask = (e) => {
@@ -20,90 +25,120 @@ export default function TaskCard({index, task, setActiveCard, onDrop, onShow}) {
         });
     }
 
-    const handleDragLeave = (e) => {
-        const currentElement = e.currentTarget;
-        const relatedTarget = e.relatedTarget;
+    const handleDragEnter = (e) => {
+        e.preventDefault();
+        if (e.currentTarget.contains(e.relatedTarget)) return;
+        let taskData = e.dataTransfer.getData('text/plain');
     
-        if (relatedTarget) {
-            // Get the parent element of the current element
-            const parentElement = currentElement.parentElement;
-    
-            // Check if relatedTarget is a sibling of the currentElement
-            const isSibling = relatedTarget.parentElement === parentElement;
-    
-            // Check if relatedTarget is a child of the parentElement
-            const isChildOfParent = parentElement.contains(relatedTarget);
-    
-            if (isSibling ) {
-                // If relatedTarget is a sibling or still within parentElement, do not hide the drop area
-                return;
-            }
+        try {
+            taskData = JSON.parse(taskData);
+            console.log("Dropped task:", taskData);
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
+            return;
         }
-    
-        // If the drag leaves both the task card and drop area, hide the drop area
-        setShowDrop(false);
+
+        const data_id = e.currentTarget.getAttribute('data-id');
+        console.log("data_id", data_id)
+        if(taskData?.id == data_id) return;
+
+        setShowDrop(taskData);
+    };
+
+    const handleDragLeave = (e) => {
+        e.preventDefault();
+        if (e.currentTarget.contains(e.relatedTarget)) return;
+        console.log("handleDragLeave")
+        setShowDrop(null);
     };
 
     return (
-        <div className="border-2">
+        <div
+            data-id={task.id}
+            draggable
+            onDragStart={(e) => {
+                setIsDragging(true);
+                setActiveCard({index: index, id: task.id, status: task.status});
+                e.dataTransfer.setData("text/plain", JSON.stringify(task));
+
+            }}
+            onDragEnd={() => {
+                setActiveCard(null);
+                setIsDragging(false);
+            }}
+            onDrop={() => {
+                onDrop();
+                setShowDrop(null);
+            }}
+            onDragOver={ (e) => e.preventDefault()}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}     
+        >
             {showDrop && (
-                <section className="drop-area"
-                    onDrop={() => onDrop()}
-                    onDragOver={ (e) => e.preventDefault()}
-                    onDragEnter={() => setShowDrop(true)}
-                    onDragLeave={handleDragLeave}
-                >
-                    <span>Drop Here</span>
-                </section>
+                <article className="task-card card dragging pointer-events-none">
+                    <div className="card-body">
+                        <DateComponent dateTime={showDrop.created_at} />
+                        <h5 className="card-title text-base dark:text-slate-300">{showDrop.title}</h5>
+                        <p className="text-xs dark:text-slate-300">{showDrop.body}</p>
+                    </div>
+                </article>
             )}
+
             {/* Task Card */}
             <article
                 key={index}
-                className={`task-card card ${isDragging ? "dragging" : ""}`}
-                draggable
-                onDragStart={() => {
-                    setIsDragging(true);
-                    setActiveCard({index: index, id: task.id, status: task.status});
-
-                }}
-                onDragEnd={() => {
-                    setActiveCard(null);
-                    setIsDragging(false);
-                    setShowDrop(false);
-                }}
-                onDrop={() => onDrop()}
-                onDragOver={ (e) => e.preventDefault()}
-                onDragEnter={() => {
-                        setShowDrop(true);
-                        console.log("onDragEnter", task.status + index);
-                    }
-                }
-                // onDragLeave={() => {
-                //         setShowDrop(false)
-                //         console.log("onDragLeave", task.status + index);
-                //     }
-                // }
-                onDragLeave={handleDragLeave}
+                className={`task-card cursor-pointer card ${isDragging ? "dragging" : ""}`}
             >
-                <div className="card-body">
-                    {/* <h1 className="text-xl font-bold text-primary">sort#: {task.sortIndex}</h1> */}
-                    <DateComponent dateTime={task.created_at} />
-                    <h5 className="card-title dark:text-slate-300">{task.title}</h5>
-                    <p className="dark:text-slate-300">{task.body}</p>
-                    <div className="card-actions justify-end">
-                        <button
-                            className="btn btn-sm btn-primary"
-                            onClick={() => onShow(task)}
+                <div className="card-body relative px-3 py-3">
+                    {/* <div className="dropdown dropdown-left dropdown-hover dark:text-gray-200 absolute right-2">
+                        <div tabIndex={0} role="button"
+                            className='btn btn-xs btn-square btn-ghost'
                         >
-                            View
-                        </button>
+                            <BsThreeDots />
+                        </div>
+                        <ul tabIndex={0} className="dropdown-content menu bg-white text-black z-50 rounded-box w-52 shadow-lg">
+                            <li><a>Option 1</a></li>
+                            <li><a>Option 2</a></li>
+                            <li><a>Option 3</a></li>
+                            <li>
+                                <form onSubmit={deleteTask} action={`/tasks/${task.id}`}>
+                                    <button className="flex items-center">
+                                        {processing ? <span className="loading loading-spinner loading-xs"></span> : <MdDelete />}
+                                        &nbsp;Delete
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div> */}
+                    <div className="absolute right-2">
+                        <Dropdown label="" renderTrigger={() => <BsThreeDots />} placement="left-start">
+                            <Dropdown.Header>
+                                <span className="block text-sm">Bonnie Green</span>
+                                <span className="block truncate text-sm font-medium">bonnie@flowbite.com</span>
+                            </Dropdown.Header>
+                            <Dropdown.Item icon={HiViewGrid}>Dashboard</Dropdown.Item>
+                            <Dropdown.Item icon={HiCog}>Settings</Dropdown.Item>
+                            <Dropdown.Item icon={HiCurrencyDollar}>Earnings</Dropdown.Item>
+                            <Dropdown.Divider />
+                            <Dropdown.Item icon={HiLogout}>Sign out</Dropdown.Item>
+                        </Dropdown>
+                    </div>
+                    <DateComponent dateTime={task.created_at} />
+                    <section
+                        className="pl-3 hover:underline"
+                        onClick={() => onShow(task)}
+                    >
+                        <h5 className="card-title text-base dark:text-slate-300 mb-3">{task.title}</h5>
+                        <p className="text-xs dark:text-slate-300">{task.body}</p>
+                    </section>
+                    {/* <div className="card-actions justify-end">
                         <form onSubmit={deleteTask} action={`/tasks/${task.id}`}>
                             <button className="btn btn-error btn-sm">
                                 {processing ? <span className="loading loading-spinner loading-xs"></span> : <MdDelete />}
                                 Delete
                             </button>
                         </form>
-                    </div>
+                    </div> */}
                 </div>
             </article>
 

@@ -53,9 +53,10 @@ export default function Index({tasks, flash}) {
 
     const [activeCard, setActiveCard] = useState(null);
     const [todos, setTodos] = useState([]);
-    const containerRef = useRef(null);
     const [task, setTask] = useState(null);
+    const [taskColumns, setTaskColumns] = useState(columnStatus);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const containerRef = useRef(null);
 
     const handleShow = (data) => {
         setIsDrawerOpen(true);
@@ -129,12 +130,16 @@ export default function Index({tasks, flash}) {
     }, [flash]);
 
     useEffect( () => {
-        columnStatus.forEach((column) => {
+        taskColumns.forEach((column) => {
             setTodos((prev) => {
                 return { ...prev, [column.status]: tasks.filter((task) => task.status === column.status)}
             }) 
         });
     }, [tasks])
+
+    useEffect( () => {
+        console.log("taskColumns: ", taskColumns)
+    }, [taskColumns])
 
 
     useEffect( () => {
@@ -159,7 +164,8 @@ export default function Index({tasks, flash}) {
             >
 
                 {/* TO DO COLUMN */}
-                {columnStatus.map((column, i) => (
+                {taskColumns &&
+                taskColumns.map((column, i) => (
                     <TaskColumn
                         key={i}
                         column = {column}
@@ -173,6 +179,33 @@ export default function Index({tasks, flash}) {
             
             <ScrollArrow containerRef={containerRef} />
         </div>
+        
+
+        {/* sample drag and drop */}
+        {/* <div className='flex justify-center border border-yellow-200 '>
+
+            <div className='border-2 bg-gray-400 w-96 h-80 m-auto my-2'>
+                <div
+                    className='border-1 bg-gray-500 w-44 h-44 flex items-center justify-center'
+                    draggable
+                    onDragEnter={(e) => {
+                        if (e.currentTarget.contains(e.relatedTarget)) return;
+                        console.log("onDragEnter") 
+                    }}
+                    onDragLeave={(e) =>{
+                        if (e.currentTarget.contains(e.relatedTarget)) return;
+                        console.log("onDragLeave")
+                    }}
+                >
+                    <div className='border-2  p-10'>
+                        <span className='border-2 p-2'>
+                            <button className='btn btn-xs' onClick={() => alert("CLick!")}>Click</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div> */}
 
         <Show isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} task={task}/>
     </>
