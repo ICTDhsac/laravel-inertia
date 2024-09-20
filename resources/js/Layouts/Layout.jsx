@@ -99,7 +99,7 @@ export default function Layout({ children }) {
                                 </Link>
                             </li>
                             <li>
-                                <Link className={`side-nav-link ${isActive('/reports')}`} href="#">
+                                <Link className={`side-nav-link ${isActive('/drawer')}`} href="/drawer">
                                     <FaFile />
                                     {!isCollapsed && <span>Reports</span>}
                                 </Link>

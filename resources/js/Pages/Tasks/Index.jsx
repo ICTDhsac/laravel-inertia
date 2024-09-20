@@ -1,53 +1,23 @@
 import '../../../css/tasks.css';
-
+/*Page Components */
 import TaskForm from "./TaskForm"
-import ScrollArrow from '../../Helper/ScrollArrow';
 import TaskColumn from "./TaskColumn";
+import Create from './Create';
 import Show from './Show';
-import { MdOutlinePending } from "react-icons/md";
-import { FaCheckToSlot } from "react-icons/fa6";
-import { ToastContainer, toast } from "react-toastify";
+/* Helper Components */
+import ScrollArrow from '../../Helper/ScrollArrow';
+/* React */
 import { useEffect, useRef, useState } from "react";
 import { router } from '@inertiajs/react';
-import Loader from '../../Layouts/Loader';
+/* Plugins */
+import { ToastContainer, toast } from "react-toastify";
+/* UI PLugins */
+import { Button } from 'flowbite-react';
+import { HiViewGridAdd } from "react-icons/hi";
+/* Data */
+import { columnStatus } from '../../Data/ColumnStatus';
 
-const columnStatus = [
-    {
-        status: "TO DO",
-        title: "TO DO",
-        icon: <MdOutlinePending className="text-md"/>,
-        color: "text-warning"
 
-    },
-    {
-        status: "IN PROGRESS",
-        title: "IN PROGRESS",
-        icon: <FaCheckToSlot className="text-md"/>,
-        color: "text-info"
-
-    },
-    {
-        status: "COMPLETED",
-        title: "COMPLETED",
-        icon: <FaCheckToSlot className="text-md"/>,
-        color: "text-success"
-
-    },
-    {
-        status: "CANCELLED",
-        title: "CANCELLED",
-        icon: <FaCheckToSlot className="text-md"/>,
-        color: "text-error"
-
-    },
-    {
-        status: "BACKLOGS",
-        title: "BACKLOGS",
-        icon: <FaCheckToSlot className="text-md"/>,
-        color: "text-amber-500"
-    },
-    
-];
 
 export default function Index({tasks, flash}) {
 
@@ -55,6 +25,7 @@ export default function Index({tasks, flash}) {
     const [todos, setTodos] = useState([]);
     const [task, setTask] = useState(null);
     const [taskColumns, setTaskColumns] = useState(columnStatus);
+    const [openCreate, setOpenCreate] =  useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const containerRef = useRef(null);
 
@@ -123,6 +94,11 @@ export default function Index({tasks, flash}) {
     }
 
     useEffect(() => {
+        
+        console.log("activeCard", activeCard)
+    }, [activeCard]);
+
+    useEffect(() => {
         if (flash.response) {
             notify(flash.response);
         }
@@ -154,9 +130,9 @@ export default function Index({tasks, flash}) {
     return (
         <>
             <ToastContainer />
-            {/* <TaskForm statuses={columnStatus.map(item => ({label: item.title, value: item.status}))}/> */}
 
             {/*main container for the kanban */}
+            <Button onClick={() => setOpenCreate(true)} gradientDuoTone="greenToBlue" outline pill><HiViewGridAdd className='mr-2 h-5 w-5'/> Create</Button>
             <div className="relative group">
                 <div
                     className="flex gap-5 max-w-full overflow-x-auto scroll-smooth pb-4"
@@ -170,6 +146,7 @@ export default function Index({tasks, flash}) {
                             key={i}
                             column = {column}
                             tasks={todos?.[column.status] ?? []}
+                            activeCard={activeCard}
                             setActiveCard={setActiveCard}
                             onDrop={handleOnDrop}
                             onShow={handleShow}
@@ -180,33 +157,10 @@ export default function Index({tasks, flash}) {
                 <ScrollArrow containerRef={containerRef} />
             </div>
             
+            {/* Modals */}
+            <Create isOpen={openCreate} onClose={() => setOpenCreate(false)} statuses={columnStatus.map(item => ({label: item.title, value: item.status}))}/>
 
-            {/* sample drag and drop */}
-            {/* <div className='flex justify-center border border-yellow-200 '>
-
-                <div className='border-2 bg-gray-400 w-96 h-80 m-auto my-2'>
-                    <div
-                        className='border-1 bg-gray-500 w-44 h-44 flex items-center justify-center'
-                        draggable
-                        onDragEnter={(e) => {
-                            if (e.currentTarget.contains(e.relatedTarget)) return;
-                            console.log("onDragEnter") 
-                        }}
-                        onDragLeave={(e) =>{
-                            if (e.currentTarget.contains(e.relatedTarget)) return;
-                            console.log("onDragLeave")
-                        }}
-                    >
-                        <div className='border-2  p-10'>
-                            <span className='border-2 p-2'>
-                                <button className='btn btn-xs' onClick={() => alert("CLick!")}>Click</button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-            </div> */}
-
+            {/* Drawers */}
             <Show isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} task={task}/>
         </>
     )

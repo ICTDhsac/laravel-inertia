@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import DropArea from "./DropArea";
 import TaskCard from "./TaskCard";
 
-export default function TaskColumn({column, tasks, setActiveCard, onDrop, onShow}) {
+export default function TaskColumn({column, tasks, activeCard, setActiveCard, onDrop, onShow}) {
     
 
     return (
@@ -20,6 +20,7 @@ export default function TaskColumn({column, tasks, setActiveCard, onDrop, onShow
                             <TaskCard
                                 index={index}
                                 task={task}
+                                activeCard={activeCard}
                                 setActiveCard={setActiveCard}
                                 onDrop={() => onDrop(column.status, index )}
                                 onShow={onShow}

@@ -13,6 +13,7 @@ Route::resource('tasks', TaskController::class)->except('index');
 Route::resource('posts', PostController::class);
 
 Route::inertia('/about', 'OffCanvas');
+Route::inertia('/drawer', 'DrawerComponent');
 
 
 Route::get('test', function(){

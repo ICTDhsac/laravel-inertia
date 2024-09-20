@@ -1,5 +1,5 @@
 import { useForm} from "@inertiajs/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 /*** icons ***/
 import { IoIosAddCircle } from "react-icons/io";
@@ -9,18 +9,9 @@ import { MdError } from "react-icons/md";
 
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import Alert from "../../Layouts/Alert";
+import { Button, Modal } from "flowbite-react";
 
 const animatedComponents = makeAnimated();
-
-
-const options = [
-    { value: 'TO DO', label: 'TO DO' },
-    { value: 'ONGOING', label: 'ONGOING' },
-    { value: 'COMPLETED', label: 'COMPLETED' },
-    { value: 'CANCELLED', label: 'CANCELLED' }
-]
-
 
 export default function TaskForm({statuses}) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -31,6 +22,22 @@ export default function TaskForm({statuses}) {
 
     const [selectedOption, setSelectedOption] = useState(null);
 
+    useEffect(() => {
+        if(!selectedOption) return;
+        
+        let selectedValue = selectedOption?.value;
+
+        if(Array.isArray(selectedOption)){
+            selectedValue = selectedOption.map((option) => option.value);
+        }
+
+        setData('status', selectedValue);
+    }, [selectedOption]);
+
+    useEffect(() => {
+        console.log(data)
+    }, [data])
+
     const handleChange = (e) => {
         const {name, value } = e.target;
         setData(name, value);
@@ -39,7 +46,7 @@ export default function TaskForm({statuses}) {
 
     const handleSelectOption = (selected) => {
         setSelectedOption(selected);
-        setData('status', selected.value);
+        // setData('status', selected.value);
     }
 
     const handleSubmitForm = (e) => {
@@ -61,10 +68,10 @@ export default function TaskForm({statuses}) {
 
     return (
         <>
-            <div className="bg-white dark:bg-gray-800 text-gray-200 dark:text-white md:w-full lg:w-1/2 mx-auto border border-gray-400 rounded p-2">
-                <form onSubmit={handleSubmitForm}>
-                    <label className="input bg-white dark:bg-gray-800 flex items-center gap-2">
-                        <FaTasks className="dark:text-white" />
+            <div>
+                <form onSubmit={handleSubmitForm} className="space-y-2">
+                    <label className="input bg-transparent flex items-center gap-2">
+                        <FaTasks />
                         <input
                             type="text"
                             name="title"
@@ -75,8 +82,8 @@ export default function TaskForm({statuses}) {
                         />
                     </label>
                     { errors.title && <p className="text-error flex items-center pl-10"><MdError/> {errors.title}</p> }
-                    <label className="input bg-white dark:bg-gray-800 flex items-center gap-2">
-                        <TbTableColumn className="dark:text-white"/>
+                    <label className="input bg-transparent flex items-center gap-2">
+                        <TbTableColumn />
                         <Select
                             name="status"
                             className="w-full"
@@ -91,18 +98,19 @@ export default function TaskForm({statuses}) {
                     </label>
                     { errors.status && <p className="text-error flex items-center pl-10"><MdError/> {errors.status}</p> }
 
-                    <div className="flex justify-end mt-3 px-5">
-                        <button 
-                            className="btn btn-sm btn-active btn-primary text-gray-100"
-                            disabled={processing}
-                        >
-                            {processing ? <span className="loading loading-spinner loading-xs"></span> : <IoIosAddCircle />}
-                            Add Task
-                        </button>
-                    </div>
+
+                    <Modal.Footer className="flex justify-end p-2">
+                        
+                            <Button color="gray" onClick={() => setOpenModal(false)}>Back</Button>
+                            <Button disabled={processing} >
+                                {processing ? <span className="loading loading-spinner loading-xs"></span> : <IoIosAddCircle className="mr-2 h-5 w-5"/>}
+                                Add Task
+                            </Button>
+                        
+                    </Modal.Footer>
+
                 </form>
             </div>
-            <div className="divider">TO DO LIST</div>
         </>
     )
 }
