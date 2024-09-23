@@ -4,37 +4,129 @@ import { useEffect, useState } from "react";
 
 /*** icons ***/
 import { IoIosAddCircle } from "react-icons/io";
-import { FaTasks } from "react-icons/fa";
+import { FaTasks, FaTags } from "react-icons/fa";
 import { TbTableColumn } from "react-icons/tb";
-import { MdError } from "react-icons/md";
+import { FaUsers } from "react-icons/fa6";
+import { MdBuild, MdError, MdInfoOutline, MdProductionQuantityLimits } from 'react-icons/md';
+
+import { Avatar, Button, Modal, Textarea, Label, TextInput } from "flowbite-react";
 
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import { Button, Modal, Textarea, Label, TextInput } from "flowbite-react";
-
 const animatedComponents = makeAnimated();
 
-export default function Create({isOpen, onClose, statuses }) {
+const planCollaborators = [
+    { value: 'john', label: 'John Doe', avatarUrl: null },
+    { value: 'jane', label: 'Jane Smith', avatarUrl: 'https://i.pravatar.cc/300?img=2' },
+    { value: 'mike', label: 'Mike Ross', avatarUrl: 'https://i.pravatar.cc/300?img=3' },
+    { value: 'rachel', label: 'Rachel Zane', avatarUrl: 'https://i.pravatar.cc/300?img=4' }
+];
+
+const customMultiValueLabel = (props) => {
+    return (
+        <div className="flex items-center space-x-2">
+            <Avatar img={props.data.avatarUrl} rounded={true} size="xs" />
+            <span>{props.data.label}</span>
+        </div>
+    );
+};
+
+const planLabels = [
+    { value: 'preventive-maintenance', label: 'Preventive Maintenance', icon: <MdBuild />, color: '#D0E7F8' },
+    { value: 'corrective-hardware', label: 'Corrective Hardware', icon: <MdError />, color: '#DBEBC7' },
+    { value: 'support-on-operation-hardware', label: 'Support on Operation - Hardware', icon: <MdInfoOutline />, color: 'yellow' },
+    { value: 'support-on-operation-software', label: 'Support on Operation - Software', icon: <MdInfoOutline />, color: 'violet' },
+    { value: 'production', label: 'Production', icon: <MdProductionQuantityLimits />, color: 'lightgray' },
+    { value: 'inventory', label: 'Inventory', icon: <MdInfoOutline />, color: 'pink' },
+];
+
+const customStyles = {
+    control: (provided) => ({
+        ...provided,
+    }),
+    multiValue: (provided, { data }) => ({
+        ...provided,
+        backgroundColor: data.color, // Use color from planLabels for selected items
+        color: 'white',
+    }),
+    multiValueLabel: (provided) => ({
+        ...provided,
+        color: '#000',
+    }),
+    multiValueRemove: (provided) => ({
+        ...provided,
+        color: 'white',
+        ':hover': {
+            backgroundColor: 'darkgray',
+            color: 'white',
+        },
+    }),
+    option: (provided, { data, isFocused, isSelected }) => ({
+        ...provided,
+        backgroundColor: data?.color
+    }),
+};
+
+const collaboratorsStyles = {
+    multiValue: (provided) => ({
+        ...provided,
+        backgroundColor: "#E0E7FF", // Example color
+        borderRadius: "50px",
+        padding: "5px",
+        display: "flex",
+        alignItems: "center",
+    }),
+    multiValueLabel: (provided) => ({
+        ...provided,
+        display: "flex",
+        alignItems: "center",
+        color: "#000",
+    }),
+    multiValueRemove: (provided) => ({
+        ...provided,
+        color: "#ff6347",
+        ':hover': {
+            backgroundColor: "#ff6347",
+            color: "#fff",
+        },
+    }),
+};
+
+const getOptionLabel = (option) => (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+        {option.icon} &nbsp; {option.label}
+    </div>
+);
+
+const getInitials = (name) => {
+    const nameArray = name.split(" ");
+    const initials = nameArray.map((n) => n[0]).join("").toUpperCase();
+    return initials;
+};
+
+
+export default function Create({isOpen, onClose, statuses, members }) {
 
     const { data, setData, post, processing, errors, reset } = useForm({
         title: '',
         body: '',
+        collaborators: [],
+        labels: [],
         status: null
     });
 
-    const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedStatus, setSelectedStatus] = useState(null);
+    const [collaborators, setCollaborators] = useState([]);
+    const [labels, setLabels] = useState([]);
 
-    useEffect(() => {
-        if(!selectedOption) return;
-        
-        let selectedValue = selectedOption?.value;
-
-        if(Array.isArray(selectedOption)){
-            selectedValue = selectedOption.map((option) => option.value);
-        }
-
-        setData('status', selectedValue);
-    }, [selectedOption]);
+    useEffect(() => {        
+        setData(prevData => ({
+            ...prevData,
+            collaborators: collaborators?.map(option => option.value) || prevData.collaborators,
+            labels: labels?.map(option => option.value) || prevData.labels,
+            status: selectedStatus?.value || prevData.status
+        }));
+    }, [selectedStatus, collaborators, labels]);
 
     useEffect(() => {
         console.log(data)
@@ -43,12 +135,6 @@ export default function Create({isOpen, onClose, statuses }) {
     const handleChange = (e) => {
         const {name, value } = e.target;
         setData(name, value);
-    }
-
-
-    const handleSelectOption = (selected) => {
-        setSelectedOption(selected);
-        // setData('status', selected.value);
     }
 
     const handleSubmitForm = (e) => {
@@ -60,7 +146,7 @@ export default function Create({isOpen, onClose, statuses }) {
             onSuccess: () => {
                 console.log("Task created successfully");
                 reset();
-                setSelectedOption(null);
+                setSelectedStatus(null);
             },
             onError: () => {
                 console.log("Task creation error");
@@ -71,8 +157,8 @@ export default function Create({isOpen, onClose, statuses }) {
     
     return (
         <>
-            <Modal dismissible show={isOpen} onClose={onClose}>
-                <Modal.Header>Terms of Service</Modal.Header>
+            <Modal dismissible show={isOpen} onClose={onClose} size="4xl">
+                <Modal.Header>Create a Task</Modal.Header>
                 <Modal.Body className="space-y-6 text-base leading-relaxed text-gray-500 dark:text-gray-400 overflow-visible">
                 
                     <div>
@@ -84,12 +170,62 @@ export default function Create({isOpen, onClose, statuses }) {
                                         type="text"
                                         name="title"
                                         className="w-full"
-                                        placeholder="Enter Your Task"
+                                        placeholder="Enter Your Task Title * (required)"
                                         onChange={handleChange}
                                         value={data?.title}
                                     />
                                 </Label>
                                 { errors.title && <p className="text-error flex items-center pl-10"><MdError/> {errors.title}</p> }
+                            </div>
+                            <div>
+                                <label className="input bg-transparent flex items-center gap-2 dark:text-neutral-100">
+                                    <FaUsers />
+                                    <Select
+                                        name="collaborators"
+                                        className='w-full'
+                                        placeholder="Assign to * (required)"
+                                        closeMenuOnSelect={true}
+                                        components={animatedComponents}
+                                        options={planCollaborators}
+                                        isMulti
+                                        getOptionLabel={(option) => (
+                                            <div className="flex items-center">
+                                                <Avatar
+                                                    img={option.avatarUrl || undefined}
+                                                    rounded={true}
+                                                    size="xs"
+                                                    placeholderInitials={getInitials(option.label)}
+                                                />
+                                                <span className="ml-2">{option.label}</span>
+                                            </div>
+                                        )}
+                                        onChange={(selected) => setCollaborators(selected)}
+                                        value={collaborators}
+                                        styles={collaboratorsStyles}
+                                        // components={{ MultiValueLabel: customMultiValueLabel }}
+                                    />
+                                </label>
+                                { errors.status && <p className="text-error flex items-center pl-10"><MdError/> {errors.collaborators}</p> }
+                            </div>
+                            
+                            <div>
+                                <label className="input bg-transparent flex items-center gap-2 dark:text-neutral-100">
+                                    <FaTags />
+                                    <Select
+                                        name="labels"
+                                        className='w-full'
+                                        placeholder="Label your task * (required)"
+                                        closeMenuOnSelect={true}
+                                        components={animatedComponents}
+                                        options={planLabels}
+                                        getOptionLabel={getOptionLabel}
+                                        isMulti
+                                        onChange={(selected) => setLabels(selected)}
+                                        value={labels}
+                                        styles={customStyles}
+                                    />
+                                </label>
+                                { errors.status && <p className="text-error flex items-center pl-10"><MdError/> {errors.labels}</p> }
                             </div>
                             <div>
                                 <label className="input bg-transparent flex items-center gap-2 dark:text-neutral-100">
@@ -102,15 +238,16 @@ export default function Create({isOpen, onClose, statuses }) {
                                         components={animatedComponents}
                                         options={statuses}
                                         // isMulti
-                                        onChange={handleSelectOption}
-                                        value={selectedOption}
+                                        onChange={(selected) => setSelectedStatus(selected)}
+                                        value={selectedStatus}
                                     />
                                 </label>
                                 { errors.status && <p className="text-error flex items-center pl-10"><MdError/> {errors.status}</p> }
                             </div>
+
                             <div>
                                 <Label>Description</Label>
-                                <textarea id="description" name="description" placeholder="Write event description..." rows={4} />
+                                <textarea onChange={handleChange} name="body" value={data?.body} placeholder="Write task description..." rows={4} />
                             </div>
 
 

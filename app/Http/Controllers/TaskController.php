@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -16,7 +17,8 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::orderBy('sortIndex')->latest()->get();
-        return inertia('Tasks/Index', ['tasks' => $tasks]);
+        $members = User::all();
+        return inertia('Tasks/Index', compact("tasks", "members"));
     }
 
     /**

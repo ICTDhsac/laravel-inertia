@@ -1,6 +1,5 @@
 import '../../../css/tasks.css';
 /*Page Components */
-import TaskForm from "./TaskForm"
 import TaskColumn from "./TaskColumn";
 import Create from './Create';
 import Show from './Show';
@@ -19,7 +18,7 @@ import { columnStatus } from '../../Data/ColumnStatus';
 
 
 
-export default function Index({tasks, flash}) {
+export default function Index({tasks, members, flash}) {
 
     const [activeCard, setActiveCard] = useState(null);
     const [todos, setTodos] = useState([]);
@@ -28,6 +27,9 @@ export default function Index({tasks, flash}) {
     const [openCreate, setOpenCreate] =  useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const containerRef = useRef(null);
+
+
+    console.log(members)
 
     const handleShow = (data) => {
         setIsDrawerOpen(true);
@@ -158,7 +160,7 @@ export default function Index({tasks, flash}) {
             </div>
             
             {/* Modals */}
-            <Create isOpen={openCreate} onClose={() => setOpenCreate(false)} statuses={columnStatus.map(item => ({label: item.title, value: item.status}))}/>
+            <Create isOpen={openCreate} onClose={() => setOpenCreate(false)} statuses={taskColumns.map(item => ({label: item.title, value: item.status}))} members={members.map(member => ({label: member.username, value: member.id}))}/>
 
             {/* Drawers */}
             <Show isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} task={task}/>
