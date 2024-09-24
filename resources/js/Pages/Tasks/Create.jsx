@@ -22,15 +22,6 @@ const planCollaborators = [
     { value: 'rachel', label: 'Rachel Zane', avatarUrl: 'https://i.pravatar.cc/300?img=4' }
 ];
 
-const customMultiValueLabel = (props) => {
-    return (
-        <div className="flex items-center space-x-2">
-            <Avatar img={props.data.avatarUrl} rounded={true} size="xs" />
-            <span>{props.data.label}</span>
-        </div>
-    );
-};
-
 const planLabels = [
     { value: 'preventive-maintenance', label: 'Preventive Maintenance', icon: <MdBuild />, color: '#D0E7F8' },
     { value: 'corrective-hardware', label: 'Corrective Hardware', icon: <MdError />, color: '#DBEBC7' },
@@ -92,11 +83,6 @@ const collaboratorsStyles = {
     }),
 };
 
-const getOptionLabel = (option) => (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-        {option.icon} &nbsp; {option.label}
-    </div>
-);
 
 const getInitials = (name) => {
     const nameArray = name.split(" ");
@@ -185,11 +171,10 @@ export default function Create({isOpen, onClose, statuses, members }) {
                                         className='w-full'
                                         placeholder="Assign to * (required)"
                                         closeMenuOnSelect={true}
-                                        components={animatedComponents}
                                         options={planCollaborators}
                                         isMulti
                                         getOptionLabel={(option) => (
-                                            <div className="flex items-center">
+                                            <div className="flex items-center space-x-1">
                                                 <Avatar
                                                     img={option.avatarUrl || undefined}
                                                     rounded={true}
@@ -218,7 +203,11 @@ export default function Create({isOpen, onClose, statuses, members }) {
                                         closeMenuOnSelect={true}
                                         components={animatedComponents}
                                         options={planLabels}
-                                        getOptionLabel={getOptionLabel}
+                                        getOptionLabel={(option) => (
+                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                {option.icon} &nbsp; {option.label}
+                                            </div>
+                                        )}
                                         isMulti
                                         onChange={(selected) => setLabels(selected)}
                                         value={labels}

@@ -17,9 +17,15 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'employee_no',
+        'first_name',
+        'last_name',
+        'middle_name',
         'email',
-        'password',
+        'contact_no',
+        'gender',
+        'date_hired',
+        'user_photo'
     ];
 
     /**
@@ -28,7 +34,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 
@@ -41,7 +46,13 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
         ];
+    }
+
+
+    // Relationships
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user')->withPivot('password');
     }
 }
