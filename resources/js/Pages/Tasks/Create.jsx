@@ -7,13 +7,20 @@ import { IoIosAddCircle } from "react-icons/io";
 import { FaTasks, FaTags } from "react-icons/fa";
 import { TbTableColumn } from "react-icons/tb";
 import { FaUsers } from "react-icons/fa6";
-import { MdBuild, MdError, MdInfoOutline, MdProductionQuantityLimits } from 'react-icons/md';
+import * as MdIcons from 'react-icons/md';
 
 import { Avatar, Button, Modal, Textarea, Label, TextInput } from "flowbite-react";
 
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 const animatedComponents = makeAnimated();
+
+
+
+const renderIcon = (iconName) => {
+    const IconComponent = MdIcons[iconName];
+    return IconComponent ? <IconComponent /> : null;
+};
 
 const planCollaborators = [
     { value: 'john', label: 'John Doe', avatarUrl: null },
@@ -23,12 +30,12 @@ const planCollaborators = [
 ];
 
 const planLabels = [
-    { value: 'preventive-maintenance', label: 'Preventive Maintenance', icon: <MdBuild />, color: '#D0E7F8' },
-    { value: 'corrective-hardware', label: 'Corrective Hardware', icon: <MdError />, color: '#DBEBC7' },
-    { value: 'support-on-operation-hardware', label: 'Support on Operation - Hardware', icon: <MdInfoOutline />, color: 'yellow' },
-    { value: 'support-on-operation-software', label: 'Support on Operation - Software', icon: <MdInfoOutline />, color: 'violet' },
-    { value: 'production', label: 'Production', icon: <MdProductionQuantityLimits />, color: 'lightgray' },
-    { value: 'inventory', label: 'Inventory', icon: <MdInfoOutline />, color: 'pink' },
+    { value: 'preventive-maintenance', label: 'Preventive Maintenance', icon: "MdBuild", color: '#D0E7F8' },
+    { value: 'corrective-hardware', label: 'Corrective Hardware', icon: "MdError", color: '#DBEBC7' },
+    { value: 'support-on-operation-hardware', label: 'Support on Operation - Hardware', icon: "MdInfoOutline", color: 'yellow' },
+    { value: 'support-on-operation-software', label: 'Support on Operation - Software', icon: "MdInfoOutline", color: 'violet' },
+    { value: 'production', label: 'Production', icon: "MdProductionQuantityLimits", color: 'lightgray' },
+    { value: 'inventory', label: 'Inventory', icon: "MdInfoOutline", color: 'pink' },
 ];
 
 const customStyles = {
@@ -43,18 +50,23 @@ const customStyles = {
     multiValueLabel: (provided) => ({
         ...provided,
         color: '#000',
+        
     }),
     multiValueRemove: (provided) => ({
         ...provided,
         color: 'white',
         ':hover': {
-            backgroundColor: 'darkgray',
+            backgroundColor: '#ff6347',
             color: 'white',
         },
     }),
-    option: (provided, { data, isFocused, isSelected }) => ({
+    option: (provided, { data }) => ({
         ...provided,
-        backgroundColor: data?.color
+        backgroundColor: data?.color,
+        ':hover': {
+            outline: '1px solid gray',
+            color: 'blue',
+        },
     }),
 };
 
@@ -161,7 +173,7 @@ export default function Create({isOpen, onClose, statuses, members }) {
                                         value={data?.title}
                                     />
                                 </Label>
-                                { errors.title && <p className="text-error flex items-center pl-10"><MdError/> {errors.title}</p> }
+                                { errors.title && <p className="text-error flex items-center pl-10">{renderIcon('MdError')} {errors.title}</p> }
                             </div>
                             <div>
                                 <label className="input bg-transparent flex items-center gap-2 dark:text-neutral-100">
@@ -190,7 +202,7 @@ export default function Create({isOpen, onClose, statuses, members }) {
                                         // components={{ MultiValueLabel: customMultiValueLabel }}
                                     />
                                 </label>
-                                { errors.status && <p className="text-error flex items-center pl-10"><MdError/> {errors.collaborators}</p> }
+                                { errors.status && <p className="text-error flex items-center pl-10">{renderIcon('MdError')} {errors.collaborators}</p> }
                             </div>
                             
                             <div>
@@ -205,7 +217,7 @@ export default function Create({isOpen, onClose, statuses, members }) {
                                         options={planLabels}
                                         getOptionLabel={(option) => (
                                             <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                {option.icon} &nbsp; {option.label}
+                                                {renderIcon(option.icon)} &nbsp; {option.label}
                                             </div>
                                         )}
                                         isMulti
@@ -214,7 +226,7 @@ export default function Create({isOpen, onClose, statuses, members }) {
                                         styles={customStyles}
                                     />
                                 </label>
-                                { errors.status && <p className="text-error flex items-center pl-10"><MdError/> {errors.labels}</p> }
+                                { errors.status && <p className="text-error flex items-center pl-10">{renderIcon('MdError')} {errors.labels}</p> }
                             </div>
                             <div>
                                 <label className="input bg-transparent flex items-center gap-2 dark:text-neutral-100">
@@ -231,7 +243,7 @@ export default function Create({isOpen, onClose, statuses, members }) {
                                         value={selectedStatus}
                                     />
                                 </label>
-                                { errors.status && <p className="text-error flex items-center pl-10"><MdError/> {errors.status}</p> }
+                                { errors.status && <p className="text-error flex items-center pl-10">{renderIcon('MdError')} {errors.status}</p> }
                             </div>
 
                             <div>

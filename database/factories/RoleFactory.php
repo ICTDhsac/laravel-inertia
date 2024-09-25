@@ -18,8 +18,9 @@ class RoleFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->word, // Random word as role name
-            'created_by' => User::factory(),
+            // 'name' => $this->faker->unique()->word, // Random word as role name
+            'name' => $this->faker->unique()->randomElement(['System Administrator', 'User', 'Administrator', 'Editor', 'Developer']),
+            'created_by' => null,
             'modified_by' => null
         ];
     }
