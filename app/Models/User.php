@@ -56,9 +56,42 @@ class User extends Authenticatable
     // Relationships
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')
-                    ->as('user_role')
-                    ->withPivot('password')
-                    ->withTimestamps();
+        
+        return $this->belongsToMany(Role::class)->using(RoleUser::class)->withPivot('password')->withTimestamps();
+        
+        // return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')
+        //             ->as('user_role')
+        //             ->withPivot('password')
+        //             ->withTimestamps();
+                    
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class); //default foreign if not specified modelname_id
+    }
+
+    public function departmentHead()
+    {
+        return $this->hasMany(Department::class, 'department_head_id'); //default foreign if not specified modelname_id
+    }
+    public function createdPlans()
+    {
+        return $this->hasMany(Plan::class, 'created_by');
+    }
+
+    public function modifiedPlans()
+    {
+        return $this->hasMany(Plan::class, 'modified_by');
+    }
+
+    public function createdDepartments()
+    {
+        return $this->hasMany(Department::class, 'created_by');
+    }
+
+    public function modifiedDepartments()
+    {
+        return $this->hasMany(Department::class, 'modified_by');
     }
 }
