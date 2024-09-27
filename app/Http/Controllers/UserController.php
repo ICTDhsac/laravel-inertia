@@ -8,17 +8,16 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
+    protected $title = 'Users';
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $users = User::find(1)->roles;
-        echo "<pre>";
-        dd($users->toArray());
-        $role = Role::with('users')->find(1);
-        $user = User::with('roles')->find(1);
-        $user1 = User::find(1);
+    // echo "<pre>";
+        // dd($users);
+        // $role = Role::with('users')->find(1);
+        // $user = User::with('roles')->find(1);
+        // $user1 = User::find(1);
         // $user1->roles()->attach(4);
 
         // dd(($user1->roles->find(2))->toArray());
@@ -28,6 +27,10 @@ class UserController extends Controller
         // }
         // dd($users);
         // dd($users1);
+    public function index()
+    {
+        $users = User::latest()->paginate(5);
+        return inertia('Users/Index', ['users' => $users]);
     }
 
     /**
@@ -35,7 +38,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        Role::updateOrCreate(['name' => 'Editor']);
+        
     }
 
     /**
@@ -76,5 +79,10 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
     }
 }

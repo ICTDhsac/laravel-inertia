@@ -22,6 +22,7 @@ Route::resource('posts', PostController::class);
 Route::inertia('/about', 'OffCanvas');
 Route::inertia('/drawer', 'DrawerComponent');
 
+Route::inertia('/shad', 'Payments/Page');
 
 Route::get('test', function(){
     event(new SystemMaintenanceEvent('Hello World'));

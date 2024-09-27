@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')          // Define the foreign key column as foreignId
-                    ->constrained('users')        // Reference the users table
-                    ->onDelete('cascade'); 
+            // $table->foreignId('user_id')          // Define the foreign key column as foreignId
+            //         ->constrained('users')        // Reference the users table
+            //         ->onDelete('cascade'); 
             $table->string('title');
-            $table->text('description')->nullable();
+            $table->text('body')->nullable();
             $table->string('status')->default('1');
             $table->integer('sortIndex')->default(0);
             $table->timestamps();

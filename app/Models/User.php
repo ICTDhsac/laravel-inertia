@@ -21,6 +21,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'employee_no',
+        'department_id',
         'first_name',
         'last_name',
         'middle_name',
@@ -28,7 +29,8 @@ class User extends Authenticatable
         'contact_no',
         'gender',
         'date_hired',
-        'user_photo'
+        'user_photo',
+        'email_verified_at',
     ];
 
     /**

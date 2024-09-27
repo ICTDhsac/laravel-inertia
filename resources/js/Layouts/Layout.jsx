@@ -6,7 +6,7 @@ import { HiHome } from "react-icons/hi";
 import { Lines } from 'react-preloaders';
 import { FaHome, FaFile, FaPlus, FaUser } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
-import { IoLogoCodepen } from "react-icons/io";
+import { IoLogoCodepen, IoIosArrowDropdownCircle, IoIosArrowDroprightCircle } from "react-icons/io";
 import { GiToggles } from "react-icons/gi";
 import Header from './Header';
 // import { BsThreeDots } from "react-icons/bs";
@@ -14,8 +14,9 @@ import Header from './Header';
 
 export default function Layout({ children }) {
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [dropDownToggle, setDropdownToggle] = useState(false);
 
-    const { url } = usePage();
+    const { url, title } = usePage();
 
     // Function to check if a link is active
     const isActive = (path) => url === path ? 'active-link' : '';
@@ -81,11 +82,24 @@ export default function Layout({ children }) {
                         </ul>
                         <ul className="flex-grow">
                             <li>
-                                <div className="dropdown">
-                                    <div tabIndex={0} role="button" className="btn m-1">Click</div>
-                                    <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                                        <li><a>Item 1</a></li>
-                                        <li><a>Item 2</a></li>
+                                <div>
+                                    <div onClick={() => setDropdownToggle(!dropDownToggle)} className='side-nav-link'>
+                                        {dropDownToggle ? <IoIosArrowDropdownCircle /> : <IoIosArrowDroprightCircle />}
+                                        {!isCollapsed && <span>All</span>}
+                                    </div>
+                                    <ul className={`transition-all duration-500 ease-in-out ${isCollapsed ? '' : 'pl-2'} ${dropDownToggle ? 'opacity-100' : 'opacity-0'} ${dropDownToggle ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
+                                        <li>
+                                            <Link className={`side-nav-link ${isActive('/item1')}`} href="/item1">
+                                                <FaFile />
+                                                {!isCollapsed && <span>Plan 1</span>}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link className={`side-nav-link ${isActive('/Plan2')}`} href="/Plan2">
+                                                <FaFile />
+                                                {!isCollapsed && <span>Plan 2</span>}
+                                            </Link>
+                                        </li>
                                     </ul>
                                 </div>
                             </li>
@@ -115,7 +129,7 @@ export default function Layout({ children }) {
 
                         {/* Content Header */}
                         <section className='flex justify-between items-center'>
-                            <h1 className='text-slate-900 dark:text-slate-300 font-bold text-3xl flex-1'>Page Title<small className='text-gray-400'> Control panel</small></h1>
+                            <h1 className='text-slate-900 dark:text-slate-300 font-bold text-3xl flex-1'>{title}<small className='text-gray-400'> Control panel</small></h1>
                             <Breadcrumb aria-label="Content Header" className='flex-none py-0 px-5'>
                                 <Breadcrumb.Item href="#" icon={HiHome}>
                                     Home

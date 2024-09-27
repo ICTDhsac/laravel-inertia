@@ -1,9 +1,9 @@
 import React from 'react';
 import { DarkThemeToggle, MegaMenu } from "flowbite-react";
 import { HiCog, HiLogout, HiViewGrid, HiUserCircle } from "react-icons/hi";
-import { IoMdApps } from "react-icons/io";
 
 export default function Header() {
+
   return (
     <>
     
@@ -13,71 +13,71 @@ export default function Header() {
             
                             <MegaMenu.Dropdown
                                 toggle={
-                                    <button className="btn btn-square text-gray-800 text-3xl btn-ghost hover:bg-slate-300 dark:text-gray-200 dark:hover:bg-neutral">
+                                    <span className="btn btn-square text-gray-800 text-3xl btn-ghost hover:bg-slate-300 dark:text-gray-200 dark:hover:bg-neutral">
                                         <HiViewGrid />
-                                    </button>
+                                    </span>
                                 }
                             >
                                 <ul className="grid grid-cols-3">
                                     <div className="space-y-4 p-4">
                                         <li>
-                                        <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                            About Us
-                                        </a>
+                                            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
+                                                About Us
+                                            </a>
                                         </li>
                                         <li>
-                                        <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                            Library
-                                        </a>
+                                            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
+                                                Library
+                                            </a>
                                         </li>
                                         <li>
-                                        <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                            Resources
-                                        </a>
+                                            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
+                                                Resources
+                                            </a>
                                         </li>
                                         <li>
-                                        <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                            Pro Version
-                                        </a>
-                                        </li>
-                                    </div>
-                                    <div className="space-y-4 p-4">
-                                        <li>
-                                        <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                            Contact Us
-                                        </a>
-                                        </li>
-                                        <li>
-                                        <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                            Support Center
-                                        </a>
-                                        </li>
-                                        <li>
-                                        <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                            Terms
-                                        </a>
-                                        </li>
-                                        <li>
-                                        <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                            Blog
-                                        </a>
+                                            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
+                                                Pro Version
+                                            </a>
                                         </li>
                                     </div>
                                     <div className="space-y-4 p-4">
                                         <li>
-                                        <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                            Newsletter
-                                        </a>
+                                            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
+                                                Contact Us
+                                            </a>
                                         </li>
                                         <li>
-                                        <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                            Playground
-                                        </a>
+                                            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
+                                                Support Center
+                                            </a>
                                         </li>
                                         <li>
-                                        <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                            License
-                                        </a>
+                                            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
+                                                Terms
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
+                                                Blog
+                                            </a>
+                                        </li>
+                                    </div>
+                                    <div className="space-y-4 p-4">
+                                        <li>
+                                            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
+                                                Newsletter
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
+                                                Playground
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
+                                                License
+                                            </a>
                                         </li>
                                     </div>
                                 </ul>

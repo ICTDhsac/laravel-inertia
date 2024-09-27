@@ -45,8 +45,6 @@ export default function Home({ posts, flash }) {
         }
     }, [flash]);
 
-    console.log(flash)
-
     const handleShowPost = (e) => {
         // const postId = e.currentTarget.dataset.id;
         const data_obj = JSON.parse(atob(e.currentTarget.dataset.object));

@@ -17,13 +17,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         //Create single
-        // User::factory()->create();
+        User::factory(5)->create();
         // $role = Role::factory()->create();
         // $user->roles()->attach($role->id, ['password' => bcrypt('your_password_here')]);
         
 
         // Create multiple
-        $roles = Role::factory()->count(1)->create(); // Create 3 roles
+        // $roles = Role::factory()->count(1)->create(); // Create 3 roles
         // $users = User::factory()->count(10)->create(); // Create 10 users
         // foreach ($users as $user) {
         //     foreach ($roles as $role) {

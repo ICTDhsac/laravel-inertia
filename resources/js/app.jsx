@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client'
 import Layout from '@/Layouts/Layout';
 
 createInertiaApp({
-    title: title => title ? `${title} - LARAVEL INERTIA` : 'LARAVEL INERTIA',
+    title: title => title ? `${title} - Human Resource Management Information System` : 'Human Resource Management Information System',
     resolve: name => {
         const pages = import.meta.glob('./Pages/**/*.jsx', { eager: true })
         let page =  pages[`./Pages/${name}.jsx`];

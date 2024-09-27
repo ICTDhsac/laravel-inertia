@@ -18,7 +18,7 @@ class TaskFactory extends Factory
     {
         return [
             'title' => fake()->sentence(),
-            'status' => fake()->randomElement(['TO DO', 'IN PROGRESS', 'BACKLOGS', 'CANCELLED', 'COMPLETED']),
+            'status' => fake()->randomElement(['REQUEST','TO DO', 'IN PROGRESS', 'BACKLOGS', 'CANCELLED', 'COMPLETED']),
             'body' => fake()->text(),
             'sortIndex' => $this->faker->numberBetween(0, 100)
         ];
