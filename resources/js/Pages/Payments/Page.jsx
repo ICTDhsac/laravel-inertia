@@ -3,9 +3,9 @@ import { DataTable } from "./DataTable";
 import { columns } from "./Columns"; // Import the columns
 
 const data = [
-  { status: "pending", email: "test@example.com", amount: 100 },
-  { status: "success", email: "user@example.com", amount: 150 },
-  { status: "pending", email: "test@example.com", amount: 100 },
+  { status: "success", email: "test@example.com", amount: 100 },
+  { status: "pending", email: "user@example.com", amount: 150 },
+  { status: "success", email: "test@example.com", amount: 100 },
   { status: "success", email: "user@example.com", amount: 150 },
   { status: "pending", email: "test@example.com", amount: 100 },
   { status: "success", email: "user@example.com", amount: 150 },
