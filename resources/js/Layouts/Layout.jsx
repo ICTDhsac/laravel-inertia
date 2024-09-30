@@ -11,6 +11,7 @@ import Header from './Header';
 export default function Layout({ children }) {
 
     return (
+        <>
         <React.Fragment >
             <Flowbite>
                 <Header />
@@ -20,5 +21,6 @@ export default function Layout({ children }) {
             </Flowbite>
             <Lines animation="slide-right" />
         </React.Fragment>
+        </>
     );
 }

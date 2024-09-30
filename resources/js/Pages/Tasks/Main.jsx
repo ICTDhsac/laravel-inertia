@@ -7,7 +7,8 @@ import { usePage } from '@inertiajs/react';
 
 export default function Main({children}) {
 
-    const { url,  title } = usePage();
+    const { url } = usePage();
+    const { title } = usePage().props;
     const [isCollapsed, setIsCollapsed] = useState(false);
 
     
@@ -18,10 +19,10 @@ export default function Main({children}) {
     };
 
   return (
-    <>
+    <div>
         <SideNav isCollapsed={isCollapsed} toggleSidebar={toggleSidebar} isActive={isActive} />
         {/* Main Content Area */}
-        <div className={`min-h-screen bg-gray-200 dark:bg-gray-900 pt-20 ${isCollapsed ? '!pl-16' : '!pl-[270px]'}`}>
+        <div className={`min-h-screen w-full bg-gray-200 dark:bg-gray-900 pt-20 ${isCollapsed ? '!pl-16' : '!pl-[270px]'}`}>
             {/* Content Header */}
             <section className='flex justify-between items-center'>
                 <h1 className='text-slate-900 dark:text-slate-300 font-bold text-3xl flex-1'>{title}<small className='text-gray-400'> Control panel</small></h1>
@@ -38,6 +39,6 @@ export default function Main({children}) {
                 {children}
             </main>
         </div>
-    </>
+    </div>
   )
 }

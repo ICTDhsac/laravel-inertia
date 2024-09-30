@@ -6,6 +6,7 @@ import {
     XCircle,
     ChevronDown,
     XIcon,
+    MailSearch,
     WandSparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -114,7 +115,7 @@ const MultiSelect = forwardRef(
             {...props}
             onClick={handleTogglePopover}
             className={cn(
-              "flex w-full p-1 rounded-md border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit",
+              "flex p-1 rounded-md border min-h-5 h-auto items-center justify-between bg-inherit hover:bg-inherit",
               className
             )}
           >
@@ -184,8 +185,8 @@ const MultiSelect = forwardRef(
               </div>
             ) : (
               <div className="flex items-center justify-between w-full mx-auto">
-                <span className="text-sm text-muted-foreground mx-3">
-                  {placeholder}
+                <span className="flex items-center space-x-1 text-sm text-muted-foreground mx-3">
+                  <MailSearch className="h-3 w-3" /><span>{placeholder} </span>
                 </span>
                 <ChevronDown className="h-4 cursor-pointer text-muted-foreground mx-2" />
               </div>
@@ -222,11 +223,11 @@ const MultiSelect = forwardRef(
                   </div>
                   <span>(Select All)</span>
                 </CommandItem>
-                {options.map((option) => {
+                {options.map((option, index) => {
                   const isSelected = selectedValues.includes(option.value);
                   return (
                     <CommandItem
-                      key={option.value}
+                      key={index}
                       onSelect={() => toggleOption(option.value)}
                       className="cursor-pointer flex"
                     >

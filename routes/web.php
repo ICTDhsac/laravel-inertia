@@ -13,9 +13,9 @@ Route::resource('users', UserController::class);
 Route::resource('plans', PlanController::class);
 Route::resource('users.tasks', TaskController::class);
 
-Route::get('/', [TaskController::class, 'index'])->name('tasks.index');
+// Route::get('/', [TaskController::class, 'index']);
 Route::put('/tasks-batch', [TaskController::class, 'updateBatch'])->name('tasks.updateBatch');
-Route::resource('tasks', TaskController::class)->except('index');
+Route::resource('tasks', TaskController::class);
 
 Route::resource('posts', PostController::class);
 
@@ -27,3 +27,7 @@ Route::inertia('/shad', 'Payments/Page');
 Route::get('test', function(){
     event(new SystemMaintenanceEvent('Hello World'));
 });
+
+
+
+// Route::resource('tasks', TaskController::class)->except('index');

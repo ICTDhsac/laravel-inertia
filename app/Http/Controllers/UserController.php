@@ -29,7 +29,9 @@ class UserController extends Controller
         // dd($users1);
     public function index()
     {
-        $users = User::orderBy('last_name', 'asc')->get();
+        $users = User::select('*')
+                    ->selectRaw("last_name || ', ' || first_name || ' ' || COALESCE(middle_name, '') AS fullname")
+                    ->get();
         return inertia('Users/Index', ['users' => $users]);
     }
 

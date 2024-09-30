@@ -21,13 +21,13 @@ export default function Header() {
                                 <ul className="grid grid-cols-3">
                                     <div className="space-y-4 p-4">
                                         <li>
-                                            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                                About Us
+                                            <a href="/users" className="hover:text-primary-600 dark:hover:text-primary-500">
+                                                Home Page
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                                Library
+                                            <a href="/tasks" className="hover:text-primary-600 dark:hover:text-primary-500">
+                                                Planner
                                             </a>
                                         </li>
                                         <li>

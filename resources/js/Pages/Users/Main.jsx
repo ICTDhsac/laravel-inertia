@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SideNav from '../Tasks/SideNav';
+import SideNav from './SideNav';
 
 import { HiHome } from "react-icons/hi";
 import { Breadcrumb } from 'flowbite-react';
@@ -7,7 +7,8 @@ import { usePage } from '@inertiajs/react';
 
 export default function Main({children}) {
 
-    const { url,  title } = usePage();
+    const { url } = usePage();
+    const { title } = usePage().props;
     const [isCollapsed, setIsCollapsed] = useState(false);
 
     
