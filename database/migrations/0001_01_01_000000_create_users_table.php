@@ -13,20 +13,22 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('employee_no');
-            $table->foreignId('department_id')
-                    ->nullable() 
-                    ->constrained('departments')
-                    ->onDelete('set null');
-            $table->string('first_name');
+            $table->string('employee_id');
             $table->string('last_name');
+            $table->string('first_name');
             $table->string('middle_name')->nullable();
+            $table->string('suffix')->nullable();
+            $table->string('contact')->nullable();
             $table->string('email')->nullable();
-            $table->string('contact_no')->nullable();
             $table->string('gender')->nullable();
             $table->date('date_hired')->nullable();
-            $table->text('user_photo')->nullable();
+            $table->text('user_photo')->default('mypic.png');
+            $table->text('is_new')->default('Y');
+            $table->text('user_status')->default('A');
             $table->timestamp('email_verified_at')->nullable();
+            $table->foreignId('department_id')->nullable()->constrained('departments')->onDelete('set null');
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('modified_by')->nullable()->constrained('users')->onDelete('set null');
             $table->rememberToken();
             $table->timestamps();
             

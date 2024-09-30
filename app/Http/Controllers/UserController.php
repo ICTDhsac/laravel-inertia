@@ -29,7 +29,7 @@ class UserController extends Controller
         // dd($users1);
     public function index()
     {
-        $users = User::latest()->paginate(5);
+        $users = User::orderBy('last_name', 'asc')->get();
         return inertia('Users/Index', ['users' => $users]);
     }
 

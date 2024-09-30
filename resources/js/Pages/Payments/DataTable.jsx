@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import MultiSelect from "@/components/reusable_components/MultiSelect";
+import { Cat, Dog, Fish, Rabbit, Turtle } from "lucide-react";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 import { flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, getFilteredRowModel, useReactTable } from "@tanstack/react-table";
@@ -11,6 +13,27 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { DataTablePagination } from "@/components/reusable_components/DataTablePagination";
 import { DataTableViewOptions } from "@/components/reusable_components/DataTableViewOptions";
 
+const statusOptions = [
+    { value: 'pending', label: 'Pending' },
+    { value: 'cancelled', label: 'Cancelled' },
+    { value: 'ongoing', label: 'Ongoing' },
+    { value: 'success', label: 'Success' }
+];
+
+const sample_emails = [
+    { label: "test@example.com", value: "test@example.com", icon: Turtle, number: 10 },
+    { label: "user@example.com", value: "user@example.com", icon: Dog, number: 15 },
+    { label: "email3@example.com", value: "email3@example.com", icon: Cat, number: 20 },
+  ];
+
+const frameworksList = [
+    { value: "react", label: "React", icon: Turtle },
+    { value: "angular", label: "Angular", icon: Cat },
+    { value: "vue", label: "Vue", icon: Dog },
+    { value: "svelte", label: "Svelte", icon: Rabbit },
+    { value: "ember", label: "Ember", icon: Fish },
+  ];
+
 export function DataTable({ data, columns }) {
 
     const [sorting, setSorting] = useState([]);
@@ -18,6 +41,8 @@ export function DataTable({ data, columns }) {
     const [globalFilter, setGlobalFilter] = useState([]);
     const [columnVisibility, setColumnVisibility] = useState([]);
     const [rowSelection, setRowSelection] = useState({});
+    const [status, setStatus] = useState([]);
+    const [selectedFrameworks, setSelectedFrameworks] = useState([]);
     
     const table = useReactTable({
         data,
@@ -63,15 +88,65 @@ export function DataTable({ data, columns }) {
                 value={table.getColumn("email")?.getFilterValue() ?? []}
                 onChange={(event) => {
                     const selectedOptions = Array.from(event.target.selectedOptions, option => option.value);
-                    console.log(selectedOptions)
                     table.getColumn("email")?.setFilterValue(selectedOptions);
                 }}
-                className="max-w-sm bg-slate-50"
+                className="max-w-sm bg-slate-50 hidden"
             >
                 <option value="test@example.com">test@example.com</option>
                 <option value="user@example.com">user@example.com</option>
                 <option value="email3@example.com">email3@example.com</option>
             </select>
+
+            {/* new select from shadcn ui */}
+            <div className="p-4 max-w-xl">
+                <h1 className="text-2xl font-bold mb-4">Filter Emails</h1>
+                <MultiSelect
+                    options={sample_emails}
+                    onValueChange={(selectedOptions) => {
+                        console.log(selectedOptions); 
+                        table.getColumn("email")?.setFilterValue(selectedOptions);
+                    }}
+                    value={table.getColumn("email")?.getFilterValue() ?? []}
+                    placeholder="Select emails"
+                    variant="inverted"
+                    animation={2}
+                    maxCount={3}
+                />
+                <div className="mt-4">
+                    <h2 className="text-xl font-semibold">Selected Emails:</h2>
+                    <ul className="list-disc list-inside">
+                    {(table.getColumn("email")?.getFilterValue() ?? []).map((email) => (
+                        <li key={email}>{email}</li>
+                    ))}
+                    </ul>
+                </div>
+            </div>
+
+            {/* new select from shadcn ui */}
+            <div className="p-4 max-w-xl">
+                <h1 className="text-2xl font-bold mb-4">Multi-Select Component</h1>
+                <MultiSelect
+                    options={sample_emails}
+                    onValueChange={setSelectedFrameworks}
+                    defaultValue={selectedFrameworks}
+                    placeholder="Select frameworks"
+                    variant="inverted"
+                    animation={2}
+                    maxCount={3}
+                />
+                <div className="mt-4">
+                    <h2 className="text-xl font-semibold">Selected Frameworks:</h2>
+                    <ul className="list-disc list-inside">
+                    {selectedFrameworks.map((framework) => (
+                        <li key={framework}>{framework}</li>
+                    ))}
+                    </ul>
+                </div>
+            </div>
+
+
+
+
             <div className="flex items-center py-4 space-x-2">
                 <Input
                     placeholder="Filter emails..."

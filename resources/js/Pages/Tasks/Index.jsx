@@ -1,5 +1,6 @@
 import '../../../css/tasks.css';
 /*Page Components */
+import Main from './Main';
 import TaskColumn from "./TaskColumn";
 import Create from './Create';
 import Show from './Show';
@@ -131,39 +132,42 @@ export default function Index({tasks, members, flash}) {
     
     return (
         <>
-            <ToastContainer />
+            <Main>
+        
+                <ToastContainer />
 
-            {/*main container for the kanban */}
-            <Button onClick={() => setOpenCreate(true)} gradientDuoTone="greenToBlue" outline pill><HiViewGridAdd className='mr-2 h-5 w-5'/> Create</Button>
-            <div className="relative group">
-                <div
-                    className="flex gap-5 max-w-full overflow-x-auto scroll-smooth pb-4"
-                    ref={containerRef}
-                >
+                {/*main container for the kanban */}
+                <Button onClick={() => setOpenCreate(true)} gradientDuoTone="greenToBlue" outline pill><HiViewGridAdd className='mr-2 h-5 w-5'/> Create</Button>
+                <div className="relative group">
+                    <div
+                        className="flex gap-5 max-w-full overflow-x-auto scroll-smooth pb-4"
+                        ref={containerRef}
+                    >
 
-                    {/* TO DO COLUMN */}
-                    {taskColumns &&
-                    taskColumns.map((column, i) => (
-                        <TaskColumn
-                            key={i}
-                            column = {column}
-                            tasks={todos?.[column.status] ?? []}
-                            activeCard={activeCard}
-                            setActiveCard={setActiveCard}
-                            onDrop={handleOnDrop}
-                            onShow={handleShow}
-                        />
-                    ))}
+                        {/* TO DO COLUMN */}
+                        {taskColumns &&
+                        taskColumns.map((column, i) => (
+                            <TaskColumn
+                                key={i}
+                                column = {column}
+                                tasks={todos?.[column.status] ?? []}
+                                activeCard={activeCard}
+                                setActiveCard={setActiveCard}
+                                onDrop={handleOnDrop}
+                                onShow={handleShow}
+                            />
+                        ))}
+                    </div>
+                    
+                    <ScrollArrow containerRef={containerRef} />
                 </div>
                 
-                <ScrollArrow containerRef={containerRef} />
-            </div>
-            
-            {/* Modals */}
-            <Create isOpen={openCreate} onClose={() => setOpenCreate(false)} statuses={taskColumns.map(item => ({label: item.title, value: item.status}))} members={members.map(member => ({label: member.username, value: member.id}))}/>
+                {/* Modals */}
+                <Create isOpen={openCreate} onClose={() => setOpenCreate(false)} statuses={taskColumns.map(item => ({label: item.title, value: item.status}))} members={members.map(member => ({label: member.username, value: member.id}))}/>
 
-            {/* Drawers */}
-            <Show isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} task={task}/>
+                {/* Drawers */}
+                <Show isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} task={task}/>
+            </Main>
         </>
     )
 }
