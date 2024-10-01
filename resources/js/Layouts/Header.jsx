@@ -22,7 +22,7 @@ export default function Header() {
                                     <div className="space-y-4 p-4">
                                         <li>
                                             <a href="/users" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                                Home Page
+                                                HRMIS
                                             </a>
                                         </li>
                                         <li>

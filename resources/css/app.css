@@ -76,7 +76,7 @@
     }
     
     .side-nav-link {
-        @apply flex items-center space-x-3 p-5 hover:bg-gray-200 dark:hover:bg-gray-700;
+        @apply flex items-center justify-between space-x-3 p-4 text-sm hover:bg-gray-200 dark:hover:bg-gray-700;
     }
     
     .round-btn {
@@ -93,6 +93,10 @@
 
     .custom-toggle .ml-2.h-4.w-4 {
         @apply hidden;
+    }
+
+    .flex-item-center {
+        @apply flex items-center space-x-2;
     }
 
 }

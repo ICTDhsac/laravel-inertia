@@ -54,6 +54,27 @@ class User extends Authenticatable
         ];
     }
 
+    public function position()
+    {
+        return $this->belongsTo(Position::class);
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class); //default foreign if not specified modelname_id
+    }
+
+    public function employmentStatus()
+    {
+        return $this->belongsTo(EmploymentStatus::class);
+    }
+
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class);
+    }
+
+
 
     // Relationships
     public function roles()
@@ -66,11 +87,6 @@ class User extends Authenticatable
         //             ->withPivot('password')
         //             ->withTimestamps();
                     
-    }
-
-    public function department()
-    {
-        return $this->belongsTo(Department::class); //default foreign if not specified modelname_id
     }
 
     public function departmentHead()

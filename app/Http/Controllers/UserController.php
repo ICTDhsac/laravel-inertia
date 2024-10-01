@@ -27,12 +27,27 @@ class UserController extends Controller
         // }
         // dd($users);
         // dd($users1);
+
+        // $users = User::with('posts')->get();
+        // $users = User::with(['posts' => function($query) {
+        //     $query->select('id', 'user_id', 'title'); // Specify only the columns you want
+        // }])->get();
+
     public function index()
     {
-        $users = User::select('*')
+    
+        $users = User::with([
+                        'position:id,name',
+                        'employmentStatus:id,name',
+                        'schedule:id,name',
+                        'department:id,name',
+                        'department.office:id,name',  // Include the office related to the department
+                    ])
+                    ->select('*')
                     ->selectRaw("last_name || ', ' || first_name || ' ' || COALESCE(middle_name, '') AS fullname")
                     ->get();
-        return inertia('Users/Index', ['users' => $users]);
+                    dd($users[0]->toArray());
+        return inertia('HRMIS/Users/Index', ['users' => $users]);
     }
 
     /**

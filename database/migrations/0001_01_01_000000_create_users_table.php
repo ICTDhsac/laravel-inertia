@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('position_id')->nullable()->constrained('positions')->onDelete('set null');
+            $table->foreignId('department_id')->nullable()->constrained('departments')->onDelete('set null');
+            $table->foreignId('employment_status_id')->nullable()->constrained('employment_statuses')->onDelete('set null');
+            $table->foreignId('schedule_id')->nullable()->constrained('schedules')->onDelete('set null');
             $table->string('employee_id');
             $table->string('last_name');
             $table->string('first_name');
@@ -26,7 +30,6 @@ return new class extends Migration
             $table->text('is_new')->default('Y');
             $table->text('user_status')->default('A');
             $table->timestamp('email_verified_at')->nullable();
-            $table->foreignId('department_id')->nullable()->constrained('departments')->onDelete('set null');
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('modified_by')->nullable()->constrained('users')->onDelete('set null');
             $table->rememberToken();

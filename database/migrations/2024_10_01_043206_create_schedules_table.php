@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('offices', function (Blueprint $table) {
+        Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('service_head_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->foreignId('commissioner_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->foreignId('location_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('name')->nullable();
+            $table->time('time_in');
+            $table->time('time_out');
+            $table->time('break_out');
+            $table->time('break_in');
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('offices');
+        Schema::dropIfExists('schedules');
     }
 };

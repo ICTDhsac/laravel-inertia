@@ -1,5 +1,5 @@
 
-import { MoreHorizontal, ArrowUpDown } from "lucide-react";
+import { Command, CopyIcon, Edit3Icon, MoreHorizontal, ViewIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -67,15 +67,27 @@ export const columns = [
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuLabel className="flex items-center space-x-2"><Command className="w-3 h-3"/><span>Actions</span></DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
+                            className="flex items-center space-x-2"
                             onClick={() => navigator.clipboard.writeText(employee.employee_id)}
                         >
-                            Copy employee ID
+                            <CopyIcon className="w-4 h-4" />
+                            <span>Copy employee ID</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem>View customer</DropdownMenuItem>
-                        <DropdownMenuItem>View payment details</DropdownMenuItem>
+                        <DropdownMenuItem
+                            className="flex items-center space-x-2"
+                        >
+                            <ViewIcon className="w-4 h-4" />
+                            <span>View employee</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            className="flex items-center space-x-2"
+                        >
+                            <Edit3Icon className="w-4 h-4" />
+                            <span>Edit</span>
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );

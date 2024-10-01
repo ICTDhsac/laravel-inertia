@@ -1,11 +1,11 @@
-import '../../../css/tasks.css';
+import '../../../../css/tasks.css';
 /*Page Components */
-import Main from './Main';
+import Main from '../Main';
 import TaskColumn from "./TaskColumn";
 import Create from './Create';
 import Show from './Show';
 /* Helper Components */
-import ScrollArrow from '../../Helper/ScrollArrow';
+import ScrollArrow from '../../../Helper/ScrollArrow';
 /* React */
 import { useEffect, useRef, useState } from "react";
 import { router } from '@inertiajs/react';
@@ -15,7 +15,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { Button } from 'flowbite-react';
 import { HiViewGridAdd } from "react-icons/hi";
 /* Data */
-import { columnStatus } from '../../Data/ColumnStatus';
+import { columnStatus } from '../../../Data/ColumnStatus';
 
 
 

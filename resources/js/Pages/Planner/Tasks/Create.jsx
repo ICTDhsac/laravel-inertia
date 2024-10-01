@@ -1,4 +1,4 @@
-import '../../../css/tasks.css';
+import '../../../../css/tasks.css';
 import { useForm} from "@inertiajs/react";
 import { useEffect, useState } from "react";
 

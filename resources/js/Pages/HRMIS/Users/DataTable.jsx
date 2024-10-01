@@ -97,23 +97,26 @@ export function DataTable({ data, columns }) {
                     onChange={e => table.setGlobalFilter(e.target.value)}
                     className="input input-sm bg-slate-50 flex-none dark:text-slate-800"
                 />
-                <label className="dark:text-slate-400 flex items-center space-x-1">
-                    <Filter className="h-4 w-4" /> <span>Filter</span>
-                </label>
-                <MultiSelect
-                    options={emails}
-                    onValueChange={(selectedOptions) => {
-                        table.getColumn("email")?.setFilterValue(selectedOptions);
-                    }}
-                    value={table.getColumn("email")?.getFilterValue() ?? []}
-                    placeholder="email"
-                    // variant="inverted"
-                    className="text-slate-700 bg-slate-100 hover:bg-white"
-                    animation={2}
-                    maxCount={1}
-                />
-                <div className="flex-1 justify-end pr-2">
-                    <DataTableViewOptions table={table} />
+                
+                <div className="flex-1 flex justify-end pr-2">
+                    <div className="flex space-x-2">
+                        <label className="dark:text-slate-400 flex items-center space-x-1">
+                            <Filter className="h-4 w-4" /> <span>Filter</span>
+                        </label>
+                        <MultiSelect
+                            options={emails}
+                            onValueChange={(selectedOptions) => {
+                                table.getColumn("email")?.setFilterValue(selectedOptions);
+                            }}
+                            value={table.getColumn("email")?.getFilterValue() ?? []}
+                            placeholder="email"
+                            // variant="inverted"
+                            className="text-slate-700 bg-slate-100 hover:bg-white"
+                            animation={2}
+                            maxCount={1}
+                        />
+                        <DataTableViewOptions table={table} />
+                    </div>
                 </div>
 
             </div>

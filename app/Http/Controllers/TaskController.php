@@ -18,7 +18,7 @@ class TaskController extends Controller
     {
         $tasks = Task::orderBy('sortIndex')->latest()->get();
         $members = User::all();
-        return inertia('Tasks/Index', compact("tasks", "members"));
+        return inertia('Planner/Tasks/Index', compact("tasks", "members"));
     }
 
     /**

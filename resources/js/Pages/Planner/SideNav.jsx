@@ -5,6 +5,7 @@ import { FaHome, FaFile, FaPlus, FaUser } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { IoIosArrowDropdownCircle, IoIosArrowDroprightCircle } from "react-icons/io";
 import { GiToggles } from "react-icons/gi";
+import { SquareKanban } from 'lucide-react';
 
 export default function SideNav({ isCollapsed, toggleSidebar, isActive  }) {
 
@@ -26,20 +27,26 @@ export default function SideNav({ isCollapsed, toggleSidebar, isActive  }) {
             <ul className='border-b dark:border-neutral'>
                 <li>
                     <Link className={`side-nav-link`} href="/">
-                        <FaPlus />
-                        {!isCollapsed && <span>New Plan</span>}
+                        <span className="flex-item-center">
+                            <FaPlus />
+                            {!isCollapsed && <span>New Plan</span>}
+                        </span>
                     </Link>
                 </li>
                 <li>
                     <Link className={`side-nav-link ${isActive('/')}`} href="/">
-                        <FaHome />
-                        {!isCollapsed && <span>Hub</span>}
+                        <span className="flex-item-center">
+                            <FaHome />
+                            {!isCollapsed && <span>Hub</span>}
+                        </span>
                     </Link>
                 </li>
                 <li>
                     <Link className={`side-nav-link ${isActive('/posts')}`} href="/posts">
-                        <FaUser />
-                        {!isCollapsed && <span>Assign to me</span>}
+                        <span className="flex-item-center">
+                            <FaUser />
+                            {!isCollapsed && <span>Assign to me</span>}
+                        </span>
                     </Link>
                 </li>
             </ul>
@@ -47,20 +54,29 @@ export default function SideNav({ isCollapsed, toggleSidebar, isActive  }) {
                 <li>
                     <div>
                         <div onClick={() => setDropdownToggle(!dropDownToggle)} className='side-nav-link'>
+                            {!isCollapsed &&
+                                <span className='flex-item-center'>
+                                    <SquareKanban className='w-4 h-4' />
+                                    <span>All</span>
+                                </span>
+                            }
                             {dropDownToggle ? <IoIosArrowDropdownCircle /> : <IoIosArrowDroprightCircle />}
-                            {!isCollapsed && <span>All</span>}
                         </div>
                         <ul className={`transition-all duration-500 ease-in-out ${isCollapsed ? '' : 'pl-2'} ${dropDownToggle ? 'opacity-100' : 'opacity-0'} ${dropDownToggle ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
                             <li>
                                 <Link className={`side-nav-link ${isActive('/item1')}`} href="/item1">
-                                    <FaFile />
-                                    {!isCollapsed && <span>Plan 1</span>}
+                                    <span className='flex-item-center'>
+                                        <FaFile />
+                                        {!isCollapsed && <span>Plan 1</span>}
+                                    </span>
                                 </Link>
                             </li>
                             <li>
                                 <Link className={`side-nav-link ${isActive('/Plan2')}`} href="/Plan2">
-                                    <FaFile />
-                                    {!isCollapsed && <span>Plan 2</span>}
+                                    <span className='flex-item-center'>
+                                        <FaFile />
+                                        {!isCollapsed && <span>Plan 2</span>}
+                                    </span>
                                 </Link>
                             </li>
                         </ul>
@@ -68,14 +84,18 @@ export default function SideNav({ isCollapsed, toggleSidebar, isActive  }) {
                 </li>
                 <li>
                     <Link className={`side-nav-link ${isActive('/drawer')}`} href="/drawer">
-                        <FaFile />
-                        {!isCollapsed && <span>Reports</span>}
+                        <span className='flex-item-center'>
+                            <FaFile />
+                            {!isCollapsed && <span>Reports</span>}
+                        </span>
                     </Link>
                 </li>
                 <li>
                     <Link className={`side-nav-link ${isActive('/settings')}`} href="#">
-                        <FaGear />
-                        {!isCollapsed && <span>Settings</span>}
+                        <span className="flex-item-center">
+                            <FaGear />
+                            {!isCollapsed && <span>Settings</span>}
+                        </span>
                     </Link>
                 </li>
             </ul>
