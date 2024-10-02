@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import MultiSelect from "@/components/reusable_components/MultiSelect";
-import { Cat, Dog, Fish, Rabbit, Turtle, Filter, UserRoundX, UserCheck } from "lucide-react";
+import { Dog, Filter } from "lucide-react";
+
+import { lucideReactIcons } from "../../../Data/PreloadedIcons";
 
 import { flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, getFilteredRowModel, useReactTable } from "@tanstack/react-table";
 
@@ -12,24 +12,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { DataTablePagination } from "@/components/reusable_components/DataTablePagination";
 import { DataTableViewOptions } from "@/components/reusable_components/DataTableViewOptions";
 
-
-const frameworksList = [
-    { value: "react", label: "React", icon: Turtle },
-    { value: "angular", label: "Angular", icon: Cat },
-    { value: "vue", label: "Vue", icon: Dog },
-    { value: "svelte", label: "Svelte", icon: Rabbit },
-    { value: "ember", label: "Ember", icon: Fish },
-  ];
-
-export function DataTable({ data, columns }) {
+export function DataTable({ data, departments, columns }) {
 
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
     const [globalFilter, setGlobalFilter] = useState([]);
     const [columnVisibility, setColumnVisibility] = useState([]);
     const [rowSelection, setRowSelection] = useState({});
-    const [emails, setEmails] = useState([]);
-    const [departments, setDepartments] = useState([]);
+    const [departmentsOptions, setDepartmentsOptions] = useState([]);
     const [status, setStatus] = useState([]);
     
     const table = useReactTable({
@@ -73,28 +63,17 @@ export function DataTable({ data, columns }) {
     });
 
     useEffect(() => {
-        setEmails(() => {
-            return table.getFilteredRowModel().rows
-            .filter(row => row.original.email !== null)
-            .map((row, index) => ({
-                label: row.original.email,
-                value: row.original.email,
-                icon: Turtle,
-                number: 10,
-                key: index
-            }));
-        })
-        setDepartments(() => {
-            return table.getFilteredRowModel().rows
-            .filter(row => row.original.department.name !== null)
-            .map((row, index) => ({
-                label: row.original.department.name,
-                value: row.original.department.name,
-                icon: Dog,
-                number: 10,
-                key: index
-            }));
-        })
+        // setEmails(() => {
+        //     return table.getFilteredRowModel().rows
+        //     .filter(row => row.original.email !== null)
+        //     .map((row, index) => ({
+        //         label: row.original.email,
+        //         value: row.original.email,
+        //         icon: Turtle,
+        //         number: 10,
+        //         key: index
+        //     }));
+        // })
 
         setStatus(() => {
             const filteredRows = table.getFilteredRowModel().rows.filter(row => row.original.user_status !== null);
@@ -106,19 +85,34 @@ export function DataTable({ data, columns }) {
                 {
                     label: 'Active',
                     value: 'A',
-                    icon: UserCheck,
+                    icon: lucideReactIcons['UserCheck'],
                     number: activeCount,
                 },
                 {
                     label: 'Inactive',
                     value: 'I',
-                    icon: UserRoundX,
+                    icon: lucideReactIcons['UserRoundX'],
                     number: inactiveCount,
                 }
             ];
         });
         
     }, []);
+
+    useEffect(() => {
+
+        setDepartmentsOptions(() => {
+            return departments.map((department, index) => ({
+                    label: department.name,
+                    value: department.name,
+                    icon: Dog,
+                    number: table.getFilteredRowModel().rows.filter(row => row.original.department.name === department.name).length,
+                    key: index
+                }));
+        });
+
+    }, [departments]);
+
 
     const getSelectedRows = () => {
         const selectedRows = table.getFilteredSelectedRowModel().rows;
@@ -143,7 +137,7 @@ export function DataTable({ data, columns }) {
                             <Filter className="h-4 w-4" />
                         </label>
                         <MultiSelect
-                            options={departments}
+                            options={departmentsOptions}
                             onValueChange={(selectedOptions) => {
                                 table.getColumn("department_name")?.setFilterValue(selectedOptions);
                             }}
