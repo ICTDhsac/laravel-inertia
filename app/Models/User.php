@@ -59,10 +59,27 @@ class User extends Authenticatable
         return $this->belongsTo(Position::class);
     }
 
+    /* Relations to Department class */
     public function department()
     {
         return $this->belongsTo(Department::class); //default foreign if not specified modelname_id
     }
+
+    public function departmentHead()
+    {
+        return $this->hasMany(Department::class, 'department_head_id'); //default foreign if not specified modelname_id
+    }
+
+    public function createdDepartments()
+    {
+        return $this->hasMany(Department::class, 'created_by');
+    }
+
+    public function modifiedDepartments()
+    {
+        return $this->hasMany(Department::class, 'modified_by');
+    }
+    /* end */
 
     public function employmentStatus()
     {
@@ -74,9 +91,7 @@ class User extends Authenticatable
         return $this->belongsTo(Schedule::class);
     }
 
-
-
-    // Relationships
+    /* Relations to Role */
     public function roles()
     {
         
@@ -89,10 +104,19 @@ class User extends Authenticatable
                     
     }
 
-    public function departmentHead()
+    public function createdRoles()
     {
-        return $this->hasMany(Department::class, 'department_head_id'); //default foreign if not specified modelname_id
+        return $this->hasMany(Role::class, 'created_by');
     }
+
+    public function modifiedRoles()
+    {
+        return $this->hasMany(Role::class, 'modified_by');
+    }
+
+    /* end */
+
+    /* Relations to Plan */
     public function createdPlans()
     {
         return $this->hasMany(Plan::class, 'created_by');
@@ -102,14 +126,36 @@ class User extends Authenticatable
     {
         return $this->hasMany(Plan::class, 'modified_by');
     }
+    /* end */
 
-    public function createdDepartments()
+    /* Relations to Office */
+    public function serviceHead()
     {
-        return $this->hasMany(Department::class, 'created_by');
+        return $this->hasMany(Office::class, 'service_head_id');
+    }
+    public function commissioner()
+    {
+        return $this->hasMany(Office::class, 'commissioner_id'); 
+    }
+    /* end */
+    public function hr(){
+        return $this->hasMany(Office::class, 'hr_id');
     }
 
-    public function modifiedDepartments()
+    public function creator()
     {
-        return $this->hasMany(Department::class, 'modified_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function modifier()
+    {
+        return $this->belongsTo(User::class, 'modified_by');
+    }
+
+    /* Mutator */
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = trim($value);
+    }
+
 }

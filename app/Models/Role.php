@@ -23,4 +23,16 @@ class Role extends Model
         //             ->withPivot('password')
         //             ->withTimestamps();
     }
+
+    
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    // Relationship to the User model for the modifier
+    public function modifier()
+    {
+        return $this->belongsTo(User::class, 'modified_by');
+    }
 }

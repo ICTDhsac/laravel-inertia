@@ -1,9 +1,11 @@
 
+import { cn } from "@/lib/utils";
 import { Command, CopyIcon, Edit3Icon, MoreHorizontal, ViewIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import DataTableColumnHeader from "@/components/reusable_components/DataTableColumnHeader";
+import { Badge } from "flowbite-react";
 
 // Define your Payment type structure
 export const columns = [
@@ -51,7 +53,35 @@ export const columns = [
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Email" />
         ),
-        filterFn: "multipleEmailFilter",
+        filterFn: "columnFilter",
+    },
+    {
+        id: 'department_name',
+        accessorKey: 'department.name',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Department" />
+        ),
+        filterFn: "columnFilter",
+    },
+    {
+        accessorKey: 'user_status',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Status" />
+        ),
+        cell: ({ row }) => {
+            const status = row.getValue('user_status');
+            const badgeLabel = status === 'A' ? 'Active' : 'Inactive';
+            const badgeColor = status === 'A' ? 'success' : 'failure'; 
+
+            return (
+                <div className="flex justify-center">
+                    <Badge className="justify-center max-w-min" color={badgeColor}>
+                        {badgeLabel}
+                    </Badge>
+                </div>
+            );
+        },
+        filterFn: "columnFilter",
     },
     {
         id: 'actions',

@@ -14,8 +14,13 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->unsignedBigInteger('created_by')->nullable();
-            $table->unsignedBigInteger('modified_by')->nullable();
+            $table->foreignId('created_by')
+                    ->constrained('users')
+                    ->onDelete('set null');
+            $table->foreignId('modified_by')
+                    ->nullable()
+                    ->constrained('users')
+                    ->onDelete('set null');
             $table->timestamps();
 
             $table->foreign('created_by')->references('id')->on('users');

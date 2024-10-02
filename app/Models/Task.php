@@ -11,7 +11,26 @@ class Task extends Model
 
     protected $fillable = [
         'title',
+        'user_id',
+        'body',
         'status',
-        'body'
+        'sortIndex',
+        'created_by',
+        'modified_by',
     ];
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function modifier()
+    {
+        return $this->belongsTo(User::class, 'modified_by');
+    }
 }

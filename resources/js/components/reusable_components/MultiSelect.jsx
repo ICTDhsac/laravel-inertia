@@ -137,7 +137,10 @@ const MultiSelect = forwardRef(
                         {IconComponent && (
                           <IconComponent className="h-4 w-4 mr-2" />
                         )}
-                        {option?.label}
+                        {option?.label.length > 15 
+                          ? `${option.label.substring(0, 15)}...` 
+                          : option.label
+                        }
                         <XCircle
                           className="ml-2 h-4 w-4 cursor-pointer"
                           onClick={(event) => {

@@ -9,6 +9,12 @@ class EmploymentStatus extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'code',
+        'status',
+    ];
+
     public function users()
     {
         return $this->hasMany(User::class);

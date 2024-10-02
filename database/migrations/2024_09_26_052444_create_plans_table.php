@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('created_by')
-                ->constrained('users')
-                ->onDelete('cascade');
+                    ->constrained('users')
+                    ->onDelete('set null');
             $table->foreignId('modified_by')
                     ->nullable()
                     ->constrained('users')

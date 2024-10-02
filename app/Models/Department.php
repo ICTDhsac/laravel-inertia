@@ -9,6 +9,14 @@ class Department extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'office_id',
+        'department_head_id',
+        'created_by',
+        'modified_by'
+    ];
+
     public function users()
     {
         return $this->hasMany(User::class);
@@ -16,7 +24,7 @@ class Department extends Model
 
     public function office()
     {
-        return $this->belongsTo(Office::class);
+        return $this->belongsTo(Office::class, 'office_id');
     }
 
     public function departmentHead()

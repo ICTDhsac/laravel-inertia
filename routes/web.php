@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('users', UserController::class);
 
+Route::post('/upload_user_photo', [UserController::class, 'upload'])->name('upload_user_photo');
+
 Route::resource('plans', PlanController::class);
 Route::resource('users.tasks', TaskController::class);
 

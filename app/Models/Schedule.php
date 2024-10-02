@@ -9,6 +9,14 @@ class Schedule extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'time_in',
+        'time_out',
+        'break_out',
+        'break_in',
+    ];
+
     public function users()
     {
         return $this->hasMany(User::class);
