@@ -53,7 +53,8 @@ class UserController extends Controller
 
         $departments = Department::query()->select('id', 'name')->get();
 
-        return inertia('HRMIS/Users/Index', compact('users', 'departments'));
+        return response()->json($users);
+        // return inertia('HRMIS/Users/Index', compact('users', 'departments'));
     }
 
     /**
