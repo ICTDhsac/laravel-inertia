@@ -34,6 +34,8 @@ class User extends Authenticatable
         'email_verified_at',
     ];
 
+    protected $appends = ['full_name'];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -139,6 +141,7 @@ class User extends Authenticatable
         return $this->hasMany(Office::class, 'commissioner_id'); 
     }
     /* end */
+    
     public function hr(){
         return $this->hasMany(Office::class, 'hr_id');
     }
@@ -153,11 +156,12 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'modified_by');
     }
 
-    /* Mutator */
-    public function setNameAttribute($value)
+
+    public function getFullNameAttribute()
     {
-        $this->attributes['name'] = trim($value);
+        return $this->last_name . ', ' . $this->first_name . ' ' . ($this->middle_name ?? '');
     }
-    
+
+
 
 }

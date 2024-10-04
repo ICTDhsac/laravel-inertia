@@ -5,15 +5,40 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use App\Http\Requests\StoreDepartmentRequest;
 use App\Http\Requests\UpdateDepartmentRequest;
+use App\Models\Location;
+use App\Models\Office;
 
 class DepartmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $title = 'Divisions';
+    protected $navigationLinks = [
+        [
+            'link' => '#',
+            'icon' => 'ShieldCheck',
+            'label' => 'System Administration'
+        ],
+        [
+            'link' => '#',
+            'icon' => 'Building',
+            'label' => 'Divisions'
+        ]
+    ];
+
     public function index()
     {
-        //
+        $navigationLinks = $this->navigationLinks;
+        $departments = Department::withCount('users')
+                    ->with([
+                        'departmentHead:id,first_name,last_name,middle_name',                // Eager load office with specific fields
+                        'office:id,name,location_id',                // Eager load office with specific fields
+                        'office.location:id,name'
+                    ])
+                    ->get();
+        // dd($departments[0]->departmentHead->full_name);
+        $offices = Office::query()->select('id', 'name')->get();
+        $locations = Location::query()->select('id', 'name')->get();
+        // dd($departments->toArray());
+        return inertia('HRMIS/Departments/Index', compact('departments', 'offices', 'locations', 'navigationLinks'));
     }
 
     /**
@@ -62,5 +87,10 @@ class DepartmentController extends Controller
     public function destroy(Department $department)
     {
         //
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
     }
 }

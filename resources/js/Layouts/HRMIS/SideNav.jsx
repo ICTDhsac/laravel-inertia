@@ -95,7 +95,7 @@ export default function SideNav({ isCollapsed, toggleSidebar, isActive  }) {
                         </div>
                         <ul className={`transition-all duration-500 ease-in-out overflow-hidden ${isCollapsed ? '' : 'pl-2'} ${dropDownToggle?.master_data ? 'opacity-100 max-h-96' : 'opacity-0 max-h-0'}`}>
                             <li>
-                                <Link className={`side-nav-link ${isActive('/item1')}`} href="/item1">
+                                <Link className={`side-nav-link ${isActive('/departments')}`} href="/departments">
                                     <span className="flex-item-center">
                                         <Building className='w-4 h-4' />
                                         {!isCollapsed && <span>Divisions</span>}
@@ -103,7 +103,7 @@ export default function SideNav({ isCollapsed, toggleSidebar, isActive  }) {
                                 </Link>
                             </li>
                             <li>
-                                <Link className={`side-nav-link ${isActive('/item2')}`} href="/item1">
+                                <Link className={`side-nav-link ${isActive('/positions')}`} href="/positions">
                                     <span className="flex-item-center">
                                         <UserCircle className='w-4 h-4' />
                                         {!isCollapsed && <span>Positions</span>}

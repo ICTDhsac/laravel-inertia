@@ -11,6 +11,18 @@ class UserController extends Controller
 {
 
     protected $title = 'Users';
+    protected $navigationLinks = [
+        [
+            'link' => '#',
+            'icon' => 'ShieldCheck',
+            'label' => 'System Administration'
+        ],
+        [
+            'link' => '#',
+            'icon' => 'User',
+            'label' => 'Users'
+        ]
+    ];
 
     /*echo "<pre>";
     dd($users);
@@ -36,7 +48,7 @@ class UserController extends Controller
 
     public function index()
     {
-        // $update = User::query()->update(['created_by' => '347']);
+        $navigationLinks = $this->navigationLinks;
         $users = User::with([
                         'position:id,name',
                         'employmentStatus:id,name',
@@ -47,14 +59,11 @@ class UserController extends Controller
                         'schedule:id,name',
                         'creator:id,first_name,last_name'
                     ])
-                    ->select('*')
-                    ->selectRaw("last_name || ', ' || first_name || ' ' || COALESCE(middle_name, '') AS fullname")
                     ->get();
-
         $departments = Department::query()->select('id', 'name')->get();
 
-        return response()->json($users);
-        // return inertia('HRMIS/Users/Index', compact('users', 'departments'));
+        // return response()->json($users);
+        return inertia('HRMIS/Users/Index', compact('users', 'departments', 'navigationLinks'));
     }
 
     /**

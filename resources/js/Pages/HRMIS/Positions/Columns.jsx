@@ -33,59 +33,41 @@ export const columns = [
         accessorKey: 'id',
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="ID#" />
-        ),
+        )
     },
     {
-        accessorKey: 'employee_id',
+        accessorKey: 'name',
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Employee ID" />
-        ),
-    },
-    {
-        accessorKey: 'full_name',
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Name" />
-        ),
-    },
-    {
-        accessorKey: 'email',
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Email" />
-        ),
-        filterFn: "columnFilter",
-    },
-    {
-        id: 'department_name',
-        accessorKey: 'department.name',
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Department" />
-        ),
-        filterFn: "columnFilter",
-    },
-    {
-        accessorKey: 'user_status',
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Status" />
+            <DataTableColumnHeader column={column} title="Position" />
         ),
         cell: ({ row }) => {
-            const status = row.getValue('user_status');
-            const badgeLabel = status === 'A' ? 'Active' : 'Inactive';
-            const badgeColor = status === 'A' ? 'success' : 'failure'; 
-
+            const position = row.original;
             return (
-                <div className="flex justify-center">
-                    <Badge className="justify-center max-w-min" color={badgeColor}>
-                        {badgeLabel}
-                    </Badge>
-                </div>
-            );
-        },
-        filterFn: "columnFilter",
+                <span>{position.name}</span>
+                
+            )
+        }
     },
+    {
+        accessorKey: 'users_count',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="No of Employees" />
+        ),
+        cell: ({ row }) => {
+            const position = row.original;
+            return (
+                <Badge color="success" className="max-w-min">
+                    {position.users_count}
+                </Badge>
+                
+            )
+        }
+    },
+
     {
         id: 'actions',
         cell: ({ row }) => {
-            const employee = row.original;
+            const position = row.original;
 
             return (
                 <DropdownMenu>
@@ -100,16 +82,16 @@ export const columns = [
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                             className="flex items-center space-x-2"
-                            onClick={() => navigator.clipboard.writeText(employee.employee_id)}
+                            onClick={() => navigator.clipboard.writeText(position.id)}
                         >
                             <CopyIcon className="w-4 h-4" />
-                            <span>Copy employee ID</span>
+                            <span>Copy position ID</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             className="flex items-center space-x-2"
                         >
                             <ViewIcon className="w-4 h-4" />
-                            <span>View employee</span>
+                            <span>View position</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             className="flex items-center space-x-2"

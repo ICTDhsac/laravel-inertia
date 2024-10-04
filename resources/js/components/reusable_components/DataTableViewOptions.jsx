@@ -9,7 +9,7 @@ import {
     DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
-export function DataTableViewOptions({ table }) {
+export function DataTableViewOptions({ table, toggleLabels }) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -26,23 +26,23 @@ export function DataTableViewOptions({ table }) {
                 <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {table
-                .getAllColumns()
-                .filter(
-                    (column) =>
-                    typeof column.accessorFn !== "undefined" && column.getCanHide()
-                )
-                .map((column) => {
-                    return (
-                    <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                    >
-                        {column.id}
-                    </DropdownMenuCheckboxItem>
-                    );
-                })}
+                    .getAllColumns()
+                    .filter(
+                        (column) =>
+                        typeof column.accessorFn !== "undefined" && column.getCanHide()
+                    )
+                    .map((column) => {
+                        return (
+                        <DropdownMenuCheckboxItem
+                            key={column.id}
+                            className="capitalize"
+                            checked={column.getIsVisible()}
+                            onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                        >
+                            {toggleLabels && toggleLabels[column.id] || column.id}
+                        </DropdownMenuCheckboxItem>
+                        );
+                    })}
             </DropdownMenuContent>
         </DropdownMenu>
     );

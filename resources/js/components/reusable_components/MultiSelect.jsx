@@ -188,8 +188,8 @@ const MultiSelect = forwardRef(
               </div>
             ) : (
               <div className="flex items-center justify-between w-full mx-auto">
-                <span className="flex items-center space-x-1 text-sm text-muted-foreground mx-3">
-                  <MailSearch className="h-3 w-3" /><span>{placeholder} </span>
+                <span className="flex items-center space-x-1 text-sm text-slate-500 italic mx-3">
+                  {placeholder}
                 </span>
                 <ChevronDown className="h-4 cursor-pointer text-muted-foreground mx-2" />
               </div>

@@ -8,12 +8,29 @@ use App\Http\Requests\UpdatePositionRequest;
 
 class PositionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $title = "Positions";
+    protected $navigationLinks = [
+        [
+            'link' => '#',
+            'icon' => 'DatabaseZap',
+            'label' => 'Master Data'
+        ],
+        [
+            'link' => '#',
+            'icon' => 'UserCircle',
+            'label' => 'Positions'
+        ]
+    ];
+
     public function index()
     {
-        //
+        $positions = Position::withCount('users')
+                    ->with('users')
+                    ->get();
+        $navigationLinks = $this->navigationLinks;
+        // dd($positions->toArray());
+        return inertia('HRMIS/Positions/Index', compact('positions', 'navigationLinks'));
+
     }
 
     /**
@@ -62,5 +79,10 @@ class PositionController extends Controller
     public function destroy(Position $position)
     {
         //
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
     }
 }

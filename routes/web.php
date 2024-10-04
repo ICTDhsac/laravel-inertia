@@ -1,7 +1,10 @@
 <?php
 
 use App\Events\SystemMaintenanceEvent;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\PositionController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
@@ -9,6 +12,9 @@ use Illuminate\Support\Facades\Route;
 // use Inertia\Inertia;
 
 Route::resource('users', UserController::class);
+Route::resource('departments', DepartmentController::class);
+Route::resource('positions', PositionController::class);
+Route::resource('offices', OfficeController::class);
 
 Route::post('/upload_user_photo', [UserController::class, 'upload'])->name('upload_user_photo');
 
