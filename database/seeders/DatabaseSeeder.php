@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Plan;
 use App\Models\Post;
 use App\Models\Role;
 use App\Models\Task;
@@ -17,7 +18,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         //Create single
-        User::factory(5)->create();
+        // User::factory(5)->create();
         // $role = Role::factory()->create();
         // $user->roles()->attach($role->id, ['password' => bcrypt('your_password_here')]);
         
@@ -45,6 +46,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         // Post::factory(25)->create();
-        Task::factory(30)->create();
+        // Task::factory(30)->create();
+        Plan::factory(5)->create();
     }
 }

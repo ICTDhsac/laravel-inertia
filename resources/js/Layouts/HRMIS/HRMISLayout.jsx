@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import SideNav from './SideNav';
+import Header from '../Header';
 import { Breadcrumb, Flowbite } from 'flowbite-react';
 import { Head, usePage } from '@inertiajs/react';
 import { Lines } from 'react-preloaders';
-import { lucideReactIcons } from '../../Data/PreloadedIcons';
-import Header from '../Header';
+import { lucideReactIcons } from '@/Data/PreloadedIcons';
 
 export default function HRMISLayout({children}) {
 

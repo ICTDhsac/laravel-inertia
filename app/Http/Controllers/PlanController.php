@@ -8,12 +8,28 @@ use App\Http\Requests\UpdatePlanRequest;
 
 class PlanController extends Controller
 {
+
+    protected $title = "Plans";
+    protected $navigationLinks = [
+        [
+            'link' => '#',
+            'icon' => 'House',
+            'label' => 'Hub'
+        ],
+        [
+            'link' => '#',
+            'icon' => 'NotebookPen',
+            'label' => 'Plans'
+        ]
+    ];
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $plans = Plan::all();
+        $navigationLinks = $this->navigationLinks;
+        return inertia('Planner/Plans/Index', compact('plans', 'navigationLinks'));
     }
 
     /**
@@ -62,5 +78,9 @@ class PlanController extends Controller
     public function destroy(Plan $plan)
     {
         //
+    }
+
+    public function getTitle(){
+        return $this->title;
     }
 }

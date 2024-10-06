@@ -17,7 +17,8 @@ class PlanFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->word(),
+            'created_by' => '118'
         ];
     }
 }

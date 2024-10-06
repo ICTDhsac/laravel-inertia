@@ -16,9 +16,10 @@ Route::resource('departments', DepartmentController::class);
 Route::resource('positions', PositionController::class);
 Route::resource('offices', OfficeController::class);
 
+Route::resource('plans', PlanController::class);
+
 Route::post('/upload_user_photo', [UserController::class, 'upload'])->name('upload_user_photo');
 
-Route::resource('plans', PlanController::class);
 Route::resource('users.tasks', TaskController::class);
 
 // Route::get('/', [TaskController::class, 'index']);
