@@ -89,21 +89,7 @@ export default function Header() {
                         </div>
                         <div className="flex-none space-x-2">
                             <DarkThemeToggle />
-                            <div className="dropdown dropdown-end dropdown-hover dark:text-gray-200">
-                                <div className={`p-1 rounded-full flex items-center hover:bg-slate-50 dark:hover:bg-slate-600`}>
-                                    <div className="avatar">
-                                        <div className="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="John Doe" />
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* <div tabIndex={0} role="button" className='btn m-1 btn-square btn-ghost'><BsThreeDots /></div> */}
-                                <ul tabIndex={0} className="dropdown-content menu bg-base-100 text-gray-200 rounded-box z-[1] w-52 p-2 shadow">
-                                    <li><a><HiUserCircle /> View Profile</a></li>
-                                    <li><a><HiCog /> Change Password</a></li>
-                                    <li><a><HiLogout/> Log Out</a></li>
-                                </ul>
-                            </div>
+
                         </div>
                     </div>
 
