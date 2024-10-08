@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Label, Select as FlowbiteSelect, Datepicker } from 'flowbite-react';
+import { Label, Select as FlowbiteSelect, Datepicker, DarkThemeToggle } from 'flowbite-react';
 import moment from 'moment';
 
 import Select from 'react-select';
@@ -31,11 +31,27 @@ export default function Register({ positions, departments, employment_status , s
         password_confirmation: '',
     });
 
+    const [selectedOptions, setSelectedOptions] = useState({
+        position_id: '',
+        department_id: '',
+        employment_status_id: '',
+        schedule_id: '',
+        gender: '',
+        schedule_id: '',
+    });
+
     const [selectedPosition, setSelectedPosition] =  useState({});
     const [selectedDepartment, setSelectedDepartment] =  useState({});
     const [selectedEmploymentStatus, setSelectedEmploymentStatus] =  useState({});
     const [selectedSchedule, setSelectedSchedule] =  useState({});
+    const [fbTheme, setFbTheme] = useState('light');
 
+    useEffect(() => {
+        const theme = localStorage.getItem('flowbite-theme-mode');
+        if(theme){
+            setFbTheme(theme);
+        }
+    });
 
     useEffect(() => {
         setData('position_id', selectedPosition.value);
@@ -75,6 +91,10 @@ export default function Register({ positions, departments, employment_status , s
         setData('user_photo', file);
     }
 
+    const find = (e) => {
+        console.log(e)
+    }
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -94,7 +114,7 @@ export default function Register({ positions, departments, employment_status , s
     return (
 
         <div className="flex justify-center items-center pt-20 bg-white dark:bg-gray-600">
-            <div className="w-full max-w-3xl border rounded p-5  dark:bg-slate-700">
+            <div className="w-full max-w-3xl border shadow-md rounded p-5 bg-gray-300 dark:bg-slate-700">
                 <h2 className="text-3xl font-bold mb-6 text-center">Register</h2>
                 <form onSubmit={handleSubmit} className='space-y-3'>
                     <span className="divider">Employee Information</span>
@@ -104,6 +124,7 @@ export default function Register({ positions, departments, employment_status , s
                             type="text"
                             value={data.employee_id}
                             onChange={(e) => setData('employee_id', e.target.value)}
+                            className="bg-white dark:bg-gray-700"
                         />
                         <div className='error'>
                             {errors.employee_id && <span>{errors.employee_id}</span>}
@@ -115,6 +136,7 @@ export default function Register({ positions, departments, employment_status , s
                             type="text"
                             value={data.first_name}
                             onChange={(e) => setData('first_name', e.target.value)}
+                            className="bg-white dark:bg-gray-700"
                         />
                         <div className='error'>
                             {errors.first_name && <span>{errors.first_name}</span>}
@@ -127,6 +149,7 @@ export default function Register({ positions, departments, employment_status , s
                             type="text"
                             value={data.last_name}
                             onChange={(e) => setData('last_name', e.target.value)}
+                            className="bg-white dark:bg-gray-700"
                         />
                         <div className='error'>
                             {errors.last_name && <span>{errors.last_name}</span>}
@@ -138,6 +161,7 @@ export default function Register({ positions, departments, employment_status , s
                             type="text"
                             value={data.middle_name}
                             onChange={(e) => setData('middle_name', e.target.value)}
+                            className="bg-white dark:bg-gray-700"
                         />
                         <div className='error'>
                             {errors.middle_name && <span>{errors.middle_name}</span>}
@@ -149,6 +173,7 @@ export default function Register({ positions, departments, employment_status , s
                             type="text"
                             value={data.suffix}
                             onChange={(e) => setData('suffix', e.target.value)}
+                            className="bg-white dark:bg-gray-700"
                         />
                         <div className='error'>
                             {errors.suffix && <span>{errors.suffix}</span>}
@@ -161,6 +186,7 @@ export default function Register({ positions, departments, employment_status , s
                             type="email"
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
+                            className="bg-white dark:bg-gray-700"
                         />
                         <div className='error'>
                             {errors.email && <span>{errors.email}</span>}
@@ -174,6 +200,7 @@ export default function Register({ positions, departments, employment_status , s
                             value={data.contact}
                             onChange={(e) => setData('contact', e.target.value)}
                             placeholder="+639XXXXXXXXX or 09XXXXXXXXX"
+                            className="bg-white dark:bg-gray-700"
                         />
                         <div className='error'>
                             {errors.contact && <span>{errors.contact}</span>}
@@ -189,7 +216,8 @@ export default function Register({ positions, departments, employment_status , s
                             closeMenuOnSelect={true}
                             components={animatedComponents}
                             options={positions}
-                            onChange={(selected) => setSelectedPosition(selected)}
+                            // onChange={(selected) => setSelectedPosition(selected)}
+                            onChange={find}
                             value={selectedPosition}
                         />
                         <div className='error'>
@@ -251,6 +279,13 @@ export default function Register({ positions, departments, employment_status , s
                         <Label>Gender:</Label>
                         <FlowbiteSelect
                             onChange={(e) => setData('gender', e.target.value)}
+                            // theme={
+                            //     {
+                            //         root:{
+                            //             inner: 'bg-blue-600'
+                            //         }
+                            //     }
+                            // }
                         >
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -276,6 +311,7 @@ export default function Register({ positions, departments, employment_status , s
                         <input
                             type="file"
                             onChange={handleFileChange}
+                            className="bg-white dark:bg-gray-700"
                         />
                         <div className='error'>
                             {errors.user_photo && <span>{errors.user_photo}</span>}
@@ -290,6 +326,7 @@ export default function Register({ positions, departments, employment_status , s
                             type="text"
                             value={data.username}
                             onChange={(e) => setData('username', e.target.value)}
+                            className="bg-white dark:bg-gray-700"
                         />
                         <div className='error'>
                             {errors.username && <span>{errors.username}</span>}
@@ -302,6 +339,7 @@ export default function Register({ positions, departments, employment_status , s
                             type="password"
                             value={data.password}
                             onChange={(e) => setData('password', e.target.value)}
+                            className="bg-white dark:bg-gray-700"
                         />
                         <div className='error'>
                             {errors.password && <span>{errors.password}</span>}
@@ -313,6 +351,7 @@ export default function Register({ positions, departments, employment_status , s
                             type="password"
                             value={data.password_confirmation}
                             onChange={(e) => setData('password_confirmation', e.target.value)}
+                            className="bg-white dark:bg-gray-700"
                         />
                         <div className='error'>
                             {errors.password_confirmation && <span>{errors.password_confirmation}</span>}

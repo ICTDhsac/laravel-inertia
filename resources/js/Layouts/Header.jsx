@@ -36,8 +36,8 @@ export default function Header() {
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-500">
-                                                Pro Version
+                                            <a href="/register" className="hover:text-primary-600 dark:hover:text-primary-500">
+                                                Registration
                                             </a>
                                         </li>
                                     </div>

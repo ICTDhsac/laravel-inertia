@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         // Post::factory(25)->create();
-        // Task::factory(30)->create();
-        Plan::factory(5)->create();
+        Task::factory(30)->create();
+        // Plan::factory(5)->create();
     }
 }

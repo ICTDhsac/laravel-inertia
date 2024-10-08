@@ -101,7 +101,7 @@
 
 
     .select-container .select__control {
-        @apply bg-white dark:bg-inherit border border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-500;
+        @apply bg-white dark:bg-gray-700 border border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-500;
       }
     
       .select-container .select__control--is-focused {

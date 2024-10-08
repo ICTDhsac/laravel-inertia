@@ -248,7 +248,7 @@ export default function Create({isOpen, onClose, statuses, members }) {
 
                             <div>
                                 <Label>Description</Label>
-                                <textarea onChange={handleChange} name="body" value={data?.body} placeholder="Write task description..." rows={4} />
+                                <textarea onChange={handleChange} name="body" className='w-full' value={data?.body} placeholder="Write task description..." rows={4} />
                             </div>
 
 
