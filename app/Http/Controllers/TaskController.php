@@ -74,7 +74,7 @@ class TaskController extends Controller
                 ->update(['sortIndex' => $task['sortIndex'], 'status' => $task['status']]);
         }
 
-        return redirect('/')->with('response', [
+        return redirect('/tasks')->with('response', [
             'error' => false,
             'message' => "Task sort index updated successfully!"
         ]);

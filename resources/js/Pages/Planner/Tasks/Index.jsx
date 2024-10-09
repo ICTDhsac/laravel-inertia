@@ -28,9 +28,6 @@ export default function Index({tasks, members, flash}) {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const containerRef = useRef(null);
 
-
-    console.log(members)
-
     const handleShow = (data) => {
         setIsDrawerOpen(true);
         setTask(data);

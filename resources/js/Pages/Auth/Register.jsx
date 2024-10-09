@@ -1,15 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Label, Select as FlowbiteSelect, Datepicker, DarkThemeToggle } from 'flowbite-react';
-import moment from 'moment';
+import { Label, Select as FlowbiteSelect, Datepicker } from 'flowbite-react';
+import moment from 'moment'; //datetime plgin
+import { ToastContainer, toast } from "react-toastify";
 
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import FileUploadComponent from '@/Helper/FileUploadComponent';
 const animatedComponents = makeAnimated();
 
-export default function Register({ positions, departments, employment_status , schedules }) {
+/* reducer function */
+const updateSelectOptions = (state, action) => {
+    const {type, selected} = action;
+    console.log("state", state)
+    console.log("action", action)
+    switch(type){
+        case 'position_id':
+            return {...state, position: selected};
+        case 'department_id':
+            return {...state, department: selected};
+        case 'employment_status_id':
+            return {...state, employment_status: selected};
+        case 'schedule_id':
+            return {...state, schedule: selected};
+        case 'role_id':
+            return {...state, role: selected};
+        default:
+            return state
+    }
+}
+
+const notify = (res) => {
+    const { error, Message } = res;
+    if(error){
+        toast.error(Message);
+    }else{
+        toast.success(Message);
+    }
+}
+
+export default function Register({ positions, departments, employment_status , schedules, roles }) {
     const { data, setData, post, errors } = useForm({
         employee_id: '',
         first_name: '',
@@ -31,47 +63,14 @@ export default function Register({ positions, departments, employment_status , s
         password_confirmation: '',
     });
 
-    const [selectedOptions, setSelectedOptions] = useState({
-        position_id: '',
-        department_id: '',
-        employment_status_id: '',
-        schedule_id: '',
-        gender: '',
-        schedule_id: '',
-    });
-
-    const [selectedPosition, setSelectedPosition] =  useState({});
-    const [selectedDepartment, setSelectedDepartment] =  useState({});
-    const [selectedEmploymentStatus, setSelectedEmploymentStatus] =  useState({});
-    const [selectedSchedule, setSelectedSchedule] =  useState({});
-    const [fbTheme, setFbTheme] = useState('light');
+    const [selectedState, dispatchSelectedState] = useReducer(updateSelectOptions, {});
 
     useEffect(() => {
-        const theme = localStorage.getItem('flowbite-theme-mode');
-        if(theme){
-            setFbTheme(theme);
-        }
-    });
+        console.log(selectedState)
+    }, [selectedState]);
 
     useEffect(() => {
-        setData('position_id', selectedPosition.value);
-    }, [selectedPosition]);
-
-    useEffect(() => {
-        setData('department_id', selectedDepartment.value);
-    }, [selectedDepartment]);
-
-    useEffect(() => {
-        setData('employment_status_id', selectedEmploymentStatus.value);
-    }, [selectedEmploymentStatus]);
-
-    useEffect(() => {
-        setData('schedule_id', selectedSchedule.value);
-    }, [selectedSchedule]);
-
-
-    useEffect(() => {
-        console.log(data)
+        console.log("useForm data",data)
     }, [data]);
 
     const handleFileChange = (e) => {
@@ -91,8 +90,12 @@ export default function Register({ positions, departments, employment_status , s
         setData('user_photo', file);
     }
 
-    const find = (e) => {
-        console.log(e)
+    const handleSelectedOptions = (type, selected) => {
+        setData(type, selected.value);
+        dispatchSelectedState({
+            type: type,
+            selected: selected
+        });
     }
 
 
@@ -216,9 +219,8 @@ export default function Register({ positions, departments, employment_status , s
                             closeMenuOnSelect={true}
                             components={animatedComponents}
                             options={positions}
-                            // onChange={(selected) => setSelectedPosition(selected)}
-                            onChange={find}
-                            value={selectedPosition}
+                            onChange={(selectedValue) => handleSelectedOptions('position_id', selectedValue)}
+                            value={selectedState.position_id}
                         />
                         <div className='error'>
                             {errors.position_id && <span>{errors.position_id}</span>}
@@ -234,8 +236,8 @@ export default function Register({ positions, departments, employment_status , s
                             closeMenuOnSelect={true}
                             components={animatedComponents}
                             options={departments}
-                            onChange={(selected) => setSelectedDepartment(selected)}
-                            value={selectedDepartment}
+                            onChange={(selectedValue) => handleSelectedOptions('department_id', selectedValue)}
+                            value={selectedState.department_id_id}
                         />
                         <div className='error'>
                             {errors.department_id && <span>{errors.department_id}</span>}
@@ -251,8 +253,8 @@ export default function Register({ positions, departments, employment_status , s
                             closeMenuOnSelect={true}
                             components={animatedComponents}
                             options={employment_status}
-                            onChange={(selected) => setSelectedEmploymentStatus(selected)}
-                            value={selectedEmploymentStatus}
+                            onChange={(selectedValue) => handleSelectedOptions('employment_status_id', selectedValue)}
+                            value={selectedState.employment_status_id}
                         />
                         <div className='error'>
                             {errors.employment_status_id && <span>{errors.employment_status_id}</span>}
@@ -268,8 +270,8 @@ export default function Register({ positions, departments, employment_status , s
                             closeMenuOnSelect={true}
                             components={animatedComponents}
                             options={schedules}
-                            onChange={(selected) => setSelectedSchedule(selected)}
-                            value={selectedSchedule}
+                            onChange={(selectedValue) => handleSelectedOptions('schedule_id', selectedValue)}
+                            value={selectedState.schedule_id}
                         />
                         <div className='error'>
                             {errors.schedule_id && <span>{errors.schedule_id}</span>}
@@ -279,14 +281,8 @@ export default function Register({ positions, departments, employment_status , s
                         <Label>Gender:</Label>
                         <FlowbiteSelect
                             onChange={(e) => setData('gender', e.target.value)}
-                            // theme={
-                            //     {
-                            //         root:{
-                            //             inner: 'bg-blue-600'
-                            //         }
-                            //     }
-                            // }
                         >
+                            <option value="" selected disabled>Select Gender ..</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </FlowbiteSelect>
@@ -332,7 +328,23 @@ export default function Register({ positions, departments, employment_status , s
                             {errors.username && <span>{errors.username}</span>}
                         </div>
                     </div>
+                    <div>
+                        <Label>Role:</Label>
 
+                        <Select
+                            className="w-full select-container"
+                            classNamePrefix="select"
+                            placeholder="Role * (required)"
+                            closeMenuOnSelect={true}
+                            components={animatedComponents}
+                            options={roles}
+                            onChange={(selectedValue) => handleSelectedOptions('role_id', selectedValue)}
+                            value={selectedState.role_id}
+                        />
+                        <div className='error'>
+                            {errors.schedule_id && <span>{errors.schedule_id}</span>}
+                        </div>
+                    </div>
                     <div>
                         <Label>Password: <span className='text-red-500'>*</span></Label>
                         <Input
@@ -358,6 +370,8 @@ export default function Register({ positions, departments, employment_status , s
                         </div>
                     </div>
 
+                    <FileUploadComponent notify={notify}/>
+
                     
                     <div className='pt-10'>
                         <Button className="w-full" type="submit">Register</Button>
@@ -366,6 +380,7 @@ export default function Register({ positions, departments, employment_status , s
                 </form>
 
             </div>
+            <ToastContainer />
         </div>
     );
 }

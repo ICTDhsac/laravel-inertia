@@ -31,13 +31,37 @@ const rejectStyle = {
     borderColor: '#ff1744'
 };
 
-export default function FileUploadComponent() {
+export default function FileUploadComponent({notify}) {
     const [files, setFiles] = useState([]);
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
 
+    
     const handleDrop = useCallback(
         (acceptedFiles) => {
+            const { allowedFiles, notAllowedFiles } = acceptedFiles.reduce((acc, file) => {
+                if (allowedTypes.includes(file.type)) {
+                    acc.allowedFiles.push(file);
+                } else {
+                    acc.notAllowedFiles.push(file);
+                }
+                return acc;
+            }, { allowedFiles: [], notAllowedFiles: [] });//initial value
+
+            if (notAllowedFiles) {
+                notify({
+                    error: true,
+                    Message: (
+                                <div>
+                                    <h5>Invalid file format:</h5>
+                                    <span className='text-red-700'>{notAllowedFiles.map(file => file.name).join(' | ')}</span>.
+                                    <small className='italic block'>Only image files (.jpg, .png) are accepted.</small>
+                                </div>
+                            )
+                });
+            }
+
             setFiles((prevFiles) => {
-                const duplicates = acceptedFiles.filter((file) =>
+                const duplicates = allowedFiles.filter((file) =>
                     prevFiles.some((existingFile) => existingFile.name === file.name)
                 );
 
@@ -45,15 +69,13 @@ export default function FileUploadComponent() {
                     alert(`The file(s) "${duplicates.map(file => file.name).join(', ')}" has already been uploaded.`);
                 }
 
-                const newFiles = acceptedFiles.filter(
+                const newFiles = allowedFiles.filter(
                     (file) => !prevFiles.some((existingFile) => existingFile.name === file.name)
                 );
 
                 return [...prevFiles, ...newFiles];
             });
-        },
-        []
-    );
+        },[]);
 
     const removeFile = (file) => {
         setFiles((prevFiles) => prevFiles.filter((f) => f !== file));
