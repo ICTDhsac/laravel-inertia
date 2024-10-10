@@ -20,19 +20,20 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'employee_no',
-        'department_id',
-        'first_name',
-        'last_name',
-        'middle_name',
-        'email',
-        'contact_no',
-        'gender',
-        'date_hired',
-        'user_photo',
-        'email_verified_at',
-    ];
+    protected $guarded = [];
+    // protected $fillable = [
+    //     'employee_no',
+    //     'department_id',
+    //     'first_name',
+    //     'last_name',
+    //     'middle_name',
+    //     'email',
+    //     'contact_no',
+    //     'gender',
+    //     'date_hired',
+    //     'user_photo',
+    //     'email_verified_at',
+    // ];
 
     protected $appends = ['full_name'];
 

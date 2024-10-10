@@ -51,13 +51,20 @@ class RegisterController extends Controller
             'employee_id' => 'required|string|max:50|unique:user',
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
-            'username' => 'required|string|max:255|unique:role_user',
-            'password' => 'required|string|min:8|confirmed',
+            'middle_name' => 'nullable|string|max:100',
+            'suffix' => 'nullable|string|max:20',
             'email' => 'required|string|email|max:255|unique:users',
+            'contact' => ['nullable','regex:/^(\+639|09)[0-9]{9}$/'],
+            'position_id' => 'required|exists:positions',
+            'department_id' => 'required|exists:departments',
+            'employment_status_id' => 'required|exists:employment_statuses',
+            'schedule_id' => 'required|exists:schedules',
             'gender' => 'required',
+            'date_hired' => ['required', 'date_format:Y-m-d'],
             'user_photo' => 'required|file|max:10240',
-            'contact' => ['required', 'regex:/^(\+639|09)[0-9]{9}$/'],
-            'date_hired' => ['required', 'date_format:Y-m-d']
+            'username' => 'required|string|max:255|unique:role_user',
+            'role_id' => 'required|exists:roles',
+            'password' => 'required|string|min:8|confirmed',
             
         ]);
 
