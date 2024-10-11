@@ -47,7 +47,7 @@ export default function FileUploadComponent({notify}) {
                 return acc;
             }, { allowedFiles: [], notAllowedFiles: [] });//initial value
 
-            if (notAllowedFiles) {
+            if (notAllowedFiles.length > 0) {
                 notify({
                     error: true,
                     Message: (

@@ -120,7 +120,7 @@ export default function Register({ positions, departments, employment_status , s
             <div className="w-full max-w-3xl border shadow-md rounded p-5 bg-gray-300 dark:bg-slate-700">
                 <h2 className="text-3xl font-bold mb-6 text-center">Register</h2>
                 <form onSubmit={handleSubmit} className='space-y-3'>
-                    <span className="divider">Employee Information</span>
+                    <span className="divider divider-start text-lg underline pb-5">Employee Information</span>
                     <div>
                         <Label>Employee ID: <span className='text-red-500'>*</span></Label>
                         <Input
@@ -314,7 +314,7 @@ export default function Register({ positions, departments, employment_status , s
                         </div>
                     </div>
 
-                    <span className="divider">System Credentials</span>
+                    <span className="divider divider-start text-lg underline py-5">System Credentials</span>
 
                     <div>
                         <Label>Username: <span className='text-red-500'>*</span></Label>

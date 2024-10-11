@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreRegisterRequest;
 use App\Models\Department;
 use App\Models\EmploymentStatus;
 use App\Models\Position;
@@ -44,35 +45,10 @@ class RegisterController extends Controller
         return Inertia::render('Auth/Register', compact('positions', 'departments', 'employment_status', 'schedules', 'roles'));
     }
     
-    public function register(Request $request)
+    public function register(StoreRegisterRequest $request)
     {
-        // Validate the input data
-        $validator = Validator::make($request->all(), [
-            'employee_id' => 'required|string|max:50|unique:user',
-            'first_name' => 'required|string|max:100',
-            'last_name' => 'required|string|max:100',
-            'middle_name' => 'nullable|string|max:100',
-            'suffix' => 'nullable|string|max:20',
-            'email' => 'required|string|email|max:255|unique:users',
-            'contact' => ['nullable','regex:/^(\+639|09)[0-9]{9}$/'],
-            'position_id' => 'required|exists:positions',
-            'department_id' => 'required|exists:departments',
-            'employment_status_id' => 'required|exists:employment_statuses',
-            'schedule_id' => 'required|exists:schedules',
-            'gender' => 'required',
-            'date_hired' => ['required', 'date_format:Y-m-d'],
-            'user_photo' => 'required|file|max:10240',
-            'username' => 'required|string|max:255|unique:role_user',
-            'role_id' => 'required|exists:roles',
-            'password' => 'required|string|min:8|confirmed',
-            
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
-        // Create a new user in the users table
+        // the StoreRegisterRequest allreay validated the form data
+        
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
