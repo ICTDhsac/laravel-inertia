@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SideNav from './SideNav';
 import Header from '../Header';
 import { Breadcrumb, Flowbite } from 'flowbite-react';
@@ -11,6 +11,14 @@ export default function HRMISLayout({children}) {
     const { url } = usePage();
     const { title, navigationLinks } = usePage().props;
     const [isCollapsed, setIsCollapsed] = useState(false);
+
+    const [isAnimating, setIsAnimating] = useState(true);  // Controls animation visibility
+
+    // Stop the animation after a short delay (e.g., 2 seconds)
+    useEffect(() => {
+        const timeout = setTimeout(() => setIsAnimating(false), 2000);  // Adjust duration as needed
+        return () => clearTimeout(timeout); 
+    }, [])
 
     
     const isActive = (path) => url === path ? 'active-link' : '';
@@ -48,7 +56,7 @@ export default function HRMISLayout({children}) {
                     </main>
                 </div>
             </Flowbite>
-            <Lines animation="slide-right" />
+            {isAnimating && <Lines animation="slide-right" />}
         </React.Fragment>
     </>
   )

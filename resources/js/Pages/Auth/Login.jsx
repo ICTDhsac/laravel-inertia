@@ -1,20 +1,46 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Inertia } from '@inertiajs/inertia';
+import { ToastContainer, toast } from "react-toastify";
+import { useForm } from '@inertiajs/react';
+import { Key } from 'lucide-react';
+import { Button } from 'flowbite-react';
 
-export default function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState({});
+const notify = (res) => {
+    const { error, message } = res;
+    if(error){
+        toast.error(message);
+    }else{
+        toast.success(message);
+    }
+}
+
+export default function Login({flash}) {
+
+    const { data, setData, post, errors, processing } = useForm({
+        username: '',
+        password: '',
+    });
+
+    useEffect(() => {
+        if (flash.response) {
+            notify(flash.response);
+        }
+    }, [flash]);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        Inertia.post('/login', {
-            email,
-            password,
-        }, {
-            onError: (err) => {
-                setErrors(err);
+        post('/login',{
+            // preserveScroll: true,
+            // preserveState: true,
+            onSuccess: (res) => {
+                console.log("Login successful");
+                console.log(res)
+                
+            },
+            onError: () => {
+                console.log("Registration error");
             }
         });
     };
@@ -29,13 +55,13 @@ export default function Login() {
                         <label htmlFor="email" className="block text-gray-700">Email</label>
                         <input
                             id="email"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            type="text"
+                            value={data.username}
+                            onChange={(e) => setData('username', e.target.value)}
                             className="w-full px-4 py-2 border border-gray-300 rounded"
-                            required
+                            
                         />
-                        {errors.email && <div className="text-red-500 text-sm mt-1">{errors.email}</div>}
+                        {errors.username && <div className="text-red-500 text-sm mt-1">{errors.username}</div>}
                     </div>
 
                     <div className="mb-4">
@@ -43,24 +69,27 @@ export default function Login() {
                         <input
                             id="password"
                             type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            value={data.password}
+                            onChange={(e) => setData('password', e.target.value)}
                             className="w-full px-4 py-2 border border-gray-300 rounded"
-                            required
+                            
                         />
                         {errors.password && <div className="text-red-500 text-sm mt-1">{errors.password}</div>}
                     </div>
 
-                    <div className="flex items-center justify-between">
-                        <button
-                            type="submit"
-                            className="px-4 py-2 bg-blue-500 text-white rounded"
-                        >
-                            Login
-                        </button>
+                    <div className='pt-5 flex justify-end'>
+                        <Button type="submit" disabled={processing} gradientDuoTone="greenToBlue" outline pill size="lg">
+                            <div className="flex-item-center">
+                                {processing ? 
+                                    <span className="loading loading-spinner loading-xs"></span> : <Key className='h-4 w-4' />
+                                }
+                                <span>Log In</span>
+                            </div>
+                        </Button>
                     </div>
                 </form>
             </div>
+            <ToastContainer />
         </div>
     );
 }

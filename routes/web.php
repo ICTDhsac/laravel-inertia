@@ -21,8 +21,9 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/register', [RegisterController::class, 'showRegisterForm']);
-Route::post('/register', [RegisterController::class, 'register']);
+Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register.show');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.store');
+Route::get('/redirectBack', [RegisterController::class, 'redirectBack']);
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('users', UserController::class);

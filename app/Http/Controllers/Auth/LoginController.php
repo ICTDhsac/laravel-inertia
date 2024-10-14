@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
+use App\Models\RoleUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,8 +28,8 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
 
-        $roleUser = DB::table('role_user')->where('username', $credentials['username'])->first();
-
+        $roleUser = RoleUser::query()->where('username', $credentials['username'])->first();
+        
         if (!$roleUser) {
             return back()->withErrors(['username' => 'The provided username is incorrect.']);
         }

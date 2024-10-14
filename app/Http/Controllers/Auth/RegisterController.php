@@ -76,17 +76,11 @@ class RegisterController extends Controller
 
         } catch(Exception $e) {
             DB::rollBack();
-            return response()->json(['error' => 'User creation failed' . $e->getMessage()], 500);
+            return to_route('register.show')->with('response',[
+                'error' => true,
+                'message' => 'User creation failed' . $e->getMessage()
+            ], 500)->withInput();
         }
 
-        // if($user){
-
-        //     $roleData['user_id'] = $user->id;
-        //     if (!$user->roles()->attach($roleData['role_id'], $roleData)) {
-        //         $user->delete(); // Manually delete the user if role assignment fails
-        //     }
-        // }
-
-        
     }
 }

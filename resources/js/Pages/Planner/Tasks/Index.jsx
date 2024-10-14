@@ -101,7 +101,6 @@ export default function Index({tasks, members, flash}) {
         if (flash.response) {
             notify(flash.response);
         }
-        console.log("flash", flash)
     }, [flash]);
 
     useEffect( () => {

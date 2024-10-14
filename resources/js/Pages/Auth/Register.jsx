@@ -1,14 +1,14 @@
 import React, { useEffect, useReducer, useState, forwardRef } from 'react';
 import { useForm } from '@inertiajs/react';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Label, Select as FlowbiteSelect, Datepicker } from 'flowbite-react';
+import { Label, Select as FlowbiteSelect, Datepicker, Button } from 'flowbite-react';
 import moment from 'moment'; //datetime plgin
 import { ToastContainer, toast } from "react-toastify";
 
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import FileUploadComponent from './FileUploadComponent';
+import { UserPlus } from 'lucide-react';
 const animatedComponents = makeAnimated();
 
 /* reducer function */
@@ -31,29 +31,29 @@ const updateSelectOptions = (state, action) => {
     }
 }
 
-    const CustomOption = forwardRef(({ isFocused, label, innerProps }, ref) => {
-        return (
-            <h1
-                style={{ backgroundColor: isFocused ? "#e2e8f0" : "inherit" }}
-                {...innerProps}
-                ref={ref}
-            >
-                {label}
-            </h1>
-        );
-    });
+const CustomOption = forwardRef(({ isFocused, label, innerProps }, ref) => {
+    return (
+        <h1
+            style={{ backgroundColor: isFocused ? "#e2e8f0" : "inherit" }}
+            {...innerProps}
+            ref={ref}
+        >
+            {label}
+        </h1>
+    );
+});
 
 const notify = (res) => {
-    const { error, Message } = res;
+    const { error, message } = res;
     if(error){
-        toast.error(Message);
+        toast.error(message);
     }else{
-        toast.success(Message);
+        toast.success(message);
     }
 }
 
-export default function Register({ positions, departments, employment_status , schedules, roles }) {
-    const { data, setData, post, errors } = useForm({
+export default function Register({ positions, departments, employment_status , schedules, roles, flash }) {
+    const { data, setData, post, errors, reset, clearErrors, processing } = useForm({
         employee_id: '',
         first_name: '',
         last_name: '',
@@ -82,6 +82,13 @@ export default function Register({ positions, departments, employment_status , s
     }, [files]);
 
     useEffect(() => {
+        if (flash.response) {
+            notify(flash.response);
+        }
+    }, [flash]);
+
+    /* for debugging only */
+    useEffect(() => {
         console.log("useForm data",data)
     }, [data]);
 
@@ -99,9 +106,12 @@ export default function Register({ positions, departments, employment_status , s
         post('/register',{
             preserveScroll: true,
             preserveState: true,
-            onSuccess: () => {
+            onSuccess: (res) => {
                 console.log("Registration successful");
-                window.location.href = '/login';
+                console.log(res)
+                reset();
+                clearErrors();
+                
             },
             onError: () => {
                 console.log("Registration error");
@@ -126,7 +136,7 @@ export default function Register({ positions, departments, employment_status , s
 
                         <form onSubmit={handleSubmit} className='space-y-3'>
                             <span className="divider divider-start text-lg underline pb-5">Employee Information</span>
-                            <div className='pl-3'>
+                            <div>
                                 <div>
                                     <Label>Employee ID: <span className='text-red-500'>*</span></Label>
                                     <Input
@@ -312,7 +322,7 @@ export default function Register({ positions, departments, employment_status , s
 
                             <span className="divider divider-start text-lg underline pt-8 pb-5">System Credentials</span>
 
-                            <div className='pl-3'>
+                            <div>
                                 <div>
                                     <Label>Username: <span className='text-red-500'>*</span></Label>
                                     <Input
@@ -365,16 +375,23 @@ export default function Register({ positions, departments, employment_status , s
                                 </div>
                             </div>
                             
-                            <div className='pt-10'>
-                                <Button className="w-full" type="submit">Register</Button>
+                            <div className='pt-5 flex justify-end'>
+                                <Button type="submit" disabled={processing} gradientDuoTone="greenToBlue" outline pill size="lg">
+                                    <div className="flex-item-center">
+                                        {processing ? 
+                                            <span className="loading loading-spinner loading-xs"></span> : <UserPlus className='h-4 w-4' />
+                                        }
+                                        <span>Register</span>
+                                    </div>
+                                </Button>
                             </div>
                             
                         </form>
                     </div>
                 </div>
-
             </div>
             <ToastContainer />
+
         </div>
     );
 }
