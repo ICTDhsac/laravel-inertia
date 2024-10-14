@@ -17,7 +17,7 @@ class Role extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class)->using(RoleUser::class)->withPivot('password')->withTimestamps();
+        return $this->belongsToMany(User::class)->using(RoleUser::class)->withPivot(['username', 'password'])->withTimestamps();
         // return $this->belongsToMany(User::class, 'role_user', 'role_id', 'user_id')
         //             ->as('user_role')
         //             ->withPivot('password')

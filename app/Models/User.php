@@ -20,20 +20,22 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $guarded = [];
-    // protected $fillable = [
-    //     'employee_no',
-    //     'department_id',
-    //     'first_name',
-    //     'last_name',
-    //     'middle_name',
-    //     'email',
-    //     'contact_no',
-    //     'gender',
-    //     'date_hired',
-    //     'user_photo',
-    //     'email_verified_at',
-    // ];
+    protected $fillable = [
+        'position_id',
+        'department_id',
+        'employment_status_id',
+        'schedule_id',
+        'employee_id',
+        'last_name',
+        'first_name',
+        'middle_name',
+        'suffix',
+        'contact',
+        'email',
+        'gender',
+        'date_hired',
+        'user_photo',
+    ];
 
     protected $appends = ['full_name'];
 
@@ -99,7 +101,7 @@ class User extends Authenticatable
     public function roles()
     {
         
-        return $this->belongsToMany(Role::class)->using(RoleUser::class)->withPivot('password')->withTimestamps();
+        return $this->belongsToMany(Role::class)->using(RoleUser::class)->withPivot(['username', 'password'])->withTimestamps();
         
         // return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')
         //             ->as('user_role')

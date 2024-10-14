@@ -19,15 +19,17 @@ use App\Http\Controllers\Auth\RegisterController;
 // Display login page
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/register', [RegisterController::class, 'showRegisterForm']);
 Route::post('/register', [RegisterController::class, 'register']);
 
-Route::resource('users', UserController::class);
-Route::resource('departments', DepartmentController::class);
-Route::resource('positions', PositionController::class);
-Route::resource('offices', OfficeController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::resource('users', UserController::class);
+    Route::resource('departments', DepartmentController::class);
+    Route::resource('positions', PositionController::class);
+    Route::resource('offices', OfficeController::class);
+});
 
 Route::resource('plans', PlanController::class);
 

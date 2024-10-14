@@ -22,22 +22,22 @@ class StoreRegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'employee_id' => 'required|string|max:50|unique:user',
+            'employee_id' => 'required|string|max:50|unique:users',
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
             'middle_name' => 'nullable|min:3',
             'suffix' => 'nullable|string|max:20',
             'email' => 'required|string|email|max:255|unique:users',
             'contact' => ['nullable','regex:/^(\+639|09)[0-9]{9}$/'],
-            'position_id' => 'required|exists:positions',
-            'department_id' => 'required|exists:departments',
-            'employment_status_id' => 'required|exists:employment_statuses',
-            'schedule_id' => 'required|exists:schedules',
+            'position_id' => 'required|exists:positions,id',
+            'department_id' => 'required|exists:departments,id',
+            'employment_status_id' => 'required|exists:employment_statuses,id',
+            'schedule_id' => 'required|exists:schedules,id',
             'gender' => 'required',
             'date_hired' => ['required', 'date_format:Y-m-d'],
-            'user_photo' => 'required|file|max:10240',
-            'username' => 'required|string|max:255|unique:role_user',
-            'role_id' => 'required|exists:roles',
+            'user_photo' => 'nullable|image|mimes:jpg,jpeg,png,gif,svg|max:10240',
+            'username' => 'required|string|max:255|unique:role_user, username',
+            'role_id' => 'required|exists:roles,id',
             'password' => 'required|string|min:8|confirmed',
         ];
     }

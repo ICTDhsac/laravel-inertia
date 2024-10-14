@@ -9,8 +9,10 @@ use App\Models\Department;
 use App\Models\EmploymentStatus;
 use App\Models\Position;
 use App\Models\Role;
+use App\Models\RoleUser;
 use App\Models\Schedule;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -48,30 +50,43 @@ class RegisterController extends Controller
     public function register(StoreRegisterRequest $request)
     {
         // the StoreRegisterRequest allreay validated the form data
+        $validatedData = $request->validated();
+        // dd($validatedData);
+        if ($request->hasFile('user_photo')) {
+            $file = $request->file('user_photo');
+            $fileName = $validatedData['employee_id'] . '_' . time() . '_' . $file->getClientOriginalName();
+            $userPhotoPath = $file->storeAs('uploads/user_photo', $fileName, 'public');
+            $validatedData['user_photo'] = $userPhotoPath;
+        }
+        $userData = array_intersect_key($validatedData, array_flip((new User)->getFillable()));
+        $roleData = array_intersect_key($validatedData, array_flip((new RoleUser)->getFillable()));
+
+        DB::beginTransaction();
+        try {
+            $user = User::create($userData);
+            $user->roles()->attach($roleData['role_id'], $roleData);
+            DB::commit();
+
+            Auth::login($user);
+
+            return redirect()->back()->with('response', [
+                'error' => false,
+                'message' => 'User created successfully!'
+            ]);
+
+        } catch(Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'User creation failed' . $e->getMessage()], 500);
+        }
+
+        // if($user){
+
+        //     $roleData['user_id'] = $user->id;
+        //     if (!$user->roles()->attach($roleData['role_id'], $roleData)) {
+        //         $user->delete(); // Manually delete the user if role assignment fails
+        //     }
+        // }
+
         
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            // Set other fields as needed
-            'password' => Hash::make($request->password), // Store the hashed password
-        ]);
-
-        // Create a corresponding entry in the role_user table
-        DB::table('role_user')->insert([
-            'user_id' => $user->id,
-            'username' => $request->username,
-            'password' => Hash::make($request->password), // Store the hashed password
-            // Assign a default role_id if necessary
-            'role_id' => 1, // Adjust this as needed
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        // Optionally log the user in after registration
-        Auth::login($user);
-
-        // Redirect to the intended page or dashboard
-        return redirect()->intended('/login');
     }
 }
