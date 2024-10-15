@@ -83,4 +83,13 @@ class RegisterController extends Controller
         }
 
     }
+
+
+    public function redirectBack()
+    {
+        echo Auth::id();
+        echo "<img src='/storage/uploads/user_photo/2024101402_1728892115_avatar5.png'/>";
+        // <img src="{{ asset('storage/uploads/user_photo/yourfile.png') }}" alt="User Photo" />
+        dd(Auth::user());
+    }
 }

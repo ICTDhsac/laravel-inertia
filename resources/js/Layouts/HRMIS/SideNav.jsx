@@ -1,11 +1,14 @@
-import React, {  useState } from 'react';
-import { Link } from '@inertiajs/react';
+import React, {  useEffect, useState } from 'react';
+import { Link, usePage, router } from '@inertiajs/react';
 
 import { IoIosArrowDropdownCircle, IoIosArrowDroprightCircle } from "react-icons/io";
 import { GiToggles } from "react-icons/gi";
 import { Building, DatabaseZap, HomeIcon, Notebook, Settings, ShieldCheck, UserCircle, UserRoundCog, Users } from 'lucide-react';
 
-export default function SideNav({ isCollapsed, toggleSidebar, isActive  }) {
+export default function SideNav({ isCollapsed, toggleSidebar, isActive, timeLeft  }) {
+
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
 
     const [dropDownToggle, setDropdownToggle] = useState({
         system_administration: false,
@@ -144,6 +147,9 @@ export default function SideNav({ isCollapsed, toggleSidebar, isActive  }) {
 
             {/* Footer */}
             <div className="mt-auto absolute bottom-0 left-0 w-full p-6">
+                <p>
+                    Session expires in:<br/> {minutes}m {seconds}s
+                </p>
                 {!isCollapsed && <span className="text-sm text-gray-400">&copy; 2024 MyApp</span>}
             </div>
         

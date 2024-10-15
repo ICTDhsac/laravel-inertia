@@ -38,7 +38,15 @@ class LoginController extends Controller
             return back()->withErrors(['password' => 'The provided password is incorrect.']);
         }
 
-        $user = User::find($roleUser->user_id);
+        $user = User::with([
+                        'position:id,name',
+                        'employmentStatus:id,name',
+                        'schedule:id,name',
+                        'department:id,name,office_id',
+                        'department.office:id,name,location_id',
+                        'department.office.location:id,name',
+                        'schedule:id,name',
+                    ])->find($roleUser->user_id);
 
         if ($user) {
             Auth::login($user);

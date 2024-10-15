@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -39,6 +41,26 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'response' => fn () => $request->session()->get('response')
             ],
+            'domain' => url('/'),
+            'asset' => url('/storage'),
+            'auth' => [
+                'user' => $this->getAuthUser() ?? [],
+                'status' => Auth::check()
+            ],
         ]);
+    }
+
+    public function getAuthUser()
+    {
+        return User::with([
+            'position:id,name',
+            'employmentStatus:id,name',
+            'schedule:id,name',
+            'department:id,name,office_id',
+            'department.office:id,name,location_id',
+            'department.office.location:id,name',
+            'schedule:id,name',
+        ])->find(Auth::id());
+
     }
 }

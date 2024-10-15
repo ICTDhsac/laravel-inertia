@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SideNav from './SideNav';
 
 import { lucideReactIcons } from '@/Data/PreloadedIcons';
@@ -16,10 +16,17 @@ import Header from './Header';
 export default function Layout({ children }) {
 
     const { url } = usePage();
-    const { title, navigationLinks } = usePage().props;
+    const { title } = usePage().props;
     const [isCollapsed, setIsCollapsed] = useState(false);
 
     const isActive = (path) => url === path ? 'active-link' : '';
+
+    const [isAnimating, setIsAnimating] = useState(true); 
+
+    useEffect(() => {
+        const timeout = setTimeout(() => setIsAnimating(false), 2000); 
+        return () => clearTimeout(timeout); 
+    }, []);
 
     const toggleSidebar = () => {
         setIsCollapsed(!isCollapsed);
@@ -36,7 +43,7 @@ export default function Layout({ children }) {
                 </main>
 
             </Flowbite>
-            <Lines animation="slide-right" />
+            {isAnimating && <Lines animation="slide-right" />}
         </React.Fragment>
         </>
     );

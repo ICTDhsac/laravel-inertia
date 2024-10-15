@@ -2,23 +2,43 @@ import React, { useEffect, useState } from 'react';
 import SideNav from './SideNav';
 import Header from '../Header';
 import { Breadcrumb, Flowbite } from 'flowbite-react';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage, router } from '@inertiajs/react';
 import { Lines } from 'react-preloaders';
 import { lucideReactIcons } from '@/Data/PreloadedIcons';
 
 export default function HRMISLayout({children}) {
 
     const { url } = usePage();
-    const { title, navigationLinks } = usePage().props;
+    const { title, navigationLinks, sessionTimeOut } = usePage().props;
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(true); 
+    const [timeLeft, setTimeLeft] = useState(sessionTimeOut * 60);
 
-    const [isAnimating, setIsAnimating] = useState(true);  // Controls animation visibility
+    const handleLogOut = () => {
+        router.get('/logout', {
+            onFinish: () => window.location.href = '/login',
+        });
+    }
 
-    // Stop the animation after a short delay (e.g., 2 seconds)
+    /* for session timeout */
     useEffect(() => {
-        const timeout = setTimeout(() => setIsAnimating(false), 2000);  // Adjust duration as needed
+        const interval = setInterval(() => {
+            setTimeLeft((prev) => Math.max(prev - 10, 0));
+        }, 10000);
+        return () => clearInterval(interval); // Cleanup on unmount
+    }, []);
+    
+    useEffect(() => {
+        if (timeLeft <= 0) {
+            handleLogOut();
+        }
+    }, [timeLeft]);
+
+    /* for preloader */
+    useEffect(() => {
+        const timeout = setTimeout(() => setIsAnimating(false), 2000); 
         return () => clearTimeout(timeout); 
-    }, [])
+    }, []);
 
     
     const isActive = (path) => url === path ? 'active-link' : '';
@@ -33,9 +53,10 @@ export default function HRMISLayout({children}) {
             <Flowbite>
                 <Head title={title} />
 
-                <Header />
+                <Header onLogOut={handleLogOut} />
 
-                <SideNav isCollapsed={isCollapsed} toggleSidebar={toggleSidebar} isActive={isActive} />
+                <SideNav isCollapsed={isCollapsed} toggleSidebar={toggleSidebar} isActive={isActive} timeLeft={timeLeft} />
+
                 
                 {/* Main Content Area */}
                 <div className={`min-h-screen bg-gray-200 dark:bg-gray-900 pt-20 ${isCollapsed ? '!pl-16' : '!pl-[270px]'}`}>
