@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Plan;
 use App\Http\Requests\StorePlanRequest;
 use App\Http\Requests\UpdatePlanRequest;
+use App\Models\Department;
+use App\Models\User;
+use Exception;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PlanController extends Controller
 {
@@ -29,6 +34,7 @@ class PlanController extends Controller
     {
         $plans = Plan::all();
         $navigationLinks = $this->navigationLinks;
+        $navigationLinks[] = ['link' => '/plans/create', 'icon' => 'CalendarPlus', 'label' => 'Create'];
         return inertia('Planner/Plans/Index', compact('plans', 'navigationLinks'));
     }
 
@@ -37,7 +43,12 @@ class PlanController extends Controller
      */
     public function create()
     {
-        //
+        $departments = Department::all()->map(function ($department) {
+            return ['value' => $department->id, 'label' => $department->name];
+        });
+        $navigationLinks = $this->navigationLinks;
+        $navigationLinks[] = ['link' => '/plans/create', 'icon' => 'CalendarPlus', 'label' => 'Create'];
+        return inertia('Planner/Plans/Create', compact('departments', 'navigationLinks'));
     }
 
     /**
@@ -45,7 +56,42 @@ class PlanController extends Controller
      */
     public function store(StorePlanRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+        $users = User::with('department')
+                            ->where('department_id', $validatedData['department_id'])->get();
+        
+        DB::beginTransaction();
+        try {
+            $plan = Plan::create([
+                'name' => $validatedData['name'],
+                'privacy' => $validatedData['privacy'],
+                'created_by' => Auth::id()
+            ]);
+            dd($plan);
+            // if($plan){
+
+            //     if($validatedData['department_id']){
+            //         $department = Department::find($validatedData['department_id']);
+
+            //         $plan->users()->attach($validatedData['user_id'], ['is_division_user' => true] );
+            //     }
+
+            //     DB::commit();
+
+            // }
+                
+            return back()->with('response', [
+                'error' => false,
+                'message' => 'Plan created successfully!'
+            ]);
+
+        } catch(Exception $e) {
+            DB::rollBack();
+            return back()->with('response',[
+                'error' => true,
+                'message' => 'User creation failed' . $e->getMessage()
+            ], 500)->withInput();
+        }
     }
 
     /**

@@ -16,6 +16,12 @@ class Plan extends Model
         'privacy',
     ];
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'plan_member')
+                                ->withPivot('is_division_user')
+                                ->withTimestamps();
+    }
     // Relationship to the User model for the creator
     public function creator()
     {

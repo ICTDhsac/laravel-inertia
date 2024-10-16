@@ -1,5 +1,5 @@
-import React, {  useEffect, useState } from 'react';
-import { Link, usePage, router } from '@inertiajs/react';
+import React, {  useState } from 'react';
+import { Link, } from '@inertiajs/react';
 
 import { IoIosArrowDropdownCircle, IoIosArrowDroprightCircle } from "react-icons/io";
 import { GiToggles } from "react-icons/gi";

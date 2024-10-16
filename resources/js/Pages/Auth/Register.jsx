@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState, forwardRef } from 'react';
 import { useForm } from '@inertiajs/react';
 import { Input } from '@/components/ui/input';
-import { Label, Select as FlowbiteSelect, Datepicker, Button } from 'flowbite-react';
+import { Label, Select as FlowbiteSelect, Datepicker, Button, useThemeMode } from 'flowbite-react';
 import moment from 'moment'; //datetime plgin
 import { ToastContainer, toast } from "react-toastify";
 
@@ -53,6 +53,8 @@ const notify = (res) => {
 }
 
 export default function Register({ positions, departments, employment_status , schedules, roles, flash }) {
+    const { mode } = useThemeMode();
+
     const { data, setData, post, errors, reset, clearErrors, processing } = useForm({
         employee_id: '',
         first_name: '',
@@ -93,7 +95,7 @@ export default function Register({ positions, departments, employment_status , s
     }, [data]);
 
     const handleSelectedOptions = (type, selected) => {
-        setData(type, Number(selected.value));
+        setData(type, selected.value);
         dispatchSelectedState({
             type: type,
             selected: selected
@@ -126,7 +128,7 @@ export default function Register({ positions, departments, employment_status , s
                 <h2 className="text-3xl font-bold mb-6 text-center">Register</h2>
                 <div className='flex flex-wrap'>
                     <div className='flex-none w-full md:w-1/4 p-5'>
-                        <FileUploadComponent files={files} setFiles={setFiles} notify={notify}/>
+                        <FileUploadComponent files={files} setFiles={setFiles} notify={notify} mode={mode}/>
                         <div className='error'>
                             {errors.user_photo && <span>{errors.user_photo}</span>}
                         </div>

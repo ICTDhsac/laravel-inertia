@@ -1,6 +1,6 @@
 
 import { Avatar } from 'flowbite-react';
-import { useCallback, useState, useMemo, useEffect } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 const baseStyle = {
@@ -19,6 +19,12 @@ const baseStyle = {
     transition: 'border .24s ease-in-out'
 };
 
+const darkModeStyle = {
+    backgroundColor: '#374151', // Dark gray
+    borderColor: '#4b5563', // Lighter gray border
+    color: '#d1d5db', // Light gray text
+};
+
 const focusedStyle = {
     borderColor: '#2196f3'
 };
@@ -31,7 +37,7 @@ const rejectStyle = {
     borderColor: '#ff1744'
 };
 
-export default function FileUploadComponent({files, setFiles, notify}) {
+export default function FileUploadComponent({files, setFiles, notify, mode}) {
     const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
 
     useEffect(() => {
@@ -41,29 +47,29 @@ export default function FileUploadComponent({files, setFiles, notify}) {
     
     const handleDrop = useCallback(
         (acceptedFiles) => {
-            // const { allowedFiles, notAllowedFiles } = acceptedFiles.reduce((acc, file) => {
-            //     if (allowedTypes.includes(file.type)) {
-            //         acc.allowedFiles.push(file);
-            //     } else {
-            //         acc.notAllowedFiles.push(file);
-            //     }
-            //     return acc;
-            // }, { allowedFiles: [], notAllowedFiles: [] });//initial value
+            const { allowedFiles, notAllowedFiles } = acceptedFiles.reduce((acc, file) => {
+                if (allowedTypes.includes(file.type)) {
+                    acc.allowedFiles.push(file);
+                } else {
+                    acc.notAllowedFiles.push(file);
+                }
+                return acc;
+            }, { allowedFiles: [], notAllowedFiles: [] });//initial value
 
-            // if (notAllowedFiles.length > 0) {
-            //     notify({
-            //         error: true,
-            //         Message: (
-            //                     <div>
-            //                         <h5>Invalid file format:</h5>
-            //                         <span className='text-red-700'>{notAllowedFiles.map(file => file.name).join(' | ')}</span>.
-            //                         <small className='italic block'>Only image files (.jpg, .png) are accepted.</small>
-            //                     </div>
-            //                 )
-            //     });
-            // }
+            if (notAllowedFiles.length > 0) {
+                notify({
+                    error: true,
+                    Message: (
+                                <div>
+                                    <h5>Invalid file format:</h5>
+                                    <span className='text-red-700'>{notAllowedFiles.map(file => file.name).join(' | ')}</span>.
+                                    <small className='italic block'>Only image files (.jpg, .png) are accepted.</small>
+                                </div>
+                            )
+                });
+            }
 
-            setFiles(acceptedFiles);
+            setFiles(allowedFiles);
         },[]);
 
     const removeFile = (file) => {
@@ -96,17 +102,18 @@ export default function FileUploadComponent({files, setFiles, notify}) {
     });
     const style = useMemo(() => ({
         ...baseStyle,
+        ...(mode == "dark" ? darkModeStyle : {}),
         ...(isFocused ? focusedStyle : {}),
         ...(isDragAccept ? acceptStyle : {}),
         ...(isDragReject ? rejectStyle : {})
-    }), [isFocused, isDragAccept, isDragReject]);
+    }), [mode, isFocused, isDragAccept, isDragReject]);
 
     return (
         <div className="file-upload">
             {files.length === 0 && (
                 <div
                     {...getRootProps({style})}
-                    className={`dropzone ${isDragActive ? 'active' : ''}`}
+                    className={`${isDragActive ? 'active' : ''}`}
                 >
                     <input {...getInputProps()} />
                     <Avatar

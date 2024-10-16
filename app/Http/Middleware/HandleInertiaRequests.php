@@ -42,7 +42,7 @@ class HandleInertiaRequests extends Middleware
                 'response' => fn () => $request->session()->get('response')
             ],
             'domain' => url('/'),
-            'asset' => url('/storage'),
+            'assetUrl' => url('/storage'),
             'auth' => [
                 'user' => $this->getAuthUser() ?? [],
                 'status' => Auth::check()

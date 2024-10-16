@@ -35,7 +35,7 @@ export default function PlannerLayout({ children }) {
 
                     <SideNav isCollapsed={isCollapsed} toggleSidebar={toggleSidebar} isActive={isActive} />
                     {/* Main Content Area */}
-                    <div className={`min-h-screen w-full bg-gray-200 dark:bg-gray-900 pt-20 ${isCollapsed ? '!pl-16' : '!pl-[270px]'}`}>
+                    <div className={`flex flex-col min-h-screen w-full bg-gray-200 dark:bg-gray-900 pt-20 ${isCollapsed ? '!pl-16' : '!pl-[270px]'}`}>
                         {/* Content Header */}
                         <section className='flex justify-between items-center'>
                             <h1 className='text-slate-900 dark:text-slate-100 font-bold text-3xl flex-1'>{title}<small className='text-gray-400'> Control panel</small></h1>
@@ -48,7 +48,7 @@ export default function PlannerLayout({ children }) {
                             </Breadcrumb>
                         </section>
                         {/* Main Content */}
-                        <main className='mt-6'>
+                        <main className='flex-1 overflow-y-auto mt-6'>
                             {children}
                         </main>
                     </div>

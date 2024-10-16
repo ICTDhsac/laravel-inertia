@@ -5,6 +5,10 @@ import { Breadcrumb, Flowbite } from 'flowbite-react';
 import { Head, usePage, router } from '@inertiajs/react';
 import { Lines } from 'react-preloaders';
 import { lucideReactIcons } from '@/Data/PreloadedIcons';
+/* SweetAlert */
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal);
 
 export default function HRMISLayout({children}) {
 
@@ -15,8 +19,22 @@ export default function HRMISLayout({children}) {
     const [timeLeft, setTimeLeft] = useState(sessionTimeOut * 60);
 
     const handleLogOut = () => {
-        router.get('/logout', {
-            onFinish: () => window.location.href = '/login',
+        MySwal.fire({
+            title: <p>Log Out?</p>,
+            text: 'Do you want to proceed?',
+            icon: 'question',
+            showCancelButton: true,  // Show the cancel button
+            confirmButtonText: 'Confirm',
+            cancelButtonText: 'Cancel',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                router.get('/logout', {
+                    onFinish: () => window.location.href = '/login',
+                });
+            }
+            // else if (result.dismiss === Swal.DismissReason.cancel) {
+            //     MySwal.fire(<p>Cancelled!</p>);  // Handle the cancel action
+            // }
         });
     }
 

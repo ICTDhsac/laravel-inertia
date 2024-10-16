@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Profile from '@/Layouts/Profile';
 import { DarkThemeToggle, MegaMenu, Dropdown, Avatar } from "flowbite-react";
-import { HiCog, HiLogout, HiViewGrid, HiUserCircle } from "react-icons/hi";
+import { HiViewGrid } from "react-icons/hi";
 import { usePage } from '@inertiajs/react';
 
 export default function Header({onLogOut}) {
 
-    const { auth, asset } = usePage().props;
+    const { auth, assetUrl } = usePage().props;
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     
   return (
@@ -97,7 +97,7 @@ export default function Header({onLogOut}) {
                         <DarkThemeToggle />
                         {auth.status &&
                             <Dropdown
-                                label={<Avatar alt="User Photo" size="xs" img={`${asset}/${auth.user.user_photo || 'uploads/user_photo/avatar.png' }`} rounded />}
+                                label={<Avatar alt="User Photo" size="xs" img={`${assetUrl}/${auth.user.user_photo || 'uploads/user_photo/avatar.png' }`} rounded />}
                                 arrowIcon={false}
                                 inline
                             >

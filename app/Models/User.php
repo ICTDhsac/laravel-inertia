@@ -123,6 +123,13 @@ class User extends Authenticatable
     /* end */
 
     /* Relations to Plan */
+    public function plans()
+    {
+        return $this->belongsToMany(Plan::class, 'plan_member')
+                                ->withPivot('is_division_user')
+                                ->withTimestamps();
+    }
+
     public function createdPlans()
     {
         return $this->hasMany(Plan::class, 'created_by');

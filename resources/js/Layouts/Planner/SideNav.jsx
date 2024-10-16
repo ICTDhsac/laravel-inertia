@@ -26,18 +26,18 @@ export default function SideNav({ isCollapsed, toggleSidebar, isActive  }) {
             {/* Navigation Links */}
             <ul className='border-b dark:border-neutral'>
                 <li>
-                    <Link className={`side-nav-link`} href="/">
-                        <span className="flex-item-center">
-                            <FaPlus />
-                            {!isCollapsed && <span>New Plan</span>}
-                        </span>
-                    </Link>
-                </li>
-                <li>
                     <Link className={`side-nav-link ${isActive('/')}`} href="/">
                         <span className="flex-item-center">
                             <FaHome />
                             {!isCollapsed && <span>Hub</span>}
+                        </span>
+                    </Link>
+                </li>
+                <li>
+                    <Link className={`side-nav-link ${isActive('/plans/create')}`} href="/plans/create">
+                        <span className="flex-item-center">
+                            <FaPlus />
+                            {!isCollapsed && <span>New Plan</span>}
                         </span>
                     </Link>
                 </li>
