@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('plan_member', function (Blueprint $table) {
             $table->id();
             $table->foreignId('plan_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('department_id')->nullable()->constrained()->onDelete('set null');
             $table->boolean('is_division_user')->default(false); // Flag to indicate if added via a division
+            $table->unique(['plan_id', 'user_id', 'department_id']);
             $table->timestamps(); 
         });
     }

@@ -22,6 +22,7 @@ return new class extends Migration
                     ->constrained('users')
                     ->onDelete('set null');
             $table->enum('privacy', ['public', 'private'])->default('public');
+            $table->boolean('is_group_plan')->default(true);
             $table->timestamps();
         });
     }

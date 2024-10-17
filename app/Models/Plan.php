@@ -11,16 +11,26 @@ class Plan extends Model
 
     protected $fillable = [
         'name',
+        'privacy',
+        'is_group_plan',
         'created_by',
         'modified_by',
-        'privacy',
     ];
 
+    // public function users()
+    // {
+    //     return $this->belongsToMany(User::class, 'plan_member')
+    //                             ->withPivot('is_division_user')
+    //                             ->withTimestamps();
+    // }
     public function users()
     {
-        return $this->belongsToMany(User::class, 'plan_member')
-                                ->withPivot('is_division_user')
-                                ->withTimestamps();
+        return $this->belongsToMany(User::class, 'plan_user')->withTimestamps();
+    }
+
+    public function departments()
+    {
+        return $this->belongsToMany(Department::class, 'plan_department')->withTimestamps();
     }
     // Relationship to the User model for the creator
     public function creator()

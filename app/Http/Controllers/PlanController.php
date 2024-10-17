@@ -46,9 +46,14 @@ class PlanController extends Controller
         $departments = Department::all()->map(function ($department) {
             return ['value' => $department->id, 'label' => $department->name];
         });
+        $users = User::all()->map(function ($user) {
+            return ['value' => $user->id, 'label' => $user->full_name];
+        });
+
         $navigationLinks = $this->navigationLinks;
         $navigationLinks[] = ['link' => '/plans/create', 'icon' => 'CalendarPlus', 'label' => 'Create'];
-        return inertia('Planner/Plans/Create', compact('departments', 'navigationLinks'));
+
+        return inertia('Planner/Plans/Create', compact('users', 'departments', 'navigationLinks'));
     }
 
     /**
@@ -56,29 +61,30 @@ class PlanController extends Controller
      */
     public function store(StorePlanRequest $request)
     {
+        $users = [];
         $validatedData = $request->validated();
-        $users = User::with('department')
-                            ->where('department_id', $validatedData['department_id'])->get();
-        
+        dd($validatedData);
         DB::beginTransaction();
         try {
+            if($validatedData['department_ids']){
+                $users = User::with('department')->where('department_id', $validatedData['department_id'])->get();
+            }
+
             $plan = Plan::create([
                 'name' => $validatedData['name'],
                 'privacy' => $validatedData['privacy'],
+                'is_group_plan' => $validatedData['is_group_plan'],
                 'created_by' => Auth::id()
             ]);
-            dd($plan);
-            // if($plan){
-
-            //     if($validatedData['department_id']){
-            //         $department = Department::find($validatedData['department_id']);
-
-            //         $plan->users()->attach($validatedData['user_id'], ['is_division_user' => true] );
-            //     }
-
-            //     DB::commit();
-
-            // }
+            dd($users);
+            if($plan && $users){
+                
+                foreach($users as $user){
+                    $plan->users()->attach($user['id'], ['is_division_user' => true] );
+                }
+                
+            }
+            DB::commit();
                 
             return back()->with('response', [
                 'error' => false,

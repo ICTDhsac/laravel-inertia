@@ -23,8 +23,26 @@ class StorePlanRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'department_id' => 'required|exists:departments,id',
+            'is_group_plan' => 'required|boolean',
+            'department_ids' => 'required_if:is_group_plan,true|array',
+            'department_ids.*' => 'exists:departments,id',
+            'user_ids' => 'required_if:is_group_plan,false|array',
+            'user_ids.*' => 'exists:users,id',
             'privacy' => 'required|in:public,private'
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'department_ids.required_if' => 'The department is required when creating a group plan.',
+            'department_ids.min' => 'Please select at least one department.',
+
+            'user_ids.required_if' => 'Users are required when creating a personal plan.',
+            'user_ids.min' => 'Please select at least one user.',
+
+            'department_ids.*.exists' => 'One or more selected departments do not exist.',
+            'user_ids.*.exists' => 'One or more selected users do not exist.',
         ];
     }
 }

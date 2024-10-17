@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('role_user', function (Blueprint $table) {
-            $table->string('username')->unique();
+        
+        Schema::table('plans', function (Blueprint $table) {
+            $table->boolean('is_group_plan')->default(true);
         });
     }
 
@@ -21,8 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('role_user', function (Blueprint $table) {
-            $table->dropColumn('username');
+        Schema::table('plans', function (Blueprint $table) {
+            $table->dropColumn('is_group_plan');
         });
     }
 };

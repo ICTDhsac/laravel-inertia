@@ -7,8 +7,10 @@ import { IoIosArrowDropdownCircle, IoIosArrowDroprightCircle } from "react-icons
 import { GiToggles } from "react-icons/gi";
 import { SquareKanban } from 'lucide-react';
 
-export default function SideNav({ isCollapsed, toggleSidebar, isActive  }) {
+export default function SideNav({ isCollapsed, toggleSidebar, isActive, timeLeft  }) {
 
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = (timeLeft % 60).toString().padStart(2, '0');
     const [dropDownToggle, setDropdownToggle] = useState(false);
 
     // Function to check if a link is active
@@ -101,7 +103,10 @@ export default function SideNav({ isCollapsed, toggleSidebar, isActive  }) {
             </ul>
 
             {/* Footer */}
-            <div className="mt-auto absolute bottom-0 left-0 w-full p-6">
+            <div className={`text-xs absolute bottom-0 left-0 w-full ${!isCollapsed ? 'p-6' : 'p-2'}`}>
+                <p>
+                    {!isCollapsed && <span>Session expires in:</span>}<br/><b>{minutes}:{seconds}</b>
+                </p>
                 {!isCollapsed && <span className="text-sm text-gray-400">&copy; 2024 MyApp</span>}
             </div>
         

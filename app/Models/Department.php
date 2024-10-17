@@ -22,6 +22,11 @@ class Department extends Model
         return $this->hasMany(User::class);
     }
 
+    public function plans()
+    {
+        return $this->belongsToMany(Plan::class, 'plan_department')->withTimestamps();
+    }
+
     public function office()
     {
         return $this->belongsTo(Office::class, 'office_id');
