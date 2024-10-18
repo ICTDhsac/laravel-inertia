@@ -7,7 +7,6 @@ export default function Profile({isOpen, handleClose}) {
     const { assetUrl } = usePage().props;
     const { user } = usePage().props.auth;
     const { mode } = useThemeMode();
-    console.log(user)
     
   return (
     <Drawer className="z-50 space-y-5 min-w-fit" size="xl" open={isOpen} onClose={handleClose} position='right'>

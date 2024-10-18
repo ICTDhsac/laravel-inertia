@@ -41,12 +41,27 @@ export default function PlannerLayout({ children }) {
         });
     }
 
+    useEffect(() => {
+        const handleSession = () => {
+            console.log("Session refresh");
+            setTimeLeft(sessionTimeOut * 60);
+        };
+
+        const removeSuccessListener = router.on('success', handleSession);
+        const removeErrorListener = router.on('error', handleSession);
+
+        return () => {
+            removeSuccessListener();
+            removeErrorListener();
+        };
+    }, [sessionTimeOut]);
+
     /* for session timeout */
     useEffect(() => {
         const interval = setInterval(() => {
             setTimeLeft((prev) => Math.max(prev - 10, 0));
         }, 10000);
-        return () => clearInterval(interval); // Cleanup on unmount
+        return () => clearInterval(interval);
     }, []);
 
     useEffect(() => {

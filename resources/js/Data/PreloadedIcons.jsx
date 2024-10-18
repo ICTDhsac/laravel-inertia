@@ -1,4 +1,4 @@
-import { House, Cat, Dog, Fish, Rabbit, Turtle, Filter, MapPin, UserCircle, ShieldCheck, CircleHelp, UserRoundX, UserCheck, User, Building, DatabaseZap, University, NotebookPen, CalendarPlus } from "lucide-react";
+import { House, Cat, Dog, Fish, Rabbit, Turtle, Filter, MapPin, UserCircle, ShieldCheck, CircleHelp, UserRoundX, UserCheck, User, Building, DatabaseZap, University, NotebookPen, CalendarPlus, View } from "lucide-react";
 import { FaHome, FaFile, FaPlus, FaUser } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { IoIosArrowDropdownCircle, IoIosArrowDroprightCircle } from "react-icons/io";
@@ -23,7 +23,8 @@ export const lucideReactIcons = {
     UserCircle: UserCircle,
     University: University,
     NotebookPen: NotebookPen,
-    CalendarPlus: CalendarPlus
+    CalendarPlus: CalendarPlus,
+    View: View
 }
 
 export const reactIconsFa = {

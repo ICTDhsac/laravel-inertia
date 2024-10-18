@@ -43,6 +43,8 @@ class PlanController extends Controller
      */
     public function create()
     {
+        $plans = Plan::latest()->get();
+        // dd($plans);
         $departments = Department::all()->map(function ($department) {
             return ['value' => $department->id, 'label' => $department->name];
         });
@@ -53,7 +55,7 @@ class PlanController extends Controller
         $navigationLinks = $this->navigationLinks;
         $navigationLinks[] = ['link' => '/plans/create', 'icon' => 'CalendarPlus', 'label' => 'Create'];
 
-        return inertia('Planner/Plans/Create', compact('users', 'departments', 'navigationLinks'));
+        return inertia('Planner/Plans/Create', compact('users', 'departments', 'navigationLinks', 'plans'));
     }
 
     /**
@@ -61,28 +63,27 @@ class PlanController extends Controller
      */
     public function store(StorePlanRequest $request)
     {
-        $users = [];
-        $validatedData = $request->validated();
-        dd($validatedData);
+        $formData = $request->validated();
+        
         DB::beginTransaction();
         try {
-            if($validatedData['department_ids']){
-                $users = User::with('department')->where('department_id', $validatedData['department_id'])->get();
-            }
-
+            // $users = User::with('department')->where('department_id', $formData['department_id'])->get();
+            
             $plan = Plan::create([
-                'name' => $validatedData['name'],
-                'privacy' => $validatedData['privacy'],
-                'is_group_plan' => $validatedData['is_group_plan'],
+                'name' => $formData['name'],
+                'privacy' => $formData['privacy'],
+                'is_group_plan' => $formData['is_group_plan'],
                 'created_by' => Auth::id()
             ]);
-            dd($users);
-            if($plan && $users){
-                
-                foreach($users as $user){
-                    $plan->users()->attach($user['id'], ['is_division_user' => true] );
+
+            if($formData['is_group_plan']){
+                foreach($formData['department_ids'] as $department_id){
+                    $plan->departments()->attach($department_id);
                 }
-                
+            }else{
+                foreach($formData['user_ids'] as $user_id){
+                    $plan->users()->attach($user_id);
+                }
             }
             DB::commit();
                 
@@ -105,7 +106,19 @@ class PlanController extends Controller
      */
     public function show(Plan $plan)
     {
-        //
+        $plan->load('users', 'departments');
+        
+        /* Select options */
+        $departmentOptions = Department::all()->map(function ($department) {
+            return ['value' => $department->id, 'label' => $department->name];
+        });
+        $userOptions = User::all()->map(function ($user) {
+            return ['value' => $user->id, 'label' => $user->full_name];
+        });
+
+        $navigationLinks = $this->navigationLinks;
+        $navigationLinks[] = ['link' => "/plans/{$plan->id}", 'icon' => 'View', 'label' => 'View'];
+        return inertia('Planner/Plans/Show', compact('plan', 'navigationLinks', 'departmentOptions', 'userOptions'));
     }
 
     /**
