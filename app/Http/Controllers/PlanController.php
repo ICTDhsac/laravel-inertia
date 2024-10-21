@@ -10,6 +10,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class PlanController extends Controller
 {
@@ -34,7 +35,6 @@ class PlanController extends Controller
     {
         $plans = Plan::all();
         $navigationLinks = $this->navigationLinks;
-        $navigationLinks[] = ['link' => '/plans/create', 'icon' => 'CalendarPlus', 'label' => 'Create'];
         return inertia('Planner/Plans/Index', compact('plans', 'navigationLinks'));
     }
 
@@ -77,14 +77,12 @@ class PlanController extends Controller
             ]);
 
             if($formData['is_group_plan']){
-                foreach($formData['department_ids'] as $department_id){
-                    $plan->departments()->attach($department_id);
-                }
+                $plan->departments()->sync($formData['department_ids']);
+                
             }else{
-                foreach($formData['user_ids'] as $user_id){
-                    $plan->users()->attach($user_id);
-                }
+                $plan->users()->sync($formData['user_ids']);    
             }
+
             DB::commit();
                 
             return back()->with('response', [
@@ -118,7 +116,7 @@ class PlanController extends Controller
 
         $navigationLinks = $this->navigationLinks;
         $navigationLinks[] = ['link' => "/plans/{$plan->id}", 'icon' => 'View', 'label' => 'View'];
-        return inertia('Planner/Plans/Show', compact('plan', 'navigationLinks', 'departmentOptions', 'userOptions'));
+        return inertia('Planner/Plans/Show', compact('plan', 'navigationLinks', 'departmentOptions', 'userOptions'))->with('referrer', url()->previous());
     }
 
     /**
@@ -126,7 +124,19 @@ class PlanController extends Controller
      */
     public function edit(Plan $plan)
     {
-        //
+        $plan->load('users', 'departments');
+        
+        /* Select options */
+        $departmentOptions = Department::all()->map(function ($department) {
+            return ['value' => $department->id, 'label' => $department->name];
+        });
+        $userOptions = User::all()->map(function ($user) {
+            return ['value' => $user->id, 'label' => $user->full_name];
+        });
+
+        $navigationLinks = $this->navigationLinks;
+        $navigationLinks[] = ['link' => "/plans/{$plan->id}", 'icon' => 'View', 'label' => 'View'];
+        return inertia('Planner/Plans/Edit', compact('plan', 'navigationLinks', 'departmentOptions', 'userOptions'))->with('referrer', url()->previous());
     }
 
     /**
@@ -134,7 +144,44 @@ class PlanController extends Controller
      */
     public function update(UpdatePlanRequest $request, Plan $plan)
     {
-        //
+        $formData = $request->validated();
+        // dd($formData);
+        DB::beginTransaction();
+        try {
+            
+            $plan->update([
+                'name' => $formData['name'],
+                'privacy' => $formData['privacy'],
+                'is_group_plan' => $formData['is_group_plan'],
+                'modified_by' => Auth::id()
+            ]);
+
+            if($formData['is_group_plan']){
+                $plan->departments()->sync($formData['departments']);
+                
+            }else{
+                $plan->users()->sync($formData['users']);
+                
+            }
+
+            DB::commit();
+
+            // return Inertia::location(route('plans.show', $plan));
+            return to_route('plans.edit', $plan)
+            ->with('response', [
+                'error' => false,
+                'message' => 'Plan updated successfully!',
+            ])
+            // ->with('plan', $plan)
+            ->setStatusCode(303);
+
+        } catch(Exception $e) {
+            DB::rollBack();
+            return back()->with('response',[
+                'error' => true,
+                'message' => 'User update failed' . $e->getMessage()
+            ], 500)->withInput();
+        }
     }
 
     /**

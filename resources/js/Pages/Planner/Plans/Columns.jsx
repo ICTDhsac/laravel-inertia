@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import DataTableColumnHeader from "@/components/reusable_components/DataTableColumnHeader";
 import { Badge } from "flowbite-react";
+import { router } from "@inertiajs/react";
 
 // Define your Payment type structure
 export const columns = [
@@ -42,7 +43,23 @@ export const columns = [
         ),
     },
     {
+        accessorKey: 'privacy',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Privacy" />
+        ),
+    },
+    {
+        accessorKey: 'is_group_plan',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Group Plan" />
+        ),
+        cell: ({ getValue }) => (getValue() ? 'Yes' : 'No'),
+    },
+    {
         id: 'actions',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Action" />
+        ),
         cell: ({ row }) => {
             const plan = row.original;
 
@@ -66,12 +83,14 @@ export const columns = [
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             className="flex items-center space-x-2"
+                            // onClick={() => router.get(`/plans/${plan.id}`)}
                         >
                             <ViewIcon className="w-4 h-4" />
                             <span>View plan</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             className="flex items-center space-x-2"
+                            onClick={() => router.get(`/plans/${plan.id}/edit`)}
                         >
                             <Edit3Icon className="w-4 h-4" />
                             <span>Edit</span>

@@ -12,7 +12,7 @@ import CreateForm from './Forms/CreateForm';
 export default function Create()
 {
     const {assetUrl, plans, flash} = usePage().props;
-    const [ showList, setShowList ] = useState(true);
+    const [ showList, setShowList ] = useState(false);
     
 
     useEffect(() => {

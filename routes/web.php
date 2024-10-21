@@ -31,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('positions', PositionController::class);
     Route::resource('offices', OfficeController::class);
     Route::resource('plans', PlanController::class);
+    Route::resource('plans.tasks', TaskController::class)->shallow();
 });
 
 

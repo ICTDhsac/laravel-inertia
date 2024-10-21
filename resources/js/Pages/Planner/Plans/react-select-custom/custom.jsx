@@ -1,11 +1,16 @@
 import { forwardRef } from 'react';
+import { useThemeMode } from 'flowbite-react'; 
 
 // Custom Option Component
 export const customOption = forwardRef(({ isFocused, label, innerProps }, ref) => {
-    return (
+    const { mode } = useThemeMode();
+    
+     return (
         <h1
             style={{
-                backgroundColor: isFocused ? "#e2e8f0" : "inherit",
+                backgroundColor: isFocused
+                    ? (mode === "dark" ? "#374151" : "#E5E7EB")
+                    : "inherit",
                 padding: "5px",
                 fontSize: "13px",
             }}
