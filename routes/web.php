@@ -14,8 +14,6 @@ use App\Http\Controllers\Auth\RegisterController;
 
 // use Inertia\Inertia;
 
-
-
 // Display login page
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
