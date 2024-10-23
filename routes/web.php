@@ -24,6 +24,7 @@ Route::post('/register', [RegisterController::class, 'register'])->name('registe
 Route::get('/redirectBack', [RegisterController::class, 'redirectBack']);
 
 Route::middleware(['auth'])->group(function () {
+    Route::resource('/', UserController::class);
     Route::resource('users', UserController::class);
     Route::resource('departments', DepartmentController::class);
     Route::resource('positions', PositionController::class);

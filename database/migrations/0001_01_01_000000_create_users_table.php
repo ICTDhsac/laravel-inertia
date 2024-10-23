@@ -26,9 +26,9 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('gender')->nullable();
             $table->date('date_hired')->nullable();
-            $table->text('user_photo')->default('mypic.png');
-            $table->text('is_new')->default('Y');
-            $table->text('user_status')->default('A');
+            $table->text('user_photo')->nullable();
+            $table->char('is_new', 1)->default('Y');
+            $table->char('user_status', 1)->default('A');
             $table->timestamp('email_verified_at')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('modified_by')->nullable()->constrained('users')->onDelete('set null');
@@ -42,7 +42,8 @@ return new class extends Migration
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
+            $table->id();
+            $table->string('email')->index();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
